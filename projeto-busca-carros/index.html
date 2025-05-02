@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesquisa de Veículos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Pesquisa de Veículos</h1>
+        
+        <div class="filtros">
+            <h2>Filtros</h2>
+            <div class="form-group">
+                <label for="categoria">Categoria:</label>
+                <select id="categoria">
+                    <option value="">Todas</option>
+                    <!-- Opções serão preenchidas via JavaScript -->
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="marca">Marca:</label>
+                <select id="marca">
+                    <option value="">Todas</option>
+                    <!-- Opções serão preenchidas via JavaScript -->
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="modelo">Modelo:</label>
+                <select id="modelo">
+                    <option value="">Todos</option>
+                    <!-- Opções serão preenchidas via JavaScript -->
+                </select>
+            </div>
+            
+            <button id="btnPesquisar">Pesquisar</button>
+            <button id="btnLimpar">Limpar Filtros</button>
+        </div>
+        
+        <div class="resultados">
+            <h2>Resultados</h2>
+            <div id="totalResultados"></div>
+            
+            <div class="tabela-container">
+                <table id="tabelaResultados">
+                    <thead>
+                        <tr>
+                            <!-- Cabeçalhos serão preenchidos via JavaScript -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Resultados serão preenchidos via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
