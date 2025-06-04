@@ -1,56 +1,113 @@
+<!-- Define o tipo de documento como HTML5 -->
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
+    <!-- Configuração de caracteres para suportar acentuação e caracteres especiais -->
     <meta charset="UTF-8">
+    <!-- Configuração para garantir que a página seja responsiva em dispositivos móveis -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pesquisa de Veículos</title>
+    <!-- Título da página exibido na aba do navegador -->
+    <title>Comparador de Veículos</title>
+    <!-- Link para o arquivo CSS que define os estilos da página -->
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
+    <!-- Container principal que centraliza o conteúdo e aplica estilos básicos -->
     <div class="container">
+        <!-- Título principal da aplicação -->
         <h1>Pesquisa de Veículos</h1>
-        
+
+        <!-- Seção para os filtros de pesquisa -->
         <div class="filtros">
-            <h2>Filtros</h2>
-            <div class="form-group">
-                <label for="categoria">Categoria:</label>
-                <select id="categoria">
-                    <option value="">Todas</option>
-                    <!-- Opções serão preenchidas via JavaScript -->
-                </select>
+            <!-- Título da seção de filtros -->
+            <h2 style="text-align: center;">Filtros</h2>
+            <!-- Container flexível para alinhar os dois conjuntos de filtros lado a lado -->
+            <div class="filtros-flex">
+                <!-- Div para o primeiro conjunto de filtros (Carro 1) -->
+                <div class="left">
+                    <h2>Carro 1</h2>
+                    <!-- Grupo de formulário para a seleção de Categoria -->
+                    <div class="form-group">
+                        <label for="categoria">Categoria:</label>
+                        <select id="categoria">
+                            <option value="">Todas</option>
+                            <!-- Opções serão preenchidas via JavaScript -->
+                        </select>
+                    </div>
+                    <!-- Grupo de formulário para a seleção de Marca -->
+                    <div class="form-group">
+                        <label for="marca">Marca:</label>
+                        <select id="marca">
+                            <option value="">Todas</option>
+                            <!-- Opções serão preenchidas via JavaScript -->
+                        </select>
+                    </div>
+                    <!-- Grupo de formulário para a seleção de Modelo -->
+                    <div class="form-group">
+                        <label for="modelo">Modelo:</label>
+                        <select id="modelo">
+                            <option value="">Todos</option>
+                            <!-- Opções serão preenchidas via JavaScript -->
+                        </select>
+                    </div>
+                </div>
+                <!-- Div para o segundo conjunto de filtros (Carro 2) -->
+                <div class="right">
+                    <h2>Carro 2</h2>
+                    <!-- Grupo de formulário para a seleção de Categoria (segundo carro) -->
+                    <div class="form-group">
+                        <label for="categoria2">Categoria:</label>
+                        <select id="categoria2">
+                            <option value="">Todas</option>
+                            <!-- Opções serão preenchidas via JavaScript -->
+                        </select>
+                    </div>
+                    <!-- Grupo de formulário para a seleção de Marca (segundo carro) -->
+                    <div class="form-group">
+                        <label for="marca2">Marca:</label>
+                        <select id="marca2">
+                            <option value="">Todas</option>
+                            <!-- Opções serão preenchidas via JavaScript -->
+                        </select>
+                    </div>
+                    <!-- Grupo de formulário para a seleção de Modelo (segundo carro) -->
+                    <div class="form-group">
+                        <label for="modelo2">Modelo:</label>
+                        <select id="modelo2">
+                            <option value="">Todos</option>
+                            <!-- Opções serão preenchidas via JavaScript -->
+                        </select>
+                    </div>
+                </div>
             </div>
-            
-            <div class="form-group">
-                <label for="marca">Marca:</label>
-                <select id="marca">
-                    <option value="">Todas</option>
-                    <!-- Opções serão preenchidas via JavaScript -->
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="modelo">Modelo:</label>
-                <select id="modelo">
-                    <option value="">Todos</option>
-                    <!-- Opções serão preenchidas via JavaScript -->
-                </select>
-            </div>
-            
+             <!-- Botões de ação para Pesquisar e Limpar Filtros -->
             <button id="btnPesquisar">Pesquisar</button>
             <button id="btnLimpar">Limpar Filtros</button>
         </div>
-        
+
+        <!-- Container onde os checkboxes de seleção de campos serão inseridos pelo JS -->
+         <div id="botoes-centro" style="text-align:center; margin: 20px 0;"></div>
+
+        <!-- Seção para exibir os resultados da pesquisa -->
         <div class="resultados">
+            <!-- Título da seção de resultados -->
             <h2>Resultados</h2>
+            <!-- Div para exibir o total de resultados encontrados -->
             <div id="totalResultados"></div>
-            
+
+            <!-- Container para a tabela de resultados, com scroll se necessário -->
             <div class="tabela-container">
+                <!-- Tabela para exibir os dados dos veículos -->
                 <table id="tabelaResultados">
+                    <!-- Cabeçalho da tabela -->
                     <thead>
                         <tr>
-                            <!-- Cabeçalhos serão preenchidos via JavaScript -->
+                            <!-- Cabeçalhos serão preenchidos via JavaScript com os campos selecionados -->
                         </tr>
                     </thead>
+                    <!-- Corpo da tabela onde os resultados serão exibidos -->
                     <tbody>
                         <!-- Resultados serão preenchidos via JavaScript -->
                     </tbody>
@@ -59,6 +116,8 @@
         </div>
     </div>
 
+    <!-- Link para o arquivo JavaScript que contém a lógica da aplicação -->
     <script src="script.js"></script>
 </body>
+
 </html>

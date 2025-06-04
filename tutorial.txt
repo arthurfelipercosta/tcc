@@ -1,0 +1,5 @@
+Abrir o prompt e rodar o comando abaixo:
+python -m http.server
+
+Depois de estar rodando o servidor, abrir o browser em:
+http://localhost:8000/projeto-busca-carros
