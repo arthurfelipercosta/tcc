@@ -1,9 +1,16 @@
+/*
+* Reset básico de margin e padding para todos os elementos.
+* Garante que não haverá espaçamentos padrão inesperados.
+*/
 * {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+/*
+* Estilos para o corpo da página (body).
+* Define fonte, espaçamento entre linhas, cor do texto, cor de fundo e padding geral.
+*/
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
@@ -12,21 +19,33 @@ body {
     padding: 20px;
 }
 
+/*
+* Estilos para o container principal da aplicação.
+* Centraliza o conteúdo na página, define largura máxima, fundo, padding, borda arredondada e sombra.
+*/
 .container {
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 0 auto; /* Centraliza o bloco horizontalmente */
     background: white;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px; /* Cantos arredondados */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
 }
 
+/*
+* Estilos para o título principal (h1).
+* Centraliza o texto, adiciona margem inferior e define a cor.
+*/
 h1 {
     text-align: center;
     margin-bottom: 20px;
     color: #2c3e50;
 }
 
+/*
+* Estilos para títulos de seção (h2).
+* Adiciona margem inferior, define cor, borda inferior e padding na parte de baixo.
+*/
 h2 {
     margin-bottom: 15px;
     color: #3498db;
@@ -34,113 +53,180 @@ h2 {
     padding-bottom: 5px;
 }
 
-.filtros {
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 6px;
-    margin-bottom: 20px;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
+/*
+* Estilos para os rótulos dos campos de formulário (label).
+* Define display block para ocupar a largura total e margem inferior, além de negrito.
+*/
 label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
 }
 
+/*
+* Estilos para selects e inputs (campos de formulário).
+* Define largura total, padding interno, borda, borda arredondada e tamanho da fonte.
+*/
 select, input {
     width: 100%;
     padding: 8px 10px;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 4px; /* Cantos arredondados */
     font-size: 16px;
 }
 
+/*
+* Estilos para botões gerais.
+* Define cor de fundo, cor do texto, remove borda, padding interno, cursor, borda arredondada, tamanho da fonte e transição suave na cor de fundo.
+*/
 button {
     background-color: #3498db;
     color: white;
     border: none;
     padding: 10px 15px;
-    cursor: pointer;
-    border-radius: 4px;
+    cursor: pointer; /* Muda o cursor ao passar por cima */
+    border-radius: 4px; /* Cantos arredondados */
     font-size: 16px;
-    transition: background-color 0.3s;
-    margin-right: 10px;
+    transition: background-color 0.3s ease; /* Transição suave ao hover */
+    margin-right: 10px; /* Espaçamento entre botões */
 }
 
+/*
+* Estilo para o botão no estado hover (ao passar o mouse).
+* Escurece a cor de fundo para dar feedback visual.
+*/
 button:hover {
     background-color: #2980b9;
 }
 
+/*
+* Estilo específico para o botão Limpar Filtros.
+* Define uma cor de fundo diferente.
+*/
 #btnLimpar {
     background-color: #95a5a6;
 }
 
+/*
+* Estilo para o botão Limpar Filtros no estado hover.
+* Escurece a cor de fundo.
+*/
 #btnLimpar:hover {
     background-color: #7f8c8d;
 }
 
-.tabela-container {
-    overflow-x: auto;
-}
-
+/*
+* Estilos para a tabela de resultados.
+* Define largura total e remove espaçamento entre as bordas das células.
+*/
 table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: collapse; /* Remove espaçamento entre células */
     margin-top: 15px;
 }
 
+/*
+* Estilos para células de cabeçalho (th) e dados (td) da tabela.
+* Define padding interno, alinhamento do texto à esquerda e borda inferior.
+*/
 th, td {
-    padding: 12px 15px;
+    padding: 12px 15px; /* Espaçamento interno */
     text-align: left;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #ddd; /* Linha divisória */
 }
 
+/*
+* Estilos para as células de cabeçalho (th) da tabela.
+* Define cor de fundo, cursor de ponteiro e posição relativa para os ícones de ordenação.
+*/
 th {
     background-color: #f2f2f2;
-    cursor: pointer;
-    position: relative;
+    cursor: pointer; /* Indica que é clicável */
+    position: relative; /* Necessário para posicionar os ícones */
 }
 
+/*
+* Estilo para células de cabeçalho no estado hover.
+* Muda a cor de fundo.
+*/
 th:hover {
     background-color: #e6e6e6;
 }
 
+/*
+* Adiciona um ícone de seta para cima para indicar ordenação ascendente.
+*/
 th.ordem-asc::after {
     content: "↑";
     position: absolute;
     right: 8px;
 }
 
+/*
+* Adiciona um ícone de seta para baixo para indicar ordenação descendente.
+*/
 th.ordem-desc::after {
     content: "↓";
     position: absolute;
     right: 8px;
 }
 
+/*
+* Estilo para linhas da tabela no estado hover.
+* Muda a cor de fundo para destacar a linha.
+*/
 tr:hover {
     background-color: #f5f5f5;
 }
 
-#totalResultados {
-    margin-bottom: 10px;
-    font-weight: bold;
+/*
+* Container flexível para alinhar os blocos de filtro (left e right) lado a lado.
+* Usa display flex e define um espaçamento (gap) entre os itens flexíveis.
+*/
+.filtros-flex {
+    display: flex;
+    gap: 20px; /* Espaçamento entre os flex items */
 }
 
-@media (max-width: 768px) {
-    .filtros {
-        display: flex;
-        flex-direction: column;
-    }
-    
-    table {
-        font-size: 14px;
-    }
-    
-    th, td {
-        padding: 8px 10px;
-    }
+/*
+* Estilo para o bloco de filtro da esquerda (Carro 1).
+* Define a largura como 45% do container flexível.
+*/
+.left {
+    width: 45%;
+}
+
+/*
+* Estilo para o bloco de filtro da direita (Carro 2).
+* Define a largura como 45% do container flexível.
+*/
+.right {
+    width: 45%;
+}
+
+/*
+* Estilo específico para o título h2 dentro do bloco .filtros.
+* Centraliza o texto e define a largura como 100% para garantir a centralização.
+*/
+.filtros h2 {
+    text-align: center;
+    width: 100%;
+}
+
+/*
+* Estilo para os botões dentro do bloco .filtros.
+* Define display inline-block para que fiquem na mesma linha e adiciona margem para espaçamento.
+* NOTE: Estes botões foram movidos para um novo container (#botoes-centro) via JS, este estilo pode ser redundante dependendo da implementação final.
+*/
+.filtros button {
+    display: inline-block;
+    margin: 20px 10px 0 10px;
+}
+
+/*
+* Estilo para o bloco de filtros.
+* Centraliza o conteúdo de texto (incluindo o h2 e potencialmente os botões se não forem movidos pelo JS).
+*/
+.filtros {
+    text-align: center;
 }
