@@ -230,3 +230,133 @@ tr:hover {
 .filtros {
     text-align: center;
 }
+
+#botoes-centro {
+    /* display: block; */ /* Garantir que se comporta como um bloco */
+    display: grid;
+    align-items: center;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    max-width: 1000px;
+    margin: 20px auto;
+    /* text-align: left; */ /* Removido para tentar resolver a centralização do bloco */
+}
+
+#botoes-centro label {
+    display: flex; /* Usa flexbox para alinhar checkbox e texto */
+    align-items: center; /* Centraliza verticalmente o checkbox e o texto */
+    margin: 0; /* Remove margem padrão dos labels se houver */
+    padding: 5px; /* Adiciona um pequeno padding dentro de cada item do grid */
+    /* Opcional: background-color: #eee; border-radius: 4px; */
+}
+
+#botoes-centro input[type="checkbox"] {
+    margin-right: 5px; /* Espaço entre o checkbox e o texto */
+    width: auto; /* Deixa o checkbox usar seu tamanho natural */
+}
+
+/* Estilos para a nova seção de listas de resultados */
+.resultados-listas {
+    display: flex; /* Usa flexbox para alinhar as duas listas lado a lado */
+    gap: 20px; /* Espaçamento entre as listas */
+    margin: 20px auto;
+    max-width: 1000px; /* Mesma largura máxima dos checkboxes para alinhamento */
+}
+
+.lista-carro {
+    flex: 1; /* Faz com que cada lista ocupe espaço igual */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    background-color: #fff;
+}
+
+.lista-carro h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #3498db;
+}
+
+.lista-scrollview {
+    max-height: 200px; /* Altura máxima para o scrollview */
+    overflow-y: auto; /* Adiciona scroll vertical se necessário */
+}
+
+.lista-item {
+    padding: 8px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.lista-item:last-child {
+    border-bottom: none; /* Remove a borda do último item */
+}
+
+.lista-item:hover {
+    background-color: #f5f5f5;
+}
+
+.lista-item.selecionado {
+    background-color: #e0e0e0; /* Cor para item selecionado */
+    font-weight: bold;
+}
+
+/* Ajustes na tabela para o modo comparativo */
+#tabelaResultados th:first-child, 
+#tabelaResultados td:first-child {
+    width: 40%; /* Coluna do Carro 1 */
+    /* font-weight: bold; Removido pois o cabeçalho já é bold por padrão */
+}
+
+#tabelaResultados th:nth-child(2), 
+#tabelaResultados td:nth-child(2) {
+    width: 20%; /* Coluna do Campo - ajustada para ser mais estreita */
+    text-align: center; /* Centraliza o texto do Campo */
+    font-weight: bold; /* Manter bold para o nome do campo */
+}
+
+#tabelaResultados th:nth-child(3), 
+#tabelaResultados td:nth-child(3) {
+    width: 40%; /* Coluna do Carro 2 */
+    text-align: end; /* Centraliza o texto dos dados do Carro 2 */
+}
+
+/* Estilos para a área de seleção de Versão/Transmissão */
+.versoes-selecao {
+    margin-top: 15px; /* Espaçamento acima da seção de versões */
+    padding-top: 10px;
+    border-top: 1px solid #eee; /* Linha separadora */
+    display: none; /* Inicialmente oculta a seção */
+}
+
+.versoes-selecao h4 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    color: #555;
+    font-size: 1em;
+}
+
+.versoes-scrollview {
+    max-height: 100px; /* Altura máxima para o scrollview de versões */
+    overflow-y: auto; /* Adiciona scroll vertical se necessário */
+}
+
+.versao-item {
+    padding: 6px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+    font-size: 0.9em;
+}
+
+.versao-item:last-child {
+    border-bottom: none;
+}
+
+.versao-item:hover {
+    background-color: #f9f9f9;
+}
+
+.versao-item.selecionado-versao {
+    background-color: #d0d0d0; /* Cor para versão selecionada */
+    font-weight: bold;
+}
