@@ -88,26 +88,43 @@
         </div>
 
         <!-- Container onde os checkboxes de seleção de campos serão inseridos pelo JS -->
-         <div id="botoes-centro" style="text-align:center; margin: 20px 0;"></div>
+         <div>
+            <div id="botoes-centro"></div>
+        </div>
+
+        <!-- Nova seção para as listas de resultados -->
+        <div class="resultados-listas">
+            <div class="lista-carro" id="lista-carro-1">
+                <h3>Carros Encontrados (Esquerda)</h3>
+                <div class="lista-scrollview"></div>
+                <!-- Área para seleção de Versão/Transmissão -->
+                <div class="versoes-selecao" id="versoes-selecao-1">
+                    <h4>Versões Disponíveis:</h4>
+                    <div class="versoes-scrollview"></div>
+                </div>
+            </div>
+            <div class="lista-carro" id="lista-carro-2">
+                 <h3>Carros Encontrados (Direita)</h3>
+                 <div class="lista-scrollview"></div>
+                 <!-- Área para seleção de Versão/Transmissão -->
+                <div class="versoes-selecao" id="versoes-selecao-2">
+                    <h4>Versões Disponíveis:</h4>
+                    <div class="versoes-scrollview"></div>
+                </div>
+            </div>
+        </div>
 
         <!-- Seção para exibir os resultados da pesquisa -->
         <div class="resultados">
-            <!-- Título da seção de resultados -->
-            <h2>Resultados</h2>
-            <!-- Div para exibir o total de resultados encontrados -->
-            <div id="totalResultados"></div>
-
-            <!-- Container para a tabela de resultados, com scroll se necessário -->
+            <h2>Comparativo</h2>
+            <!-- A tabela #tabelaResultados será preenchida com os dados dos carros selecionados -->
             <div class="tabela-container">
-                <!-- Tabela para exibir os dados dos veículos -->
                 <table id="tabelaResultados">
-                    <!-- Cabeçalho da tabela -->
                     <thead>
                         <tr>
-                            <!-- Cabeçalhos serão preenchidos via JavaScript com os campos selecionados -->
+                            <!-- Cabeçalhos serão preenchidos via JavaScript -->
                         </tr>
                     </thead>
-                    <!-- Corpo da tabela onde os resultados serão exibidos -->
                     <tbody>
                         <!-- Resultados serão preenchidos via JavaScript -->
                     </tbody>

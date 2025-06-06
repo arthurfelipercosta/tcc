@@ -23,19 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => console.error('Erro ao carregar os dados:', error));
     
-    // Botões já têm listeners adicionados acima, apenas movê-los
     // Adicionar eventos aos botões (mantido para garantir compatibilidade, podem ser movidos para dentro do if acima)
     document.getElementById('btnPesquisar').addEventListener('click', pesquisar);
     document.getElementById('btnLimpar').addEventListener('click', limparFiltros);
-    
-    // Mover botões para o container central
-    const botoesContainer = document.getElementById('botoes-centro');
-    const btnPesquisar = document.getElementById('btnPesquisar');
-    const btnLimpar = document.getElementById('btnLimpar');
-    if (botoesContainer && btnPesquisar && btnLimpar) {
-        botoesContainer.appendChild(btnPesquisar);
-        botoesContainer.appendChild(btnLimpar);
-    }
 
     // Atualiza modelos quando a marca muda
     document.getElementById('marca').addEventListener('change', atualizarModelos);
@@ -75,12 +65,11 @@ function processarCSV(csv) {
 
 // Cria checkboxes para seleção dos campos
 function criarSelecaoCampos() {
-    const container = document.createElement('div');
-    container.id = 'selecao-campos';
-    container.style.margin = '20px 0';
+    const container = document.getElementById('botoes-centro');
+    container.innerHTML = '';
+    
     camposComparacao.forEach(campo => {
         const label = document.createElement('label');
-        label.style.marginRight = '15px';
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.value = campo;
@@ -89,8 +78,6 @@ function criarSelecaoCampos() {
         label.appendChild(document.createTextNode(' ' + campo));
         container.appendChild(label);
     });
-    const resultadosDiv = document.querySelector('.resultados');
-    resultadosDiv.parentNode.insertBefore(container, resultadosDiv);
 }
 
 // Inicializa os filtros com opções únicas
@@ -178,13 +165,152 @@ function pesquisar() {
     const categoria2 = document.getElementById('categoria2').value;
     const marca2 = document.getElementById('marca2').value;
     const modelo2 = document.getElementById('modelo2').value;
-    // Seleção de campos
-    const camposSelecionados = Array.from(document.querySelectorAll('#selecao-campos input[type=checkbox]:checked')).map(cb => cb.value);
-    // Busca os veículos
-    const veiculo1 = dadosVeiculos.find(v => (categoria1 === '' || v['Categoria'] === categoria1) && (marca1 === '' || v['Marca'] === marca1) && (modelo1 === '' || v['Modelo'] === modelo1));
-    const veiculo2 = dadosVeiculos.find(v => (categoria2 === '' || v['Categoria'] === categoria2) && (marca2 === '' || v['Marca'] === marca2) && (modelo2 === '' || v['Modelo'] === modelo2));
-    // Monta a tabela comparativa
-    montarTabelaComparativa(camposSelecionados, veiculo1, veiculo2);
+
+    // Filtra os veículos com base nos critérios (permite campos vazios)
+    const resultadosFiltrados1 = dadosVeiculos.filter(veiculo => {
+        const matchCategoria = categoria1 === '' || veiculo['Categoria'] === categoria1;
+        const matchMarca = marca1 === '' || veiculo['Marca'] === marca1;
+        const matchModelo = modelo1 === '' || veiculo['Modelo'] === modelo1;
+        return matchCategoria && matchMarca && matchModelo;
+    });
+
+     const resultadosFiltrados2 = dadosVeiculos.filter(veiculo => {
+        const matchCategoria = categoria2 === '' || veiculo['Categoria'] === categoria2;
+        const matchMarca = marca2 === '' || veiculo['Marca'] === marca2;
+        const matchModelo = modelo2 === '' || veiculo['Modelo'] === modelo2;
+        return matchCategoria && matchMarca && matchModelo;
+    });
+
+    // Agrupa os resultados por Marca e Modelo
+    const resultadosAgrupados1 = agruparPorMarcaModelo(resultadosFiltrados1);
+    const resultadosAgrupados2 = agruparPorMarcaModelo(resultadosFiltrados2);
+
+    // Exibe os resultados agrupados nas listas
+    exibirListaResultados(resultadosAgrupados1, 'lista-carro-1');
+    exibirListaResultados(resultadosAgrupados2, 'lista-carro-2');
+
+    // Limpa a tabela comparativa ao realizar nova pesquisa
+    montarTabelaComparativa([], null, null); 
+}
+
+// Nova função para agrupar veículos por Marca e Modelo
+function agruparPorMarcaModelo(veiculos) {
+    const agrupados = {};
+    veiculos.forEach(veiculo => {
+        const chave = `${veiculo['Marca']}|${veiculo['Modelo']}`;
+        if (!agrupados[chave]) {
+            agrupados[chave] = {
+                marca: veiculo['Marca'],
+                modelo: veiculo['Modelo'],
+                versoes: []
+            };
+        }
+        agrupados[chave].versoes.push(veiculo);
+    });
+    return Object.values(agrupados);
+}
+
+// Função para exibir os resultados agrupados em uma lista (scrollview)
+function exibirListaResultados(resultadosAgrupados, idLista) {
+    const listaContainer = document.querySelector(`#${idLista} .lista-scrollview`);
+    listaContainer.innerHTML = ''; // Limpa a lista anterior
+
+    if (resultadosAgrupados.length === 0) {
+        listaContainer.innerHTML = '<p>Nenhum carro encontrado.</p>';
+        return;
+    }
+
+    resultadosAgrupados.forEach(grupo => {
+        const itemDiv = document.createElement('div');
+        itemDiv.classList.add('lista-item');
+        itemDiv.textContent = `${grupo.marca} ${grupo.modelo}`; // Exibe Marca e Modelo únicos
+        itemDiv.dataset.marca = grupo.marca; // Armazena a marca
+        itemDiv.dataset.modelo = grupo.modelo; // Armazena o modelo
+
+        // Adiciona evento de clique para selecionar o grupo de carros (modelo)
+        itemDiv.addEventListener('click', () => selecionarModeloParaVersao(grupo, idLista));
+
+        listaContainer.appendChild(itemDiv);
+    });
+}
+
+let carroSelecionado1 = null;
+let carroSelecionado2 = null;
+
+// Nova função chamada ao selecionar um MODELO da lista
+function selecionarModeloParaVersao(grupo, idLista) {
+     // Remove a classe 'selecionado' dos itens anteriores na mesma lista
+    const listaAnterior = document.querySelector(`#${idLista} .lista-scrollview`);
+    listaAnterior.querySelectorAll('.lista-item').forEach(item => {
+        item.classList.remove('selecionado');
+    });
+
+    // Adiciona a classe 'selecionado' ao item clicado
+    const itemClicado = listaAnterior.querySelector(`[data-marca="${grupo.marca}"][data-modelo="${grupo.modelo}"]`);
+     if (itemClicado) {
+        itemClicado.classList.add('selecionado');
+    }
+
+    // --- LÓGICA PARA EXIBIR AS VERSÕES/TRANSMISSÕES --- 
+    console.log(`Modelo selecionado para ${idLista}: `, grupo);
+
+    // Exibe a área de seleção de versões
+    const versoesSelecaoArea = document.querySelector(`#${idLista} .versoes-selecao`);
+    versoesSelecaoArea.style.display = 'block';
+
+    // Preenche a área de versões com as opções disponíveis
+    const versoesScrollview = versoesSelecaoArea.querySelector('.versoes-scrollview');
+    versoesScrollview.innerHTML = ''; // Limpa a lista anterior
+
+    if (grupo.versoes.length === 0) {
+        versoesScrollview.innerHTML = '<p>Nenhuma versão disponível.</p>';
+    } else {
+        grupo.versoes.forEach(veiculo => {
+            const versaoItemDiv = document.createElement('div');
+            versaoItemDiv.classList.add('versao-item');
+            // Exibe a combinação de Versão e Transmissão (ou outros campos relevantes)
+            versaoItemDiv.textContent = `${veiculo['Versão'] || '-'} / ${veiculo['Transmissão'] || '-'}`; 
+            // Adiciona evento de clique para selecionar a versão específica
+            versaoItemDiv.addEventListener('click', () => selecionarVersaoParaComparacao(veiculo, idLista, versaoItemDiv));
+            versoesScrollview.appendChild(versaoItemDiv);
+        });
+    }
+
+    // Limpamos a seleção de carro específica até que uma versão seja escolhida
+     if (idLista === 'lista-carro-1') {
+        carroSelecionado1 = null;
+    } else {
+        carroSelecionado2 = null;
+    }
+
+    // Atualiza a tabela comparativa (provavelmente ficará vazia até uma versão ser selecionada)
+    const camposSelecionados = Array.from(document.querySelectorAll('#botoes-centro input[type=checkbox]:checked')).map(cb => cb.value);
+    montarTabelaComparativa(camposSelecionados, carroSelecionado1, carroSelecionado2);
+}
+
+// Função chamada DEPOIS que a versão/transmissão for selecionada
+function selecionarVersaoParaComparacao(veiculo, idLista, itemClicado) {
+    // Remove a classe 'selecionado-versao' dos itens anteriores na mesma lista de versões
+    const versoesScrollview = document.querySelector(`#${idLista} .versoes-selecao .versoes-scrollview`);
+    versoesScrollview.querySelectorAll('.versao-item').forEach(item => {
+        item.classList.remove('selecionado-versao');
+    });
+
+    // Adiciona a classe 'selecionado-versao' ao item de versão clicado
+    if (itemClicado) {
+        itemClicado.classList.add('selecionado-versao');
+    }
+
+    // Armazena o carro específico selecionado
+     if (idLista === 'lista-carro-1') {
+        carroSelecionado1 = veiculo;
+    } else {
+        carroSelecionado2 = veiculo;
+    }
+
+    // Atualiza a tabela comparativa com o carro específico selecionado
+    const camposSelecionados = Array.from(document.querySelectorAll('#botoes-centro input[type=checkbox]:checked')).map(cb => cb.value);
+    montarTabelaComparativa(camposSelecionados, carroSelecionado1, carroSelecionado2);
 }
 
 function montarTabelaComparativa(campos, v1, v2) {
@@ -192,14 +318,18 @@ function montarTabelaComparativa(campos, v1, v2) {
     const tbody = document.querySelector('#tabelaResultados tbody');
     thead.innerHTML = '';
     tbody.innerHTML = '';
+
     // Cabeçalhos
     const trHead = document.createElement('tr');
-    trHead.innerHTML = `<th>Campo</th><th>${v1 ? (v1['Marca'] + ' ' + v1['Modelo']) : '-'}</th><th>${v2 ? (v2['Marca'] + ' ' + v2['Modelo']) : '-'}</th>`;
+    // Cabeçalhos agora são: Carro 1 | Campo | Carro 2
+    trHead.innerHTML = `<th>${v1 ? (v1['Marca'] + ' ' + v1['Modelo']) : 'Carro 1'}</th><th>Campo</th><th>${v2 ? (v2['Marca'] + ' ' + v2['Modelo']) : 'Carro 2'}</th>`;
     thead.appendChild(trHead);
+
     // Linhas
     campos.forEach(campo => {
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${campo}</td><td>${v1 ? (v1[campo] || '-') : '-'}</td><td>${v2 ? (v2[campo] || '-') : '-'}</td>`;
+        // Dados agora são: Valor Carro 1 | Nome do Campo | Valor Carro 2
+        tr.innerHTML = `<td>${v1 ? (v1[campo] || '-') : '-'}</td><td>${campo}</td><td>${v2 ? (v2[campo] || '-') : '-'}</td>`;
         tbody.appendChild(tr);
     });
 }
