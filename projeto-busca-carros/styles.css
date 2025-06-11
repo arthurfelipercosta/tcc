@@ -115,6 +115,11 @@ button:hover {
     background-color: #7f8c8d;
 }
 
+/* Ocultar o botão Pesquisar, já que a pesquisa é automática */
+#btnPesquisar {
+    display: none;
+}
+
 /*
 * Estilos para a tabela de resultados.
 * Define largura total e remove espaçamento entre as bordas das células.
