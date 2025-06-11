@@ -4,8 +4,40 @@ let dadosFiltrados = [];
 let colunas = [];
 
 // Adiciona campos selecionáveis para comparação
+/*
+    Categoria que podem ser selecionadas
+    Marca,
+    Modelo,
+    Versão,
+    Motor,
+    Tipo de Propulsão,
+    Transmissão,
+    Ar Condicionado,
+    Direção Assistida,
+    Combustível,
+    Poluentes(NMOG+NOx [mg/km]),
+    Poluentes(CO [mg/km]),
+    Poluentes(CHO [mg/km]),
+    Redução Relativa ao Limite,
+    Gás Efeito Estufa (Etanol [CO2 fóssil] [g/km]),
+    Gás Efeito Estufa (Gasolina ou Diesel [CO2 fóssil] [g/km]),
+    Gás Efeito Estufa (VEHP [CO2 fóssil] [g/km]),
+    Km - (Etanol[Cidade][km/l]),
+    Km - (Etanol[Estrada][km/l]),
+    Km - (Gasolina ou Diesel[Cidade][km/l]),
+    Km - (Gasolina ou Diesel[Estrada][km/l]),
+    Km - (Elétrico quando VE ou VEHP [Cidade][km/le]),
+    Km - (Elétrico quando VE ou VEHP [Estrada][km/le]),
+    Consumo Energético,
+    Autonomia modo Elétrico,
+    Classificação PBE (Comparação Relativa),
+    Classificação PBE (Absoluta na Categoria),
+    Selo CONPET de Eficiência Energética
+*/
 const camposComparacao = [
-    'Categoria', 'Marca', 'Modelo', 'Versão', 'Motor', 'Tipo de Propulsão', 'Transmissão', 'Ar Condicionado', 'Direção Assistida', 'Combustível'
+    'Categoria', 'Marca', 'Modelo', 'Versão',
+    'Motor', 'Tipo de Propulsão', 'Transmissão',
+    'Ar Condicionado', 'Direção Assistida', 'Combustível'
     // Adicione mais campos conforme desejar
 ];
 
@@ -18,18 +50,18 @@ document.addEventListener('DOMContentLoaded', function() {
             processarCSV(data);
             inicializarFiltros();
             criarSelecaoCampos();
-            adicionarEventosSelects();
-            pesquisar();
+            adicionarEventosSelectsAutomatico();
+            aplicarFiltrosAutomatico();
         })
         .catch(error => console.error('Erro ao carregar os dados:', error));
     
-    // Adicionar eventos aos botões (mantido para garantir compatibilidade, podem ser movidos para dentro do if acima)
+    // Adicionar eventos aos botões (Pesquisar será oculto via CSS, Limpar Filtros ainda funciona)
     document.getElementById('btnPesquisar').addEventListener('click', pesquisar);
     document.getElementById('btnLimpar').addEventListener('click', limparFiltros);
-
-    // Atualiza modelos quando a marca muda
-    document.getElementById('marca').addEventListener('change', atualizarModelos);
-    document.getElementById('categoria').addEventListener('change', atualizarModelos);
+    
+    // Atualiza modelos quando a marca muda (Esta função será chamada internamente pelo filtro automático agora)
+    // document.getElementById('marca').addEventListener('change', atualizarModelos);
+    // document.getElementById('categoria').addEventListener('change', atualizarModelos);
 });
 
 // Processa o CSV para um array de objetos
@@ -188,7 +220,7 @@ function pesquisar() {
     // Exibe os resultados agrupados nas listas
     exibirListaResultados(resultadosAgrupados1, 'lista-carro-1');
     exibirListaResultados(resultadosAgrupados2, 'lista-carro-2');
-
+    
     // Limpa a tabela comparativa ao realizar nova pesquisa
     montarTabelaComparativa([], null, null); 
 }
@@ -295,7 +327,7 @@ function selecionarVersaoParaComparacao(veiculo, idLista, itemClicado) {
     versoesScrollview.querySelectorAll('.versao-item').forEach(item => {
         item.classList.remove('selecionado-versao');
     });
-
+    
     // Adiciona a classe 'selecionado-versao' ao item de versão clicado
     if (itemClicado) {
         itemClicado.classList.add('selecionado-versao');
@@ -306,7 +338,7 @@ function selecionarVersaoParaComparacao(veiculo, idLista, itemClicado) {
         carroSelecionado1 = veiculo;
     } else {
         carroSelecionado2 = veiculo;
-    }
+}
 
     // Atualiza a tabela comparativa com o carro específico selecionado
     const camposSelecionados = Array.from(document.querySelectorAll('#botoes-centro input[type=checkbox]:checked')).map(cb => cb.value);
@@ -318,18 +350,73 @@ function montarTabelaComparativa(campos, v1, v2) {
     const tbody = document.querySelector('#tabelaResultados tbody');
     thead.innerHTML = '';
     tbody.innerHTML = '';
-
+    
     // Cabeçalhos
     const trHead = document.createElement('tr');
-    // Cabeçalhos agora são: Carro 1 | Campo | Carro 2
     trHead.innerHTML = `<th>${v1 ? (v1['Marca'] + ' ' + v1['Modelo']) : 'Carro 1'}</th><th>Campo</th><th>${v2 ? (v2['Marca'] + ' ' + v2['Modelo']) : 'Carro 2'}</th>`;
     thead.appendChild(trHead);
 
-    // Linhas
+    // Função de comparação para cada campo
+    function compararCampo(campo, valor1, valor2) {
+        if (campo === 'Transmissão') {
+            const auto1 = valor1.trim().toUpperCase().startsWith('A');
+            const auto2 = valor2.trim().toUpperCase().startsWith('A');
+            if (auto1 && !auto2) return 1;      // auto1 é melhor
+            if (!auto1 && auto2) return -1;     // auto2 é melhor
+            return 0;                           // empate
+        }
+        if (campo === 'Combustível') {
+            const ordemCombustivel = ['E', 'A', 'F', 'G', 'D']
+            const auto1 = ordemCombustivel.indexOf(valor1.trim());
+            const auto2 = ordemCombustivel.indexOf(valor2.trim());
+            if (auto1 !== -1 && auto2 !== -1) {
+                if (auto1 < auto2) return 1;        // auto1 é melhor
+                else if (auto1 > auto2) return -1;  // auto2 é melhor
+                return 0;                           // empate
+            }
+        }
+        // Adicione outros critérios aqui!
+        return 0;
+    }
+
+    let adicionarSimbolos = false;
     campos.forEach(campo => {
+        if (campo === 'Motor') {
+            adicionarSimbolos = true;
+        }
         const tr = document.createElement('tr');
-        // Dados agora são: Valor Carro 1 | Nome do Campo | Valor Carro 2
-        tr.innerHTML = `<td>${v1 ? (v1[campo] || '-') : '-'}</td><td>${campo}</td><td>${v2 ? (v2[campo] || '-') : '-'}</td>`;
+        const valor1 = v1 ? (v1[campo] || '-') : '-';
+        const valor2 = v2 ? (v2[campo] || '-') : '-';
+        let classe1 = '', classe2 = '';
+        let simbolo1 = '', simbolo2 = '';
+        const resultado = compararCampo(campo, valor1, valor2);
+
+        if (adicionarSimbolos) {
+            if (resultado === 1) {
+                simbolo1 = '<span style="color:green;font-weight:bold;">🟢</span> ';
+                simbolo2 = '<span style="color:red;font-weight:bold;">❌</span> ';
+            } else if (resultado === -1) {
+                simbolo1 = '<span style="color:red;font-weight:bold;">❌</span> ';
+                simbolo2 = '<span style="color:green;font-weight:bold;">🟢</span> ';
+            }
+            else {
+                simbolo1 = '<span style="color:red;font-weight:bold;">🟨</span> ';
+                simbolo2 = '<span style="color:green;font-weight:bold;">🟨</span> ';
+            }
+        }
+
+        if (resultado === 1) {
+            classe1 = 'ganhador';
+            classe2 = 'perdedor';
+        } else if (resultado === -1) {
+            classe1 = 'perdedor';
+            classe2 = 'ganhador';
+        } else if (resultado === 0 && valor1 !== '-' && valor2 !== '-') {
+            classe1 = 'empate';
+            classe2 = 'empate';
+        }
+
+        tr.innerHTML = `<td class="${classe1}">${simbolo1}${valor1}</td><td>${campo}</td><td class="${classe2}">${valor2}${simbolo2}</td>`;
         tbody.appendChild(tr);
     });
 }
@@ -340,13 +427,33 @@ function limparFiltros() {
         const el = document.getElementById(id);
         if (el) el.value = '';
     });
-    pesquisar();
+    aplicarFiltrosAutomatico();
 }
 
-// Eventos dinâmicos para selects
-function adicionarEventosSelects() {
-    [['marca','categoria','modelo'],['marca2','categoria2','modelo2']].forEach(([idMarca, idCategoria, idModelo]) => {
-        document.getElementById(idMarca).addEventListener('change', () => atualizarModelos(idMarca, idCategoria, idModelo));
-        document.getElementById(idCategoria).addEventListener('change', () => atualizarModelos(idMarca, idCategoria, idModelo));
-    });
+// Eventos dinâmicos para selects - AGORA COM FILTRO AUTOMÁTICO
+function adicionarEventosSelectsAutomatico() {
+    // Eventos para Carro 1
+    document.getElementById('categoria').addEventListener('change', aplicarFiltrosAutomatico);
+    document.getElementById('marca').addEventListener('change', aplicarFiltrosAutomatico);
+    document.getElementById('modelo').addEventListener('change', aplicarFiltrosAutomatico);
+
+    // Eventos para Carro 2
+    document.getElementById('categoria2').addEventListener('change', aplicarFiltrosAutomatico);
+    document.getElementById('marca2').addEventListener('change', aplicarFiltrosAutomatico);
+    document.getElementById('modelo2').addEventListener('change', aplicarFiltrosAutomatico);
+}
+
+// Nova função para aplicar filtros automaticamente e atualizar listas
+function aplicarFiltrosAutomatico() {
+    // Atualizar as opções dos selects (Marca e Modelo) para Carro 1
+    atualizarModelos('marca', 'categoria', 'modelo');
+    // Atualizar as opções dos selects (Marca e Modelo) para Carro 2
+    // Precisamos re-filtrar os modelos2 com base na categoria2 e marca2 atuais
+    // A função atualizarModelos já faz isso, só precisamos chamá-la para os selects do Carro 2
+     atualizarModelos('marca2', 'categoria2', 'modelo2');
+
+
+    // Agora, aplicar os filtros atuais para atualizar as listas de carros
+    // A função pesquisar já lê os valores dos selects e atualiza as listas
+    pesquisar();
 }
