@@ -437,6 +437,52 @@ function montarTabelaComparativa(campos, v1, v2) {
                 return 0;                           // empate
             }
         }
+        // Critérios para comparar os poluentes emitidos entre os automóveis
+        // Em relação ao nível de (NMOG+NOx [mg/km])
+        if (campo === 'Poluentes(NMOG+NOx [mg/km])') {
+            // Converte para números, removendo caracteres não numéricos
+            const valor1Num = parseFloat(valor1.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+            const valor2Num = parseFloat(valor2.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+
+            if (isNaN(valor1Num)) { valor1Num = 1000; }
+            if (isNaN(valor2Num)) { valor2Num = 1000; }
+            // Verifica se os valores são números válidos
+            if (!isNaN(valor1Num) && !isNaN(valor2Num)) {
+                if (valor1Num < valor2Num) return 1;        // auto1 é melhor (menos poluente)
+                else if (valor1Num > valor2Num) return -1;  // auto2 é melhor (menos poluente)
+                return 0;                                   // empate
+            }
+        }
+        // Em relação ao nível de (CO [mg/km])
+        if (campo === 'Poluentes(CO [mg/km])') {
+            // Converte para números, removendo caracteres não numéricos
+            const valor1Num = parseFloat(valor1.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+            const valor2Num = parseFloat(valor2.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+
+            if (isNaN(valor1Num)) { valor1Num = 1000; }
+            if (isNaN(valor2Num)) { valor2Num = 1000; }
+            // Verifica se os valores são números válidos
+            if (!isNaN(valor1Num) && !isNaN(valor2Num)) {
+                if (valor1Num < valor2Num) return 1;        // auto1 é melhor (menos poluente)
+                else if (valor1Num > valor2Num) return -1;  // auto2 é melhor (menos poluente)
+                return 0;                                   // empate
+            }
+        }
+        // Em relação ao nível de (CHO [mg/km])
+        if (campo === 'Poluentes(CHO [mg/km])') {
+            // Converte para números, removendo caracteres não numéricos
+            const valor1Num = parseFloat(valor1.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+            const valor2Num = parseFloat(valor2.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+
+            if (isNaN(valor1Num)) { valor1Num = 1000; }
+            if (isNaN(valor2Num)) { valor2Num = 1000; }
+            // Verifica se os valores são números válidos
+            if (!isNaN(valor1Num) && !isNaN(valor2Num)) {
+                if (valor1Num < valor2Num) return 1;        // auto1 é melhor (menos poluente)
+                else if (valor1Num > valor2Num) return -1;  // auto2 é melhor (menos poluente)
+                return 0;                                   // empate
+            }
+        }
 
 
         // Adicionar outros critérios aqui!
@@ -458,16 +504,16 @@ function montarTabelaComparativa(campos, v1, v2) {
         if (adicionarSimbolos) {
             if (resultado === 1) {
                 simbolo1 = '<span style="color:green;font-weight:bold;">🟢</span> ';
-                simbolo2 = '<span style="color:red;font-weight:bold;">❌</span> ';
+                simbolo2 = '<span style="color:red;font-weight:bold;"> ❌</span> ';
                 pontos1++;
             } else if (resultado === -1) {
                 simbolo1 = '<span style="color:red;font-weight:bold;">❌</span> ';
-                simbolo2 = '<span style="color:green;font-weight:bold;">🟢</span> ';
+                simbolo2 = '<span style="color:green;font-weight:bold;"> 🟢</span> ';
                 pontos2++;
             }
             else {
                 simbolo1 = '<span style="color:red;font-weight:bold;">🟨</span> ';
-                simbolo2 = '<span style="color:green;font-weight:bold;">🟨</span> ';
+                simbolo2 = '<span style="color:green;font-weight:bold;"> 🟨</span> ';
                 // pontos1++; pontos2++;
             }
         }
@@ -487,7 +533,7 @@ function montarTabelaComparativa(campos, v1, v2) {
         tr.innerHTML = `<td class="${classe1}">${simbolo1}${valor1}</td><td>${campo}</td><td class="${classe2}">${valor2}${simbolo2}</td>`;
         tbody.appendChild(tr);
     });
-    
+
     //  Linha final com a pontuação
     const trPontuacao = document.createElement('tr');
     trPontuacao.innerHTML = `<td style="text-align:center; font-weight:bold;">${pontos1} pts</td>
