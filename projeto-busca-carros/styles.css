@@ -365,3 +365,19 @@ tr:hover {
     background-color: #d0d0d0; /* Cor para versão selecionada */
     font-weight: bold;
 }
+
+#botoes-centro {
+    max-height: 180px;   /* ajuste a altura conforme preferir */
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 8px;
+    background: #fafafa;
+    margin-bottom: 16px;
+    border-radius: 6px;
+}
+
+#botoes-centro label {
+    display: block;
+    margin-bottom: 4px;
+    cursor: pointer;
+}

@@ -1,6 +1,15 @@
-// Dados dos veículos (você precisará carregar o CSV)
+/**
+ * script.js
+ * Lógica principal do comparador de veículos.
+ * Carrega dados de um CSV, popula filtros, permite seleção e comparação de veículos.
+ * Desenvolvido para o projeto de busca e comparação de carros.
+ */
+
+// Array com todos os veículos carregados do CSV
 let dadosVeiculos = [];
+// Array com veículos filtrados (não usado diretamente, mas pode ser útil futuramente)
 let dadosFiltrados = [];
+// Lista de nomes das colunas do CSV
 let colunas = [];
 
 // Adiciona campos selecionáveis para comparação
@@ -35,13 +44,19 @@ let colunas = [];
     Selo CONPET de Eficiência Energética
 */
 const camposComparacao = [
-    'Categoria', 'Marca', 'Modelo', 'Versão',
-    'Motor', 'Tipo de Propulsão', 'Transmissão',
-    'Ar Condicionado', 'Direção Assistida', 'Combustível'
-    // Adicione mais campos conforme desejar
+    'Categoria', 'Marca', 'Modelo', 'Versão', 'Motor', 'Tipo de Propulsão', 'Transmissão',
+    'Ar Condicionado', 'Direção Assistida', 'Combustível', 'Poluentes(NMOG+NOx [mg/km])',
+    'Poluentes(CO [mg/km])', 'Poluentes(CHO [mg/km])', 'Redução Relativa ao Limite',
+    'Consumo Energético', 'Classificação PBE (Comparação Relativa)',
+    'Classificação PBE (Absoluta na Categoria)', 'Selo CONPET de Eficiência Energética'
+
+    // Adicione ou retirar campos conforme desejar
 ];
 
-// Inicializa a aplicação quando a página carregar
+/**
+ * Inicializa a aplicação ao carregar a página.
+ * Carrega o CSV, processa os dados e inicializa os filtros e eventos.
+ */
 document.addEventListener('DOMContentLoaded', function () {
     // Carrega o CSV 
     fetch('dados_corrigidos_sem_duplicatas.csv')
@@ -64,7 +79,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // document.getElementById('categoria').addEventListener('change', atualizarModelos);
 });
 
-// Processa o CSV para um array de objetos
+/**
+ * Processa o conteúdo do CSV e preenche o array de veículos.
+ * @param {string} csv - Conteúdo do arquivo CSV como string.
+ */
 function processarCSV(csv) {
     const linhas = csv.split('\n');
     colunas = linhas[0].split(';').map(col => col.trim());
@@ -96,10 +114,22 @@ function processarCSV(csv) {
         dadosVeiculos.push(veiculo);
     }
 
+    // Ordena os veículos por Marca e depois por Modelo
+    dadosVeiculos.sort((a, b) => {
+        if (a['Marca'] < b['Marca']) return -1;
+        if (a['Marca'] > b['Marca']) return 1;
+        // Se as marcas forem iguais, ordena por Modelo
+        if (a['Modelo'] < b['Modelo']) return -1;
+        if (a['Modelo'] > b['Modelo']) return 1;
+        return 0;
+    });
+
     console.log('Dados carregados:', dadosVeiculos.length, 'veículos');
 }
 
-// Cria checkboxes para seleção dos campos
+/**
+ * Cria os checkboxes para seleção dos campos de comparação.
+ */
 function criarSelecaoCampos() {
     const container = document.getElementById('botoes-centro');
     container.innerHTML = '';
@@ -109,7 +139,7 @@ function criarSelecaoCampos() {
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.value = campo;
-        checkbox.checked = true;
+        checkbox.checked = true;                                    // Trocar para false para ficar desativado no início
         label.appendChild(checkbox);
         label.appendChild(document.createTextNode(' ' + campo));
         container.appendChild(label);
@@ -484,16 +514,52 @@ function montarTabelaComparativa(campos, v1, v2) {
             }
         }
 
+        // Critério para comparar Classificação PBE relativa e absoluta entre os carros selecionados
+        if (campo === 'Classificação PBE (Comparação Relativa)' ||
+            campo === 'Classificação PBE (Absoluta na Categoria)') {
+            // Ordem: A > B > C > D > E
+            const ordemPBE = ['A', 'B', 'C', 'D', 'E'];
+            const v1 = ordemPBE.indexOf(valor1.trim().toUpperCase());
+            const v2 = ordemPBE.indexOf(valor2.trim().toUpperCase());
+            if (v1 !== -1 && v2 !== -1) {
+                if (v1 < v2) return 1;        // valor1 é melhor
+                else if (v1 > v2) return -1;  // valor2 é melhor
+                return 0;                     // empate
+            }
+        }
 
+        // Critério para comparar consumo energético entre os carros selecionados
+        if (campo === 'Consumo Energético') {
+            // Converte para números, removendo caracteres não numéricos
+            const valor1Num = parseFloat(valor1.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+            const valor2Num = parseFloat(valor2.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+
+            if (isNaN(valor1Num)) { valor1Num = 1000; }
+            if (isNaN(valor2Num)) { valor2Num = 1000; }
+            // Verifica se os valores são números válidos
+            if (!isNaN(valor1Num) && !isNaN(valor2Num)) {
+                if (valor1Num < valor2Num) return 1;        // auto1 é melhor (menos consumo)
+                else if (valor1Num > valor2Num) return -1;  // auto2 é melhor (menos consumo)
+                return 0;                                   // empate
+            }
+        }
+
+        if (campo === 'Selo CONPET de Eficiência Energética') {
+            const ordemCONPET = ['SIM', 'NÃO'];
+            const v1 = ordemCONPET.indexOf(valor1.trim().toUpperCase());
+            const v2 = ordemCONPET.indexOf(valor2.trim().toUpperCase());
+
+            if (v1 !== -1 && v2 !== -1) {
+                if (v1 < v2) return 1;        // valor1 é melhor
+                else if (v1 > v2) return -1;  // valor2 é melhor
+                return 0;                     // empate
+            }
+        }
         // Adicionar outros critérios aqui!
         return 0;
     }
 
-    let adicionarSimbolos = false;
     campos.forEach(campo => {
-        if (campo === 'Tipo de Propulsão') {
-            adicionarSimbolos = true;
-        }
         const tr = document.createElement('tr');
         const valor1 = v1 ? (v1[campo] || '-') : '-';
         const valor2 = v2 ? (v2[campo] || '-') : '-';
@@ -501,21 +567,17 @@ function montarTabelaComparativa(campos, v1, v2) {
         let simbolo1 = '', simbolo2 = '';
         const resultado = compararCampo(campo, valor1, valor2);
 
-        if (adicionarSimbolos) {
-            if (resultado === 1) {
-                simbolo1 = '<span style="color:green;font-weight:bold;">🟢</span> ';
-                simbolo2 = '<span style="color:red;font-weight:bold;"> ❌</span> ';
-                pontos1++;
-            } else if (resultado === -1) {
-                simbolo1 = '<span style="color:red;font-weight:bold;">❌</span> ';
-                simbolo2 = '<span style="color:green;font-weight:bold;"> 🟢</span> ';
-                pontos2++;
-            }
-            else {
-                simbolo1 = '<span style="color:red;font-weight:bold;">🟨</span> ';
-                simbolo2 = '<span style="color:green;font-weight:bold;"> 🟨</span> ';
-                // pontos1++; pontos2++;
-            }
+        if (resultado === 1) {
+            simbolo1 = '<span style="color:green;font-weight:bold;">🟢</span> ';
+            simbolo2 = '<span style="color:red;font-weight:bold;"> ❌</span> ';
+            pontos1++;
+        } else if (resultado === -1) {
+            simbolo1 = '<span style="color:red;font-weight:bold;">❌</span> ';
+            simbolo2 = '<span style="color:green;font-weight:bold;"> 🟢</span> ';
+            pontos2++;
+        } else if (resultado === 0 && valor1 !== '-' && valor2 !== '-') {
+            simbolo1 = '<span style="color:red;font-weight:bold;">🟨</span> ';
+            simbolo2 = '<span style="color:green;font-weight:bold;"> 🟨</span> ';
         }
 
         // Comparar resultados
