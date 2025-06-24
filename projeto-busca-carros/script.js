@@ -53,6 +53,22 @@ const camposComparacao = [
     // Adicione ou retirar campos conforme desejar
 ];
 
+const legendasCampos = {
+    'Tipo de Propulsão': 'Tipos de Propulsão:\nElétrico\nHíbrido Plug-In\nHíbrido convencional (HEV)\nCombustão (Gasolina, Etanol, Diesel, Flex)',
+    'Transmissão': 'Transmissão:\nAs trasmissões são organizadas em ordem\nde tecnologia:\nMais modernas: Automáticas e/ou elétricas\nMais rústicas: Manuais e convencionais.',
+    'Direção Assistida': 'Direção Assistida:\nE: Direção Elétrica ou eletroassistida\nE-H: Direção Eletro-hidráulica\nH: Direção Hidráulica',
+    'Combustível': 'Combustível:\nA = Álcool (Etanol)\nD = Diesel\nE = Elétrico\nF = Flex\nG = Gasolina',
+    'Poluentes(NMOG+NOx [mg/km])': 'Poluentes(NMOG+NOx [mg/km]):\nNMOG = Non-Methane Organic Gases(Gases Orgânicos Não-metânicos)\nNOx = Óxidos de Nitrogênio\n(Principalmente NO e NO₂)\n[mg/km = miligramas por quilômetro]',
+    'Poluentes(CO [mg/km])': 'Poluentes (CO [mg/km]):\nCO = Monóxido de Carbono\n[mg/km = miligramas por quilômetro[',
+    'Poluentes(CHO [mg/km])':'Poluentes (CHO [mg/km]):\nCHO = Hidrocarbonetos oxigenados\n(formaldeído e outros compostos orgânicos coláteis)\n[mg/km = miligramas por quilômetro]',
+    'Redução Relativa ao Limite': 'Redução Relativa ao Limite:\nIndica o quanto abaixo do limite legal o veículo está.',
+    'Consumo Energético': 'Consumo Energético:\nConsumo de energia total do veículo',
+    'Classificação PBE (Comparação Relativa)': 'Comparação do veículo com outros modelos (independente da categoria)',
+    'Classificação PBE (Absoluta na Categoria)': 'Comparação do veículo com outros modelos (dentro da sua categoria)',
+    'Selo CONPET de Eficiência Energética': 'Selo emitido pela Petrobras/Minas e Energia que reconhece veículos com alto desempenho energético'
+    // Adicione outras legendas conforme necessário
+};
+
 /**
  * Inicializa a aplicação ao carregar a página.
  * Carrega o CSV, processa os dados e inicializa os filtros e eventos.
@@ -602,6 +618,31 @@ function montarTabelaComparativa(campos, v1, v2) {
                              <td style="text-align:center; font-weight:bold;">Pontuação</td>
                              <td style="text-align:center; font-weight:bold;">${pontos2} pts</td>`;
     tbody.appendChild(trPontuacao);
+
+    // Adiciona tooltip nas células da coluna do meio
+    document.querySelectorAll('#tabelaResultados tbody tr td:nth-child(2)').forEach((td, idx) => {
+        const campo = campos[idx];
+        const legenda = legendasCampos[campo];
+        if (legenda) {
+            td.style.cursor = 'help';
+            td.addEventListener('mouseenter', function(e) {
+                const tooltip = document.getElementById('tooltip');
+                tooltip.textContent = legenda;
+                tooltip.style.display = 'block';
+                tooltip.style.left = (e.pageX + 10) + 'px';
+                tooltip.style.top = (e.pageY + 10) + 'px';
+            });
+            td.addEventListener('mousemove', function(e) {
+                const tooltip = document.getElementById('tooltip');
+                tooltip.style.left = (e.pageX + 10) + 'px';
+                tooltip.style.top = (e.pageY + 10) + 'px';
+            });
+            td.addEventListener('mouseleave', function() {
+                const tooltip = document.getElementById('tooltip');
+                tooltip.style.display = 'none';
+            });
+        }
+    });
 }
 
 // Limpa todos os filtros

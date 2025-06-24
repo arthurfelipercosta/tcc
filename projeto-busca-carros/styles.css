@@ -381,3 +381,17 @@ tr:hover {
     margin-bottom: 4px;
     cursor: pointer;
 }
+
+.tooltip {
+    position: absolute;
+    background: #222;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.95em;
+    z-index: 1000;
+    pointer-events: none;
+    white-space: pre-line;
+    display: none;
+    max-width: 300px;
+}
