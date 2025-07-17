@@ -5,6 +5,8 @@
  * Desenvolvido para o projeto de busca e comparação de carros.
  */
 
+import { buscarInfoCarro } from "./scrapping.js";
+
 // Array com todos os veículos carregados do CSV
 let dadosVeiculos = [];
 // Array com veículos filtrados (não usado diretamente, mas pode ser útil futuramente)
@@ -57,10 +59,10 @@ const legendasCampos = {
     'Tipo de Propulsão': 'Tipos de Propulsão:\nElétrico\nHíbrido Plug-In\nHíbrido convencional (HEV)\nCombustão (Gasolina, Etanol, Diesel, Flex)',
     'Transmissão': 'Transmissão:\nAs trasmissões são organizadas em ordem\nde tecnologia:\nMais modernas: Automáticas e/ou elétricas\nMais rústicas: Manuais e convencionais.',
     'Direção Assistida': 'Direção Assistida:\nE: Direção Elétrica ou eletroassistida\nE-H: Direção Eletro-hidráulica\nH: Direção Hidráulica',
-    'Combustível': 'Combustível:\nA = Álcool (Etanol)\nD = Diesel\nE = Elétrico\nF = Flex\nG = Gasolina',
+    'Combustível': 'Combustível:\nE = Elétrico\nA = Álcool (Etanol)\nF = Flex\nG = Gasolina\nD = Diesel',
     'Poluentes(NMOG+NOx [mg/km])': 'Poluentes(NMOG+NOx [mg/km]):\nNMOG = Non-Methane Organic Gases(Gases Orgânicos Não-metânicos)\nNOx = Óxidos de Nitrogênio\n(Principalmente NO e NO₂)\n[mg/km = miligramas por quilômetro]',
-    'Poluentes(CO [mg/km])': 'Poluentes (CO [mg/km]):\nCO = Monóxido de Carbono\n[mg/km = miligramas por quilômetro[',
-    'Poluentes(CHO [mg/km])':'Poluentes (CHO [mg/km]):\nCHO = Hidrocarbonetos oxigenados\n(formaldeído e outros compostos orgânicos coláteis)\n[mg/km = miligramas por quilômetro]',
+    'Poluentes(CO [mg/km])': 'Poluentes (CO [mg/km]):\nCO = Monóxido de Carbono\n[mg/km = miligramas por quilômetro]',
+    'Poluentes(CHO [mg/km])': 'Poluentes (CHO [mg/km]):\nCHO = Hidrocarbonetos oxigenados\n(formaldeído e outros compostos orgânicos voláteis)\n[mg/km = miligramas por quilômetro]',
     'Redução Relativa ao Limite': 'Redução Relativa ao Limite:\nIndica o quanto abaixo do limite legal o veículo está.',
     'Consumo Energético': 'Consumo Energético:\nConsumo de energia total do veículo',
     'Classificação PBE (Comparação Relativa)': 'Comparação do veículo com outros modelos (independente da categoria)',
@@ -160,6 +162,14 @@ function criarSelecaoCampos() {
         label.appendChild(document.createTextNode(' ' + campo));
         container.appendChild(label);
     });
+
+    // Adiciona evento para atualizar a tabela ao marcar/desmarcar qualquer campo de comparação
+    document.querySelectorAll('#botoes-centro input[type=checkbox]').forEach(cb => {
+        cb.addEventListener('change', function () {
+            const camposSelecionados = Array.from(document.querySelectorAll('#botoes-centro input[type=checkbox]:checked')).map(cb => cb.value);
+            montarTabelaComparativa(camposSelecionados, carroSelecionado1, carroSelecionado2);
+        })
+    })
 }
 
 // Inicializa os filtros com opções únicas
@@ -209,6 +219,105 @@ function inicializarFiltros() {
     });
 
     atualizarModelos('marca2', 'categoria2', 'modelo2');
+}
+
+/**
+ * Atualiza os selects de categoria, marca e modelo de acordo com as seleções atuais.
+ * Implementa as seguintes regras:
+ * - Selecionar categoria filtra marcas e modelos disponíveis nessa categoria.
+ * - Selecionar marca filtra categorias e modelos disponíveis para essa marca.
+ * - Selecionar modelo filtra categoria e marca daquele modelo.
+ * - Se selecionar um modelo e depois mudar a marca, o campo modelo volta para 'Todos'.
+ * - Se selecionar marca e modelo e depois mudar a categoria, ambos voltam para 'Todos'.
+ *
+ * @param {string} idMarca - id do select de marca
+ * @param {string} idCategoria - id do select de categoria
+ * @param {string} idModelo - id do select de modelo
+ */
+function atualizarFiltros(idMarca, idCategoria, idModelo) {
+    const selectCategoria = document.getElementById(idCategoria);
+    const selectMarca = document.getElementById(idMarca);
+    const selectModelo = document.getElementById(idModelo);
+
+    // Salva os valores selecionados
+    let categoriaSelecionada = selectCategoria.value;
+    let marcaSelecionada = selectMarca.value;
+    let modeloSelecionado = selectModelo.value;
+
+    // Se um modelo for selecionado, filtra categoria e marca para aquele modelo
+    if (modeloSelecionado && modeloSelecionado !== '') {
+        // Busca o veículo correspondente ao modelo selecionado
+        const veiculo = dadosVeiculos.find(v => v['Modelo'] === modeloSelecionado);
+        if (veiculo) {
+            categoriaSelecionada = veiculo['Categoria'];
+            marcaSelecionada = veiculo['Marca'];
+            selectCategoria.value = categoriaSelecionada;
+            selectMarca.value = marcaSelecionada;
+        }
+    }
+
+    // Filtra marcas e modelos disponíveis para a categoria selecionada
+    let marcasDisponiveis = new Set();
+    let modelosDisponiveis = new Set();
+    let categoriasDisponiveis = new Set();
+
+    dadosVeiculos.forEach(veiculo => {
+        // Se categoria está selecionada, só considera veículos dessa categoria
+        if (categoriaSelecionada && categoriaSelecionada !== '' && veiculo['Categoria'] !== categoriaSelecionada) return;
+        // Se marca está selecionada, só considera veículos dessa marca
+        if (marcaSelecionada && marcaSelecionada !== '' && veiculo['Marca'] !== marcaSelecionada) return;
+        marcasDisponiveis.add(veiculo['Marca']);
+        modelosDisponiveis.add(veiculo['Modelo']);
+        categoriasDisponiveis.add(veiculo['Categoria']);
+    });
+
+    // Atualiza opções de categoria
+    const valorCategoriaAntes = selectCategoria.value;
+    selectCategoria.innerHTML = '<option value="">Todas</option>';
+    categoriasDisponiveis.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat;
+        option.textContent = cat;
+        selectCategoria.appendChild(option);
+    });
+    // Restaura valor se ainda existir
+    if (categoriasDisponiveis.has(valorCategoriaAntes)) {
+        selectCategoria.value = valorCategoriaAntes;
+    } else {
+        selectCategoria.value = '';
+    }
+
+    // Atualiza opções de marca
+    const valorMarcaAntes = selectMarca.value;
+    selectMarca.innerHTML = '<option value="">Todas</option>';
+    marcasDisponiveis.forEach(marca => {
+        const option = document.createElement('option');
+        option.value = marca;
+        option.textContent = marca;
+        selectMarca.appendChild(option);
+    });
+    // Restaura valor se ainda existir
+    if (marcasDisponiveis.has(valorMarcaAntes)) {
+        selectMarca.value = valorMarcaAntes;
+    } else {
+        selectMarca.value = '';
+    }
+
+    // Atualiza opções de modelo
+    const valorModeloAntes = selectModelo.value;
+    selectModelo.innerHTML = '<option value="">Todos</option>';
+    modelosDisponiveis.forEach(modelo => {
+        const option = document.createElement('option');
+        option.value = modelo;
+        option.textContent = modelo;
+        selectModelo.appendChild(option);
+    });
+    // Restaura valor se ainda existir
+    if (modelosDisponiveis.has(valorModeloAntes)) {
+        selectModelo.value = valorModeloAntes;
+    } else {
+        selectModelo.value = '';
+    }
 }
 
 // Atualiza modelos para selects dinâmicos
@@ -368,6 +477,13 @@ function selecionarModeloParaVersao(grupo, idLista) {
     // Atualiza a tabela comparativa (provavelmente ficará vazia até uma versão ser selecionada)
     const camposSelecionados = Array.from(document.querySelectorAll('#botoes-centro input[type=checkbox]:checked')).map(cb => cb.value);
     montarTabelaComparativa(camposSelecionados, carroSelecionado1, carroSelecionado2);
+
+    // Mostra info do carro 1 e/ou 2 (exemplo para o carro 1)
+    if (carroSelecionado1) {
+        // Usar o slug correto da empresa para o ReclameAqui
+        mostrarInfoCarroLado(carroSelecionado1, 1);
+    }
+
 }
 
 // Função chamada DEPOIS que a versão/transmissão for selecionada
@@ -415,7 +531,7 @@ function montarTabelaComparativa(campos, v1, v2) {
         // Critério para comparar tipo de propulsão entre os automóveis
         if (campo === 'Tipo de Propulsão') {
             // Elétrico, Combustão, Híbrido, Plug-in
-            const ordemPropulsao = ['Elétrico', 'Combustão', 'Híbrido', 'Plug-in'];
+            const ordemPropulsao = ['Elétrico', 'Híbrido', 'Plug-in', 'Combustão'];
             const auto1 = ordemPropulsao.indexOf(valor1.trim());
             const auto2 = ordemPropulsao.indexOf(valor2.trim());
             if (auto1 !== -1 && auto2 !== -1) {
@@ -470,11 +586,11 @@ function montarTabelaComparativa(campos, v1, v2) {
         // Em relação ao nível de poluição
         if (campo === 'Combustível') {
             const ordemCombustivel = ['E', 'A', 'F', 'G', 'D'];
-            // A - Álcool (Etanol)
-            // D - Diesel
             // E - Elétrico
+            // A - Álcool (Etanol)
             // F - Flex
             // G - Gasolina
+            // D - Diesel
             const auto1 = ordemCombustivel.indexOf(valor1.trim());
             const auto2 = ordemCombustivel.indexOf(valor2.trim());
             if (auto1 !== -1 && auto2 !== -1) {
@@ -487,8 +603,8 @@ function montarTabelaComparativa(campos, v1, v2) {
         // Em relação ao nível de (NMOG+NOx [mg/km])
         if (campo === 'Poluentes(NMOG+NOx [mg/km])') {
             // Converte para números, removendo caracteres não numéricos
-            const valor1Num = parseFloat(valor1.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
-            const valor2Num = parseFloat(valor2.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+            let valor1Num = parseFloat(valor1.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+            let valor2Num = parseFloat(valor2.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
 
             if (isNaN(valor1Num)) { valor1Num = 1000; }
             if (isNaN(valor2Num)) { valor2Num = 1000; }
@@ -502,8 +618,8 @@ function montarTabelaComparativa(campos, v1, v2) {
         // Em relação ao nível de (CO [mg/km])
         if (campo === 'Poluentes(CO [mg/km])') {
             // Converte para números, removendo caracteres não numéricos
-            const valor1Num = parseFloat(valor1.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
-            const valor2Num = parseFloat(valor2.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+            let valor1Num = parseFloat(valor1.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+            let valor2Num = parseFloat(valor2.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
 
             if (isNaN(valor1Num)) { valor1Num = 1000; }
             if (isNaN(valor2Num)) { valor2Num = 1000; }
@@ -517,8 +633,8 @@ function montarTabelaComparativa(campos, v1, v2) {
         // Em relação ao nível de (CHO [mg/km])
         if (campo === 'Poluentes(CHO [mg/km])') {
             // Converte para números, removendo caracteres não numéricos
-            const valor1Num = parseFloat(valor1.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
-            const valor2Num = parseFloat(valor2.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+            let valor1Num = parseFloat(valor1.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+            let valor2Num = parseFloat(valor2.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
 
             if (isNaN(valor1Num)) { valor1Num = 1000; }
             if (isNaN(valor2Num)) { valor2Num = 1000; }
@@ -547,8 +663,8 @@ function montarTabelaComparativa(campos, v1, v2) {
         // Critério para comparar consumo energético entre os carros selecionados
         if (campo === 'Consumo Energético') {
             // Converte para números, removendo caracteres não numéricos
-            const valor1Num = parseFloat(valor1.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
-            const valor2Num = parseFloat(valor2.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+            let valor1Num = parseFloat(valor1.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+            let valor2Num = parseFloat(valor2.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
 
             if (isNaN(valor1Num)) { valor1Num = 1000; }
             if (isNaN(valor2Num)) { valor2Num = 1000; }
@@ -564,6 +680,18 @@ function montarTabelaComparativa(campos, v1, v2) {
             const ordemCONPET = ['SIM', 'NÃO'];
             const v1 = ordemCONPET.indexOf(valor1.trim().toUpperCase());
             const v2 = ordemCONPET.indexOf(valor2.trim().toUpperCase());
+
+            if (v1 !== -1 && v2 !== -1) {
+                if (v1 < v2) return 1;        // valor1 é melhor
+                else if (v1 > v2) return -1;  // valor2 é melhor
+                return 0;                     // empate
+            }
+        }
+
+        if (campo === 'Redução Relativa ao Limite') {
+            const ordemReducao = ['A', 'B', 'C', 'D', 'E']
+            const v1 = ordemReducao.indexOf(valor1.trim().toUpperCase());
+            const v2 = ordemReducao.indexOf(valor2.trim().toUpperCase());
 
             if (v1 !== -1 && v2 !== -1) {
                 if (v1 < v2) return 1;        // valor1 é melhor
@@ -619,25 +747,47 @@ function montarTabelaComparativa(campos, v1, v2) {
                              <td style="text-align:center; font-weight:bold;">${pontos2} pts</td>`;
     tbody.appendChild(trPontuacao);
 
+    // Adicionar linha de preço médio (se disponível)
+    // Usa window.precoMedio1 e window.precoMedio2, que são atualizados por mostrarInfoCarroLado
+    if (carroSelecionado1 || carroSelecionado2) {
+        let precoMedio1 = window.precoMedio1 || '-';
+        let precoMedio2 = window.precoMedio2 || '-';
+
+        // Formata para moeda se for número
+        if (typeof precoMedio1 === 'number') {
+            precoMedio1 = precoMedio1.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+        if (typeof precoMedio2 === 'number') {
+            precoMedio2 = precoMedio2.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        // Cria a linha da tabela para o preço médio
+        const trPreco = document.createElement('tr');
+        trPreco.innerHTML = `<td style="text-align:center; font-weight:bold;">${precoMedio1}</td>
+                         <td style="text-align:center; font-weight:bold;">Preço Médio (R$)</td>
+                         <td style="text-align:center; font-weight:bold;">${precoMedio2}</td>`;
+        tbody.appendChild(trPreco);
+    }
+
     // Adiciona tooltip nas células da coluna do meio
     document.querySelectorAll('#tabelaResultados tbody tr td:nth-child(2)').forEach((td, idx) => {
         const campo = campos[idx];
         const legenda = legendasCampos[campo];
         if (legenda) {
             td.style.cursor = 'help';
-            td.addEventListener('mouseenter', function(e) {
+            td.addEventListener('mouseenter', function (e) {
                 const tooltip = document.getElementById('tooltip');
                 tooltip.textContent = legenda;
                 tooltip.style.display = 'block';
                 tooltip.style.left = (e.pageX + 10) + 'px';
                 tooltip.style.top = (e.pageY + 10) + 'px';
             });
-            td.addEventListener('mousemove', function(e) {
+            td.addEventListener('mousemove', function (e) {
                 const tooltip = document.getElementById('tooltip');
                 tooltip.style.left = (e.pageX + 10) + 'px';
                 tooltip.style.top = (e.pageY + 10) + 'px';
             });
-            td.addEventListener('mouseleave', function() {
+            td.addEventListener('mouseleave', function () {
                 const tooltip = document.getElementById('tooltip');
                 tooltip.style.display = 'none';
             });
@@ -657,14 +807,44 @@ function limparFiltros() {
 // Eventos dinâmicos para selects - AGORA COM FILTRO AUTOMÁTICO
 function adicionarEventosSelectsAutomatico() {
     // Eventos para Carro 1
-    document.getElementById('categoria').addEventListener('change', aplicarFiltrosAutomatico);
-    document.getElementById('marca').addEventListener('change', aplicarFiltrosAutomatico);
-    document.getElementById('modelo').addEventListener('change', aplicarFiltrosAutomatico);
+    document.getElementById('categoria').addEventListener('change', function () {
+        // Se mudar a categoria, reseta marca e modelo
+        document.getElementById('marca').value = '';
+        document.getElementById('modelo').value = '';
+        atualizarFiltros('marca', 'categoria', 'modelo');
+        aplicarFiltrosAutomatico();
+    });
+    document.getElementById('marca').addEventListener('change', function () {
+        // Se mudar a marca, reseta modelo
+        document.getElementById('modelo').value = '';
+        atualizarFiltros('marca', 'categoria', 'modelo');
+        aplicarFiltrosAutomatico();
+    });
+    document.getElementById('modelo').addEventListener('change', function () {
+        // Se mudar o modelo, filtra categoria e marca para aquele modelo
+        atualizarFiltros('marca', 'categoria', 'modelo');
+        aplicarFiltrosAutomatico();
+    });
 
     // Eventos para Carro 2
-    document.getElementById('categoria2').addEventListener('change', aplicarFiltrosAutomatico);
-    document.getElementById('marca2').addEventListener('change', aplicarFiltrosAutomatico);
-    document.getElementById('modelo2').addEventListener('change', aplicarFiltrosAutomatico);
+    document.getElementById('categoria2').addEventListener('change', function () {
+        // Se mudar a categoria, reseta marca e modelo
+        document.getElementById('marca2').value = '';
+        document.getElementById('modelo2').value = '';
+        atualizarFiltros('marca2', 'categoria2', 'modelo2');
+        aplicarFiltrosAutomatico();
+    });
+    document.getElementById('marca2').addEventListener('change', function () {
+        // Se mudar a marca, reseta modelo
+        document.getElementById('modelo2').value = '';
+        atualizarFiltros('marca2', 'categoria2', 'modelo2');
+        aplicarFiltrosAutomatico();
+    });
+    document.getElementById('modelo2').addEventListener('change', function () {
+        // Se mudar o modelo, filtra categoria e marca para aquele modelo
+        atualizarFiltros('marca2', 'categoria2', 'modelo2');
+        aplicarFiltrosAutomatico();
+    });
 }
 
 // Nova função para aplicar filtros automaticamente e atualizar listas
@@ -680,4 +860,51 @@ function aplicarFiltrosAutomatico() {
     // Agora, aplicar os filtros atuais para atualizar as listas de carros
     // A função pesquisar já lê os valores dos selects e atualiza as listas
     pesquisar();
+
+    // Atualiza a tabela comparativa se já houver dois carros selecionados
+    const camposSelecionados = Array.from(document.querySelectorAll('#botoes-centro input[type=checkbox]:checked')).map(cb => cb.value);
+    montarTabelaComparativa(camposSelecionados, carroSelecionado1, carroSelecionado2);
+}
+
+
+/**
+ * Faz uma requisição à API Flask para buscar informações de preço médio (Webmotors)
+ * e quantidade de reclamações (ReclameAqui) para um determinado carro.
+ * @param {string} marca - Marca do veículo (ex: 'honda')
+ * @param {string} modelo - Modelo do veículo (ex: 'civic')
+ * @param {string} empresa_slug - Slug da empresa no ReclameAqui (ex: 'honda-do-brasil')
+ * @returns {Promise<Object>} - Objeto contendo preco_medio, precos (lista) e reclamacoes
+ *
+ * Exemplo de uso:
+ *   const info = await buscarInfoCarro('honda', 'civic');
+ */
+// async function buscarInfoCarro(marca, modelo) {
+//     const url = `http://127.0.0.1:5000/api/info_carro?marca=${encodeURIComponent(marca)}&modelo=${encodeURIComponent(modelo)}&empresa_slug=${encodeURIComponent(empresa_slug)}`;
+//     const resp = await fetch(url);
+//     const data = await resp.json();
+//     return data;
+// }
+
+/**
+ * Busca o preço médio do veículo selecionado (lado 1 ou 2) usando a API Flask
+ * e armazena o resultado em uma variável global para uso na tabela comparativa.
+ * @param {Object} veiculo - Objeto do veículo selecionado (deve conter 'Marca' e 'Modelo')
+ * @param {number} lado - 1 para carro da esquerda, 2 para carro da direita
+ *
+ * Exemplo de uso:
+ *   mostrarInfoCarroLado(carroSelecionado1, 1);
+ */
+async function mostrarInfoCarroLado(veiculo, lado) {
+    if (!veiculo) {
+        // Se não houver veículo selecionado, limpa o valor global
+        window['precoMedio' + lado] = '-';
+        return;
+    }
+    // Chama a API Flask para buscar preço médio e reclamações
+    const info = await buscarInfoCarro(
+        veiculo['Marca'].toLowerCase(),
+        veiculo['Modelo'].toLowerCase()
+    );
+    // Armazena o preço médio globalmente para uso na tabela
+    window['precoMedio' + lado] = info.preco_medio;
 }

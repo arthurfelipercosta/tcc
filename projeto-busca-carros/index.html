@@ -1,3 +1,8 @@
+<!--
+    Comando para inicializar o programa na porta 8000
+    python -m http.server 8000
+ -->
+
 <!-- Define o tipo de documento como HTML5 -->
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -134,10 +139,12 @@
     </div>
 
     <!-- Link para o arquivo JavaScript que contém a lógica da aplicação -->
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
+    <!-- <script src="script.js"></script> -->
 
     <!-- Tooltip -->
     <div id="tooltip" class="tooltip"></div>
+    <div id="info-carro" style="margin-top:20px; font-size:1.1em;"></div>
 </body>
 
 </html>
