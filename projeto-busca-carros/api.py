@@ -6,8 +6,8 @@ Endpoints:
 - /api/info_carro: Recebe marca e modelo, retorna preço médio e reclamações.
 
 Funções auxiliares:
-- buscar_precos_webmotors: Faz scraping de preços no Webmotors.
-- buscar_reclamacoes_reclameaqui: Faz scraping de reclamações no ReclameAqui.
+- buscar_precos_webmotors: Faz scrapping de preços no Webmotors.
+- buscar_reclamacoes_reclameaqui: Faz scrapping de reclamações no ReclameAqui.
 
 Uso acadêmico/experimental.
 """
@@ -31,25 +31,31 @@ def buscar_precos_webmotors(marca, modelo, limite=10):
     Returns:
         tuple: (media dos preços encontrados ou None, lista de preços)
     """
-    url = f"https://www.webmotors.com.br/carros/estoque/{marca}/{modelo}"
+    url = (
+        "https://www.webmotors.com.br/api/search/car"
+        "?displayPerPage=47"
+        "&actualPage=1"
+        "&showMenu=true"
+        "&showCount=true"
+        "&showBreadCrumb=true"
+        "&order=1"
+        f"&url=https://www.webmotors.com.br/carros/estoque/{marca.lower()}/{modelo.lower()}?marca={marca.lower()}&modelo={modelo.lower()}&autocomplete={modelo.lower()}&autocompleteTerm={marca.title()}%20{modelo.upper()}&tipoveiculo=carros&marca1={marca.upper()}&modelo1={modelo.upper()}&page=1"
+        "&mediaZeroKm=true"
+    )
     headers = {'User-Agent': 'Mozilla/5.0'}
     r = requests.get(url, headers=headers)
-    soup = BeautifulSoup(r.text, 'html.parser')
+    if r.status_code != 200:
+        return 0, "Carro não encontrado"
+    data = r.json()
     precos = []
-    # Procura por elementos <strong> que contenham o preço (ajuste o seletor se necessário)
-    for preco in soup.select('p._body-bold-large_qtpsh_78'):
-        valor = preco.text.replace('R$', '').replace('.', '').replace(',', '.').strip()
-        print(valor)
-        try:
-            precos.append(float(valor))
-        except:
-            pass
-        if len(precos) >= limite:
-            break
+    for anuncio in data.get("SearchResults", [])[:limite]:
+        price = anuncio.get("Prices", {}).get("Price")
+        if price:
+            precos.append(float(price))
     if precos:
         media = sum(precos) / len(precos)
         return media, precos
-    return None, []
+    return 0, "Carro não encontrado"
 
 def buscar_reclamacoes_reclameaqui(empresa_slug):
     """
@@ -78,17 +84,15 @@ def info_carro():
     - lista de preços encontrados
     - quantidade de reclamações (ReclameAqui)
     Exemplo de uso:
-    GET /api/info_carro?marca=honda&modelo=civic&empresa_slug=honda-do-brasil
+    GET /api/info_carro?marca=honda&modelo=civic
     """
     marca = request.args.get('marca', '').lower()
     modelo = request.args.get('modelo', '').lower()
-    empresa_slug = request.args.get('empresa_slug', '').lower()
     preco_medio, precos = buscar_precos_webmotors(marca, modelo)
-    reclamacoes = buscar_reclamacoes_reclameaqui(empresa_slug)
+
     return jsonify({
         'preco_medio': preco_medio,
         'precos': precos,
-        'reclamacoes': reclamacoes
     })
 
 if __name__ == '__main__':
