@@ -13,8 +13,9 @@
 
 export async function buscarInfoCarro(marca, modelo) {
     const url = `http://127.0.0.1:5000/api/info_carro?marca=${encodeURIComponent(marca)}&modelo=${encodeURIComponent(modelo)}`;
+    console.log("URL: ", url);
     const resp = await fetch(url);
     const data = await resp.json()
-    console.log("SCRAPPING para ", marca, modelo, ":", data, null, 2);
+    // console.log("SCRAPPING para ", marca, modelo, ":", data, null, 2);
     return data;
 }

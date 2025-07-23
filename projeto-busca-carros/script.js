@@ -477,13 +477,6 @@ function selecionarModeloParaVersao(grupo, idLista) {
     // Atualiza a tabela comparativa (provavelmente ficará vazia até uma versão ser selecionada)
     const camposSelecionados = Array.from(document.querySelectorAll('#botoes-centro input[type=checkbox]:checked')).map(cb => cb.value);
     montarTabelaComparativa(camposSelecionados, carroSelecionado1, carroSelecionado2);
-
-    // Mostra info do carro 1 e/ou 2 (exemplo para o carro 1)
-    if (carroSelecionado1) {
-        // Usar o slug correto da empresa para o ReclameAqui
-        mostrarInfoCarroLado(carroSelecionado1, 1);
-    }
-
 }
 
 // Função chamada DEPOIS que a versão/transmissão for selecionada
@@ -504,6 +497,12 @@ function selecionarVersaoParaComparacao(veiculo, idLista, itemClicado) {
         carroSelecionado1 = veiculo;
     } else {
         carroSelecionado2 = veiculo;
+    }
+
+    // Mostra info do carro 1 e/ou 2 (exemplo para o carro 1)
+    if (carroSelecionado1) {
+        // Usar o slug correto da empresa para o ReclameAqui
+        mostrarInfoCarroLado(carroSelecionado1, 1);
     }
 
     // Atualiza a tabela comparativa com o carro específico selecionado
@@ -901,10 +900,26 @@ async function mostrarInfoCarroLado(veiculo, lado) {
         return;
     }
     // Chama a API Flask para buscar preço médio e reclamações
-    const info = await buscarInfoCarro(
-        veiculo['Marca'].toLowerCase(),
-        veiculo['Modelo'].toLowerCase()
-    );
-    // Armazena o preço médio globalmente para uso na tabela
-    window['precoMedio' + lado] = info.preco_medio;
+    try {
+        const info = await buscarInfoCarro(
+            veiculo['Marca'].toLowerCase(),
+            veiculo['Modelo'].toLowerCase()
+        );
+
+        // Calcular o preço médio
+        let precoMedio = 0;
+        if (info && info.precos && Array.isArray(info.precos) && info.precos.length > 0) {
+            const somaPrecos = info.precos.reduce((soma, preco) => soma + preco, 0);
+            precoMedio = somaPrecos / info.precos.length;
+        }
+        window['precoMedio' + lado] = precoMedio;
+        const camposSelecionados = Array.from(document.querySelectorAll('#botoes-centro input[type=checkbox]:checked')).map(cb => cb.value);
+        montarTabelaComparativa(camposSelecionados, carroSelecionado1, carroSelecionado2);
+
+    } catch (error) {
+        console.error(`Erro ao buscar informações do carro (lado ${lado}):`, error);
+        window['precoMedio' + lado] = '-';
+    }
+    // console.log(`PREÇOS LADO ${lado == 1 ? 'esquerdo' : 'direito'}: `, precoMedio);
+
 }
