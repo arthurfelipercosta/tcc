@@ -734,8 +734,10 @@ function montarTabelaComparativa(campos, v1, v2) {
             simbolo2 = '<span style="color:green;font-weight:bold;"> 🟢</span> ';
             pontos2++;
         } else if (resultado === 0 && valor1 !== '-' && valor2 !== '-') {
-            simbolo1 = '<span style="color:red;font-weight:bold;">🟨</span> ';
-            simbolo2 = '<span style="color:green;font-weight:bold;"> 🟨</span> ';
+            const sinalMenos1 = '<span class="sinal-menos-empate-1"></span>';
+            const sinalMenos2 = '<span class="sinal-menos-empate-2"></span>';
+            simbolo1 = sinalMenos1;
+            simbolo2 = sinalMenos2;
         }
 
         // Comparar resultados
