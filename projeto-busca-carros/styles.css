@@ -12,393 +12,341 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
-/*
-* Estilos para o corpo da página (body).
-* Define fonte, espaçamento entre linhas, cor do texto, cor de fundo e padding geral.
-*/
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    background-color: #f4f4f4;
-    padding: 20px;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(120deg, #e0eafc 0%, #cfdef3 100%);
+    color: #222;
+    min-height: 100vh;
+    padding: 0;
 }
 
-/*
-* Estilos para o container principal da aplicação.
-* Centraliza o conteúdo na página, define largura máxima, fundo, padding, borda arredondada e sombra.
-*/
 .container {
     max-width: 1200px;
-    margin: 0 auto; /* Centraliza o bloco horizontalmente */
-    background: white;
-    padding: 20px;
-    border-radius: 8px; /* Cantos arredondados */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    margin: 40px auto 24px auto;
+    background: #fff;
+    padding: 40px 32px 32px 32px;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(44, 62, 80, 0.13);
 }
 
-/*
-* Estilos para o título principal (h1).
-* Centraliza o texto, adiciona margem inferior e define a cor.
-*/
 h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #2c3e50;
+    color: #2563eb;
+    font-size: 2.5em;
+    margin-bottom: 32px;
+    letter-spacing: 1px;
+    font-weight: 800;
 }
 
-/*
-* Estilos para títulos de seção (h2).
-* Adiciona margem inferior, define cor, borda inferior e padding na parte de baixo.
-*/
-h2 {
-    margin-bottom: 15px;
-    color: #3498db;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 5px;
+h2, .lista-carro h3 {
+    color: #2563eb;
+    font-weight: 700;
+    border-bottom: 2px solid #e3e8f0;
+    padding-bottom: 8px;
+    margin-bottom: 22px;
+    font-size: 1.3em;
 }
 
-/*
-* Estilos para os rótulos dos campos de formulário (label).
-* Define display block para ocupar a largura total e margem inferior, além de negrito.
-*/
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
+.filtros {
+    background: #f6faff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.06);
+    padding: 32px 24px 18px 24px;
+    margin-bottom: 32px;
 }
 
-/*
-* Estilos para selects e inputs (campos de formulário).
-* Define largura total, padding interno, borda, borda arredondada e tamanho da fonte.
-*/
-select, input {
-    width: 100%;
-    padding: 8px 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px; /* Cantos arredondados */
-    font-size: 16px;
-}
-
-/*
-* Estilos para botões gerais.
-* Define cor de fundo, cor do texto, remove borda, padding interno, cursor, borda arredondada, tamanho da fonte e transição suave na cor de fundo.
-*/
-button {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer; /* Muda o cursor ao passar por cima */
-    border-radius: 4px; /* Cantos arredondados */
-    font-size: 16px;
-    transition: background-color 0.3s ease; /* Transição suave ao hover */
-    margin-right: 10px; /* Espaçamento entre botões */
-}
-
-/*
-* Estilo para o botão no estado hover (ao passar o mouse).
-* Escurece a cor de fundo para dar feedback visual.
-*/
-button:hover {
-    background-color: #2980b9;
-}
-
-/*
-* Estilo específico para o botão Limpar Filtros.
-* Define uma cor de fundo diferente.
-*/
-#btnLimpar {
-    background-color: #95a5a6;
-}
-
-/*
-* Estilo para o botão Limpar Filtros no estado hover.
-* Escurece a cor de fundo.
-*/
-#btnLimpar:hover {
-    background-color: #7f8c8d;
-}
-
-/* Ocultar o botão Pesquisar, já que a pesquisa é automática */
-#btnPesquisar {
-    display: none;
-}
-
-/*
-* Estilos para a tabela de resultados.
-* Define largura total e remove espaçamento entre as bordas das células.
-*/
-table {
-    width: 100%;
-    border-collapse: collapse; /* Remove espaçamento entre células */
-    margin-top: 15px;
-}
-
-/*
-* Estilos para células de cabeçalho (th) e dados (td) da tabela.
-* Define padding interno, alinhamento do texto à esquerda e borda inferior.
-*/
-th, td {
-    padding: 12px 15px; /* Espaçamento interno */
-    text-align: left;
-    border-bottom: 1px solid #ddd; /* Linha divisória */
-}
-
-/*
-* Estilos para as células de cabeçalho (th) da tabela.
-* Define cor de fundo, cursor de ponteiro e posição relativa para os ícones de ordenação.
-*/
-th {
-    background-color: #f2f2f2;
-    cursor: pointer; /* Indica que é clicável */
-    position: relative; /* Necessário para posicionar os ícones */
-}
-
-/*
-* Estilo para células de cabeçalho no estado hover.
-* Muda a cor de fundo.
-*/
-th:hover {
-    background-color: #e6e6e6;
-}
-
-/*
-* Adiciona um ícone de seta para cima para indicar ordenação ascendente.
-*/
-th.ordem-asc::after {
-    content: "↑";
-    position: absolute;
-    right: 8px;
-}
-
-/*
-* Adiciona um ícone de seta para baixo para indicar ordenação descendente.
-*/
-th.ordem-desc::after {
-    content: "↓";
-    position: absolute;
-    right: 8px;
-}
-
-/*
-* Estilo para linhas da tabela no estado hover.
-* Muda a cor de fundo para destacar a linha.
-*/
-tr:hover {
-    background-color: #f5f5f5;
-}
-
-/*
-* Container flexível para alinhar os blocos de filtro (left e right) lado a lado.
-* Usa display flex e define um espaçamento (gap) entre os itens flexíveis.
-*/
 .filtros-flex {
     display: flex;
-    gap: 20px; /* Espaçamento entre os flex items */
+    gap: 48px;
+    justify-content: space-between;
+    margin-bottom: 0;
 }
 
-/*
-* Estilo para o bloco de filtro da esquerda (Carro 1).
-* Define a largura como 45% do container flexível.
-*/
-.left {
-    width: 45%;
+.left, .right {
+    width: 48%;
 }
 
-/*
-* Estilo para o bloco de filtro da direita (Carro 2).
-* Define a largura como 45% do container flexível.
-*/
-.right {
-    width: 45%;
+.form-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
 }
-
-/*
-* Estilo específico para o título h2 dentro do bloco .filtros.
-* Centraliza o texto e define a largura como 100% para garantir a centralização.
-*/
-.filtros h2 {
-    text-align: center;
-    width: 100%;
+.form-group label {
+    min-width: 80px;
+    font-size: 1.08em;
+    color: #2563eb;
+    font-weight: 600;
 }
-
-/*
-* Estilo para os botões dentro do bloco .filtros.
-* Define display inline-block para que fiquem na mesma linha e adiciona margem para espaçamento.
-* NOTE: Estes botões foram movidos para um novo container (#botoes-centro) via JS, este estilo pode ser redundante dependendo da implementação final.
-*/
-.filtros button {
-    display: inline-block;
-    margin: 20px 10px 0 10px;
+.form-group select {
+    flex: 1;
+    border: 1.5px solid #b6c4d6;
+    border-radius: 7px;
+    padding: 10px 12px;
+    font-size: 1em;
+    background: #f8fafc;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 1px 2px rgba(44,62,80,0.03);
 }
-
-/*
-* Estilo para o bloco de filtros.
-* Centraliza o conteúdo de texto (incluindo o h2 e potencialmente os botões se não forem movidos pelo JS).
-*/
-.filtros {
-    text-align: center;
+.form-group select:focus {
+    border-color: #2563eb;
+    outline: none;
+    background: #fff;
+    box-shadow: 0 0 0 2px #2563eb33;
+}
+.form-group button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5em;
+    padding: 2px 6px;
+    transition: transform 0.15s, filter 0.2s;
+    display: flex;
+    align-items: center;
+    color: #2563eb;
+}
+.form-group button:hover {
+    transform: scale(1.18) rotate(-8deg);
+    filter: brightness(1.2);
 }
 
 #botoes-centro {
-    /* display: block; */ /* Garantir que se comporta como um bloco */
     display: grid;
     align-items: center;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
     max-width: 1000px;
-    margin: 20px auto;
-    /* text-align: left; */ /* Removido para tentar resolver a centralização do bloco */
+    margin: 24px auto 18px auto;
+    background: #f8fafc;
+    border: 1.5px solid #e3e8f0;
+    border-radius: 10px;
+    padding: 14px 10px 10px 10px;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.04);
 }
-
 #botoes-centro label {
-    display: flex; /* Usa flexbox para alinhar checkbox e texto */
-    align-items: center; /* Centraliza verticalmente o checkbox e o texto */
-    margin: 0; /* Remove margem padrão dos labels se houver */
-    padding: 5px; /* Adiciona um pequeno padding dentro de cada item do grid */
-    /* Opcional: background-color: #eee; border-radius: 4px; */
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1.04em;
+    color: #2563eb;
+    font-weight: 500;
+    background: #e0eafc;
+    border-radius: 6px;
+    padding: 6px 8px;
+    cursor: pointer;
+    transition: background 0.2s;
 }
-
+#botoes-centro label:hover {
+    background: #dbeafe;
+}
 #botoes-centro input[type="checkbox"] {
-    margin-right: 5px; /* Espaço entre o checkbox e o texto */
-    width: auto; /* Deixa o checkbox usar seu tamanho natural */
+    accent-color: #2563eb;
+    width: 18px;
+    height: 18px;
 }
 
-/* Estilos para a nova seção de listas de resultados */
 .resultados-listas {
-    display: flex; /* Usa flexbox para alinhar as duas listas lado a lado */
-    gap: 20px; /* Espaçamento entre as listas */
-    margin: 20px auto;
-    max-width: 1000px; /* Mesma largura máxima dos checkboxes para alinhamento */
+    display: flex;
+    gap: 32px;
+    margin: 24px auto 0 auto;
+    max-width: 1000px;
 }
-
 .lista-carro {
-    flex: 1; /* Faz com que cada lista ocupe espaço igual */
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 10px;
-    background-color: #fff;
+    flex: 1;
+    border: 1.5px solid #e3e8f0;
+    border-radius: 12px;
+    padding: 18px 14px 14px 14px;
+    background: #f9fafb;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.04);
 }
-
 .lista-carro h3 {
     margin-top: 0;
-    margin-bottom: 10px;
-    color: #3498db;
+    margin-bottom: 12px;
+    color: #2563eb;
+    font-size: 1.1em;
+    font-weight: 700;
 }
-
 .lista-scrollview {
-    max-height: 200px; /* Altura máxima para o scrollview */
-    overflow-y: auto; /* Adiciona scroll vertical se necessário */
+    max-height: 220px;
+    overflow-y: auto;
+    border-radius: 6px;
+    background: #fff;
+    border: 1px solid #e3e8f0;
+    box-shadow: 0 1px 2px rgba(44,62,80,0.03);
 }
-
 .lista-item {
-    padding: 8px;
+    padding: 10px 8px;
     cursor: pointer;
     border-bottom: 1px solid #eee;
+    font-size: 1.04em;
+    transition: background 0.15s, color 0.15s;
 }
-
 .lista-item:last-child {
-    border-bottom: none; /* Remove a borda do último item */
+    border-bottom: none;
 }
-
 .lista-item:hover {
-    background-color: #f5f5f5;
+    background-color: #e0eafc;
+    color: #2563eb;
 }
-
 .lista-item.selecionado {
-    background-color: #e0e0e0; /* Cor para item selecionado */
+    background-color: #dbeafe;
+    color: #174ea6;
     font-weight: bold;
 }
 
-/* Ajustes na tabela para o modo comparativo */
-#tabelaResultados th:first-child, 
-#tabelaResultados td:first-child {
-    width: 40%; /* Coluna do Carro 1 */
-    /* font-weight: bold; Removido pois o cabeçalho já é bold por padrão */
-}
-
-#tabelaResultados th:nth-child(2), 
-#tabelaResultados td:nth-child(2) {
-    width: 20%; /* Coluna do Campo - ajustada para ser mais estreita */
-    text-align: center; /* Centraliza o texto do Campo */
-    font-weight: bold; /* Manter bold para o nome do campo */
-}
-
-#tabelaResultados th:nth-child(3), 
-#tabelaResultados td:nth-child(3) {
-    width: 40%; /* Coluna do Carro 2 */
-    text-align: end; /* Centraliza o texto dos dados do Carro 2 */
-}
-
-/* Estilos para a área de seleção de Versão/Transmissão */
 .versoes-selecao {
-    margin-top: 15px; /* Espaçamento acima da seção de versões */
+    margin-top: 15px;
     padding-top: 10px;
-    border-top: 1px solid #eee; /* Linha separadora */
-    display: none; /* Inicialmente oculta a seção */
+    border-top: 1px solid #eee;
+    display: none;
 }
-
 .versoes-selecao h4 {
     margin-top: 0;
     margin-bottom: 8px;
     color: #555;
     font-size: 1em;
 }
-
 .versoes-scrollview {
-    max-height: 100px; /* Altura máxima para o scrollview de versões */
-    overflow-y: auto; /* Adiciona scroll vertical se necessário */
+    max-height: 100px;
+    overflow-y: auto;
 }
-
 .versao-item {
-    padding: 6px;
+    padding: 8px 6px;
     cursor: pointer;
     border-bottom: 1px solid #eee;
-    font-size: 0.9em;
+    font-size: 0.98em;
+    transition: background 0.15s, color 0.15s;
 }
-
 .versao-item:last-child {
     border-bottom: none;
 }
-
 .versao-item:hover {
-    background-color: #f9f9f9;
+    background-color: #e0f7fa;
+    color: #2563eb;
 }
-
 .versao-item.selecionado-versao {
-    background-color: #d0d0d0; /* Cor para versão selecionada */
+    background-color: #bbf7d0;
+    color: #166534;
     font-weight: bold;
 }
 
-#botoes-centro {
-    max-height: 180px;   /* ajuste a altura conforme preferir */
-    overflow-y: auto;
-    border: 1px solid #ccc;
-    padding: 8px;
-    background: #fafafa;
-    margin-bottom: 16px;
-    border-radius: 6px;
+.tabela-container {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.06);
+    padding: 18px 10px 10px 10px;
+    margin-top: 24px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.06);
+}
+th, td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e3e8f0;
+    font-size: 1.05em;
+}
+tr:nth-child(even) td {
+    background: #f3f6fa;
+}
+th {
+    background: #e0eafc;
+    color: #2563eb;
+    font-weight: 700;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+tr:hover td {
+    background: #f0f7ff;
 }
 
-#botoes-centro label {
-    display: block;
-    margin-bottom: 4px;
-    cursor: pointer;
+#tabelaResultados th:first-child, 
+#tabelaResultados td:first-child {
+    width: 40%;
+}
+#tabelaResultados th:nth-child(2), 
+#tabelaResultados td:nth-child(2) {
+    width: 20%;
+    text-align: center;
+    font-weight: bold;
+}
+#tabelaResultados th:nth-child(3), 
+#tabelaResultados td:nth-child(3) {
+    width: 40%;
+    text-align: end;
 }
 
 .tooltip {
     position: absolute;
-    background: #222;
+    background: #2563eb;
     color: #fff;
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 0.95em;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 1em;
     z-index: 1000;
     pointer-events: none;
     white-space: pre-line;
     display: none;
-    max-width: 300px;
+    max-width: 320px;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.10);
+}
+
+.sinal-menos-empate-1 {
+    display: inline-block;
+    width: 18px;
+    height: 5px;
+    background: #FFD600;
+    border-radius: 3px;
+    vertical-align: middle;
+    margin: 0px 10px 3px 2px;
+}.sinal-menos-empate-2 {
+    display: inline-block;
+    width: 18px;
+    height: 5px;
+    background: #FFD600;
+    border-radius: 3px;
+    vertical-align: middle;
+    margin: 0px 0px 3px 10px;
+}
+
+/* Responsividade */
+@media (max-width: 1100px) {
+    .container {
+        padding: 18px 2vw;
+    }
+    .filtros-flex, .resultados-listas {
+        flex-direction: column;
+        gap: 18px;
+    }
+    .left, .right {
+        width: 100%;
+    }
+}
+@media (max-width: 700px) {
+    .container {
+        padding: 6px 0;
+    }
+    .filtros {
+        padding: 12px 2vw 8px 2vw;
+    }
+    #botoes-centro {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        padding: 6px 2px 2px 2px;
+    }
+    .tabela-container {
+        padding: 4px 0 0 0;
+    }
+    th, td {
+        padding: 8px 4px;
+        font-size: 0.98em;
+    }
 }
