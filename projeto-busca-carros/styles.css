@@ -194,19 +194,12 @@ tr:hover {
 }
 
 /*
-* Estilo para o bloco de filtro da esquerda (Carro 1).
-* Define a largura como 45% do container flexível.
+* Estilo para o bloco de filtro da esquerda (Carro 1) e
+da direita (Carro 2).
+* Define a largura como 50% do container flexível.
 */
-.left {
-    width: 45%;
-}
-
-/*
-* Estilo para o bloco de filtro da direita (Carro 2).
-* Define a largura como 45% do container flexível.
-*/
-.right {
-    width: 45%;
+.left .right{
+    width: 50%;
 }
 
 /*
@@ -394,4 +387,23 @@ tr:hover {
     white-space: pre-line;
     display: none;
     max-width: 300px;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.form-group label {
+    min-width: 70px;
+}
+.form-group select {
+    flex: 1;
+}
+.form-group button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    padding: 2px 6px;
 }
