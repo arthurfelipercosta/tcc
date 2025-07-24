@@ -1,4 +1,11 @@
 /*
+ * styles.css
+ * Estilos principais para a interface do comparador de veículos.
+ * Define layout, cores, tipografia, responsividade e estilos para filtros, listas, tabela comparativa e tooltips.
+ * Integrado ao index.html e script.js.
+ * Uso acadêmico/experimental.
+ */
+/*
 * Reset básico de margin e padding para todos os elementos.
 * Garante que não haverá espaçamentos padrão inesperados.
 */

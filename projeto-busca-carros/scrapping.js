@@ -2,6 +2,9 @@
  * scrapping.js
  * Responsável por buscar informações externas (preço médio, reclamações, etc)
  * via API backend (Flask).
+ * Função principal: buscarInfoCarro(marca, modelo)
+ * Retorna dados para integração com a interface.
+ * Uso acadêmico/experimental.
  */
 
 /**
