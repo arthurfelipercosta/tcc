@@ -1,3 +1,14 @@
+# api.py
+# Backend Flask para fornecer informações de preço médio de veículos (Webmotors) e quantidade de reclamações (ReclameAqui) para integração com front-end HTML/JS.
+#
+# Endpoints:
+# - /api/info_carro: Recebe marca e modelo, retorna preço médio e reclamações.
+#
+# Funções auxiliares:
+# - buscar_precos_webmotors: Faz scrapping de preços no Webmotors.
+# - buscar_reclamacoes_reclameaqui: Faz scrapping de reclamações no ReclameAqui.
+#
+# Uso acadêmico/experimental.
 """
 api.py
 Backend Flask para fornecer informações de preço médio de veículos (Webmotors) e quantidade de reclamações (ReclameAqui) para integração com front-end HTML/JS.

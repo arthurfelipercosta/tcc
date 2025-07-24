@@ -1,8 +1,14 @@
 /**
  * script.js
  * Lógica principal do comparador de veículos.
- * Carrega dados de um CSV, popula filtros, permite seleção e comparação de veículos.
- * Desenvolvido para o projeto de busca e comparação de carros.
+ * Carrega dados do CSV, popula filtros, permite seleção e comparação de veículos.
+ * Integração com scrapping.js para buscar informações externas.
+ * Principais funcionalidades:
+ * - Filtros dinâmicos (categoria, marca, modelo)
+ * - Seleção de versões
+ * - Montagem de tabela comparativa
+ * - Chamada à API Flask para preço médio
+ * Uso acadêmico/experimental.
  */
 
 import { buscarInfoCarro } from "./scrapping.js";
