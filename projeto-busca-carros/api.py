@@ -44,7 +44,7 @@ def buscar_precos_webmotors(marca, modelo, limite=10):
     """
     url = (
         "https://www.webmotors.com.br/api/search/car"
-        "?displayPerPage=47"
+        "?displayPerPage=10"
         "&actualPage=1"
         "&showMenu=true"
         "&showCount=true"

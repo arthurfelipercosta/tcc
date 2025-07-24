@@ -103,6 +103,23 @@ document.addEventListener('DOMContentLoaded', function () {
     // document.getElementById('categoria').addEventListener('change', atualizarModelos);
 });
 
+document.getElementById('apagar-categoria-left-1').addEventListener('click', function () {
+    document.getElementById('categoria').value = '';
+    document.getElementById('categoria').dispatchEvent(new Event('change'));
+});
+document.getElementById('apagar-categoria-left-2').addEventListener('click', function () {
+    document.getElementById('marca').value = '';
+    document.getElementById('marca').dispatchEvent(new Event('change'));
+});
+document.getElementById('apagar-categoria-right-1').addEventListener('click', function () {
+    document.getElementById('categoria2').value = '';
+    document.getElementById('categoria2').dispatchEvent(new Event('change'));
+});
+document.getElementById('apagar-categoria-right-2').addEventListener('click', function () {
+    document.getElementById('marca2').value = '';
+    document.getElementById('marca2').dispatchEvent(new Event('change'));
+});
+
 /**
  * Processa o conteúdo do CSV e preenche o array de veículos.
  * @param {string} csv - Conteúdo do arquivo CSV como string.
@@ -501,16 +518,14 @@ function selecionarVersaoParaComparacao(veiculo, idLista, itemClicado) {
     // Armazena o carro específico selecionado
     if (idLista === 'lista-carro-1') {
         carroSelecionado1 = veiculo;
+        // Mostra info do carro 1
+        mostrarInfoCarroLado(carroSelecionado1, 1);
     } else {
         carroSelecionado2 = veiculo;
+        // Mostra info do carro 2
+        mostrarInfoCarroLado(carroSelecionado2, 2);
+    
     }
-
-    // Mostra info do carro 1 e/ou 2 (exemplo para o carro 1)
-    if (carroSelecionado1) {
-        // Usar o slug correto da empresa para o ReclameAqui
-        mostrarInfoCarroLado(carroSelecionado1, 1);
-    }
-
     // Atualiza a tabela comparativa com o carro específico selecionado
     const camposSelecionados = Array.from(document.querySelectorAll('#botoes-centro input[type=checkbox]:checked')).map(cb => cb.value);
     montarTabelaComparativa(camposSelecionados, carroSelecionado1, carroSelecionado2);
@@ -725,8 +740,10 @@ function montarTabelaComparativa(campos, v1, v2) {
             simbolo2 = '<span style="color:green;font-weight:bold;"> 🟢</span> ';
             pontos2++;
         } else if (resultado === 0 && valor1 !== '-' && valor2 !== '-') {
-            simbolo1 = '<span style="color:red;font-weight:bold;">🟨</span> ';
-            simbolo2 = '<span style="color:green;font-weight:bold;"> 🟨</span> ';
+            const sinalMenos1 = '<span class="sinal-menos-empate-1"></span>';
+            const sinalMenos2 = '<span class="sinal-menos-empate-2"></span>';
+            simbolo1 = sinalMenos1;
+            simbolo2 = sinalMenos2;
         }
 
         // Comparar resultados
