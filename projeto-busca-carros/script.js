@@ -894,18 +894,12 @@ function aplicarFiltrosAutomatico() {
  * e quantidade de reclamações (ReclameAqui) para um determinado carro.
  * @param {string} marca - Marca do veículo (ex: 'honda')
  * @param {string} modelo - Modelo do veículo (ex: 'civic')
- * @param {string} empresa_slug - Slug da empresa no ReclameAqui (ex: 'honda-do-brasil')
  * @returns {Promise<Object>} - Objeto contendo preco_medio, precos (lista) e reclamacoes
  *
  * Exemplo de uso:
  *   const info = await buscarInfoCarro('honda', 'civic');
  */
-// async function buscarInfoCarro(marca, modelo) {
-//     const url = `http://127.0.0.1:5000/api/info_carro?marca=${encodeURIComponent(marca)}&modelo=${encodeURIComponent(modelo)}&empresa_slug=${encodeURIComponent(empresa_slug)}`;
-//     const resp = await fetch(url);
-//     const data = await resp.json();
-//     return data;
-// }
+
 
 /**
  * Busca o preço médio do veículo selecionado (lado 1 ou 2) usando a API Flask

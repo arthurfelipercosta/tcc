@@ -68,29 +68,31 @@ def buscar_precos_webmotors(marca, modelo, limite=10):
         return media, precos
     return 0, "Carro não encontrado"
 
-def buscar_reclamacoes_reclameaqui(empresa_slug):
-    """
-    Busca a quantidade de reclamações de uma empresa no ReclameAqui.
-    Args:
-        empresa_slug (str): Slug da empresa na URL do ReclameAqui (ex: 'honda-do-brasil')
-    Returns:
-        str: Quantidade de reclamações encontradas ou 'Não encontrado'
-    """
-    url = f"https://www.reclameaqui.com.br/empresa/{empresa_slug}/"
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    r = requests.get(url, headers=headers)
-    soup = BeautifulSoup(r.text, 'html.parser')
-    # Procura por span com a classe que contém o número de reclamações (ajuste se necessário)
-    reclamacoes = soup.find('span', {'class': 'sc-1pe7b5t-1'})
-    if reclamacoes:
-        return reclamacoes.text.strip()
-    return "Não encontrado"
+# def buscar_reclamacoes_reclameaqui(marca,modelo):
+#     """
+#     Busca a quantidade de reclamações de uma empresa no ReclameAqui.
+#     Args:
+#         marca (str): Marca do veículo (ex: 'audi')
+#         modelo (str): Modelo do veículo (ex: 'a3 sedan')
+#     Returns:
+#         str: Quantidade de reclamações encontradas ou 'Não encontrado'
+#     """
+#     url = f"https://www.reclameaqui.com.br/busca/?q={marca}%20{modelo}"
+#     return url
+    # headers = {'User-Agent': 'Mozilla/5.0'}
+    # r = requests.get(url, headers=headers)
+    # soup = BeautifulSoup(r.text, 'html.parser')
+    # # Procura por span com a classe que contém o número de reclamações (ajuste se necessário)
+    # reclamacoes = soup.find('span', {'class': 'sc-1pe7b5t-1'})
+    # if reclamacoes:
+    #     return reclamacoes.text.strip()
+    # return "Não encontrado"
 
 @app.route('/api/info_carro', methods=['GET'])
 def info_carro():
     """
     Endpoint principal da API.
-    Recebe marca, modelo e empresa_slug via query string e retorna:
+    Recebe marca e modelo via query string e retorna:
     - preço médio do veículo (Webmotors)
     - lista de preços encontrados
     - quantidade de reclamações (ReclameAqui)
@@ -100,10 +102,12 @@ def info_carro():
     marca = request.args.get('marca', '').lower()
     modelo = request.args.get('modelo', '').lower()
     preco_medio, precos = buscar_precos_webmotors(marca, modelo)
+    # reclamacoes = buscar_reclamacoes_reclameaqui(marca, modelo)
 
     return jsonify({
         'preco_medio': preco_medio,
         'precos': precos,
+        # 'reclamacoes': reclamacoes
     })
 
 if __name__ == '__main__':
