@@ -121,8 +121,11 @@ def webhook():
                 enviar_mensagem(numero, "Bem-vindo ao comparador de carros")
                 time.sleep(0.5)  # Pequeno delay entre mensagens
                 enviar_mensagem(numero, "Qual seria a marca do primeiro carro que deseja comparar?")
+                estado["etapa"] = "marca"
             
             case "marca":
+                data = request.get_json()
+                print(data)
                 # Etapa de validação da marca
                 if not marcas_existentes(mensagem):
                     # Marca não encontrada - solicita nova entrada
