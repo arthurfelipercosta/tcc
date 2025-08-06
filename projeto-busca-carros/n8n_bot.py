@@ -77,17 +77,41 @@ def marcas_existentes(marca_usuario):
     Verificar se a marca existe no banco CSV
     Retornar TRUE se existir, FALSE caso contrário
     """
-    # Caminho para o arquivo CSV com os dados dos carros
-    csv_path = os.path.join(BASE_DIR,"dados_corrigidos_sem_duplicatas.csv")
+    try:
 
-    # Leitura do CSV e extração das marcas únicas
-    df = pd.read_csv(csv_path, sep=";")
-    marcas = df['Marca'].str.upper().unique()
+        # Caminho para o arquivo CSV com os dados dos carros
+        csv_path = os.path.join(BASE_DIR,"dados_corrigidos_sem_duplicatas.csv")
 
-    # Verificação se a marca do usuário existe (comparação case-insensitive)
-    return marca_usuario.upper() in marcas
+        # Leitura do CSV e extração das marcas únicas
+        df = pd.read_csv(csv_path, sep=";")
+        marcas = df['Marca'].str.upper().unique()
 
-# Endpoint para receber mensagens do WhatsApp via N8N
+        # Verificação se a marca do usuário existe (comparação case-insensitive)
+        return marca_usuario.upper() in marcas
+    except Exception as e:
+        print(f"Erro ao verificar marca: {e}")
+        return False
+
+def modelos_existentes(marca_usuario, modelo_usuario):
+    """
+    Verificar se o modelo de carro daquela marca existe no banco CSV
+    Retornar TRUE se existir, FALSE caso contrário
+    """
+    try:
+        # Caminho para o arquivo CSV com os dados dos carros
+        csv_path = os.path.join(BASE_DIR, "dados_corrigidos_sem_duplicatas.csv")
+
+        # Leitura do CSV e extração dos modelos únicos para a marca do usuário
+        df = pd.read_csv(csv_path, sep=";")
+        modelos = df['Modelo'].str.upper().unique()
+
+        # Verificação se o modelo do usuário existe para a marca específica
+        return modelo_usuario.upper() in modelos
+    except Exception as e:
+        print(f"Erro ao verificar modelo: {e}")
+        return False
+
+# Endpoints para receber mensagens do WhatsApp via N8N
 @app.route("/webhook", methods=["POST"])
 def webhook():
     """
@@ -104,6 +128,7 @@ def webhook():
         # Extração da mensagem e número do usuário
         mensagem = data.get("mensagem")
         numero = data.get("numero")
+        etapa = data.get({"etapa": "hello"})
 
         # Validação dos dados recebidos
         if not numero or not mensagem:
@@ -113,48 +138,88 @@ def webhook():
         numero = numero.replace("whatsapp:", "")
         print(f"Mensagem recebida de {numero}: {mensagem}")
 
+        payload = {
+            "mensagem" : mensagem,
+            "numero": numero,
+            "etapa": etapa
+        }
+
+        # Fazer a requisição interna para validar_marca
+        response = requests.post("http://127.0.0.1:5002/validar_marca")
         # Recuperar o estado do usuário ou iniciar um novo
         estado = usuario.get(numero, {"etapa": "hello"})
 
-        # Máquina de estados para gerenciar o fluxo da conversa
-        match estado["etapa"]:
-            case "hello":
-                # Etapa inicial - boas-vindas e solicitação da marca
-                enviar_mensagem(numero, "Bem-vindo ao comparador de carros")
-                time.sleep(0.5)  # Pequeno delay entre mensagens
-                enviar_mensagem(numero, "Qual seria a marca do primeiro carro que deseja comparar?")
-                estado["etapa"] = "marca"
-            
-            case "marca":
-                data = request.get_json()
-                print(data)
-                # Etapa de validação da marca
-                if not marcas_existentes(mensagem):
-                    # Marca não encontrada - solicita nova entrada
-                    enviar_mensagem(numero, "Marca não encontrada, por favor digite novamente.")
-                else:
-                    # Marca encontrada - salva e avança para próxima etapa
-                    estado["marca"] = mensagem.upper()
-                    estado["etapa"] = "modelo"
-                    enviar_mensagem(numero, "Marca encontrada! Agora digite o modelo do carro 1.")
-        
-        # Código comentado para etapas futuras do fluxo
-        # elif estado["etapa"] == "modelo":
-        #     estado["modelo"] = mensagem
-        #     estado["etapa"] = "fim"
-        #     enviar_mensagem(numero, f"Modelo {mensagem} encontrado!")
-        
-        # elif estado["etapa"] =="fim":
-        #     enviar_mensagem(numero, "Comparação pronta!")
-
         # Atualização do estado do usuário no dicionário
         usuario[numero] = estado
-        return "OK", 200
+        return payload, 200
         
     except Exception as e:
         # Tratamento de erros
         print("Erro no webhook: ", e)
         return {"erro": str(e)}, 500
+
+@app.route("/validar_marca", methods=["POST"])
+def validar_marca():
+    """
+    Endpoint para validar se a marca existe no banco CSV
+    """
+
+    try:
+        data = request.get_json()
+        marca = data.get("mensagem")
+        numero = data.get("numero")
+        etapa = data.get("etapa")
+
+        print(f"DATA: {data}")
+
+        if not numero:
+            return {"erro": "Número não informado!"}, 400
+        elif not marca:
+            return {"erro": "Marca não informada!"}, 400
+        elif marcas_existentes(marca):
+            if (etapa == "hello"):
+                enviar_mensagem(numero, "Qual seria a marca do primeiro carro que deseja comparar?")
+            elif (etapa == "modelo1"):
+                enviar_mensagem(numero, "Digite novamente a marca do primeiro carro!")
+
+            return {
+                "validade": True,
+                "etapa": "modelo1",
+                "mensagem": "Marca encontrada! Agora digite o modelo de carro 1."
+            }, 200
+        else:
+            return {
+                "validade": False,
+                "etapa": "modelo1",
+                "mensagem": "Marca não encontrada!"
+            }, 200
+    except Exception as e:
+        print("Erro na validação da marca: ",e)
+        return { "erro": str(e)}, 500
+
+@app.route("/validar_modelo", methods=["POST"])
+def validar_modelo():
+    """
+    Endpoint para validar se o modelo existe no banco CSV
+    """
+    try:
+        data = request.get_json()
+        marca = data.get("marca")
+        modelo = data.get("mensagem")
+        numero = data.get("numero")
+        etapa = data.get("etapa")
+
+        if not numero:
+            return {"erro": "Número não informado!"}, 400
+        elif not modelo:
+            return {"erro": "Modelo não informado"}, 400
+        elif modelos_existentes(marca, modelo):
+            return {"validade": True}, 200
+        else:
+            return {"validade": False}, 200
+    except Exception as e:
+        print("Erro na validação do modelo: ",e)
+        return { "erro": str(e)}, 500
 
 # Execução da aplicação Flask
 if __name__ == "__main__":
