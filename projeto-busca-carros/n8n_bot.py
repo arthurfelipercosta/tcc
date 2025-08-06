@@ -1,13 +1,13 @@
 # Passo a passo para rodar o projeto
-# Abrir o terminal e rodar "n8n"
+# Abrir o terminal
+# Rodar o comando "pip install -r requirements.txt" para instalar dependências
+# Rodar o comando "n8n" (caso não o tenha instalado, rodar o comando de "npm install -g n8n" antes)
 # Abrir outro terminal, navegar até a pasta do projeto
-# Rodar "python n8n_bot.py"
-# Abrir outro terminao e rodar "ngrok http 5678"
-# Copiar o endereço no "Forwarding" e colar no campo
-# "When a message comes in" na página da Twilio, em "sandbox settings"
+# Rodar o comando "python n8n_bot.py"
+# Abrir outro terminal e rodar o comando "ngrok http 5678"
+# Copiar o endereço no "Forwarding" e colar no campo "When a message comes in" na página da Twilio, em "sandbox settings"
 # Entrar em https://console.twilio.com
 # Copiar o ACCOUNT_SID e o AUTH_TOKEN caso tenham sido alterados
-# Rodar em um terminal "n8n"
 # Pegar o "Path" nos parâmetros do N8N
 # Em outro terminal rodar "ngrok http 5678"
 
@@ -22,11 +22,13 @@ from flask import Flask, request  # Framework web Flask
 app = Flask(__name__)
 
 # Variáveis de ambiente
-N8N_WEBHOOK_URL = os.getenv("N8N_WEBHOOK_URL")          # URL do webhook do N8N
-WEBHOOK = os.getenv("WEBHOOK")                          # URL local do N8N para testes
+NGROK_URL = os.getenv("NGROK_URL")                      # URL do ngrok para o N8N
+WEBHOOK = os.getenv("WEBHOOK")                          # URL local do N8N
 TWILIO_SID = os.getenv("TWILIO_SID")                    # Account SID do Twilio
 AUTH_TOKEN = os.getenv("AUTH_TOKEN")                    # Token de autenticação do Twilio
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))   # Diretório base do projeto
+
+N8N_WEBHOOK_URL = f"{NGROK_URL}/webhook/{WEBHOOK}"
 
 # Dicionário para armazenar o estado de cada usuário (número -> informações)
 usuario = {}
