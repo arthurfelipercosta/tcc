@@ -1,0 +1,12 @@
+version: "2"
+authtoken: 30efEqivSgODbVDBIzEdDlWf4xb_2HZMg7Nh7mnE7Ez1SeKag
+tunnels:
+  n8n:
+    addr: 5678
+    proto: http
+  flask:
+    addr: 5002
+    proto: http
+
+
+# Rodar ngrok start --all --config=./ngrok.yml
