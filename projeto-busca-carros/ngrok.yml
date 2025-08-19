@@ -5,7 +5,7 @@ tunnels:
     addr: 5678
     proto: http
   flask:
-    addr: 5002
+    addr: 5000
     proto: http
 
 

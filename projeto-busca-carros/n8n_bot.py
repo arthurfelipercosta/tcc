@@ -1,226 +1,197 @@
-# Passo a passo para rodar o projeto
-# Abrir o terminal
-# Rodar o comando "pip install -r requirements.txt" para instalar dependências
-# Rodar o comando "n8n" (caso não o tenha instalado, rodar o comando de "npm install -g n8n" antes)
-# Abrir outro terminal, navegar até a pasta do projeto
-# Rodar o comando "python n8n_bot.py"
-# Abrir outro terminal e rodar o comando "ngrok http 5678"
-# Copiar o endereço no "Forwarding" e colar no campo "When a message comes in" na página da Twilio, em "sandbox settings"
-# Entrar em https://console.twilio.com
-# Copiar o ACCOUNT_SID e o AUTH_TOKEN caso tenham sido alterados
-# Pegar o "Path" nos parâmetros do N8N
-# Em outro terminal rodar "ngrok http 5678"
+# api.py
+# Backend Flask para fornecer informações de preço médio de veículos (Webmotors) e quantidade de reclamações (ReclameAqui) para integração com front-end HTML/JS.
+#
+# Endpoints:
+# - /api/info_carro: Recebe marca e modelo, retorna preço médio e reclamações.
+#
+# Funções auxiliares:
+# - buscar_precos_webmotors: Faz scrapping de preços no Webmotors.
+# - buscar_reclamacoes_reclameaqui: Faz scrapping de reclamações no ReclameAqui.
+#
+# Uso acadêmico/experimental.
+"""
+api.py
+Backend Flask para fornecer informações de preço médio de veículos (Webmotors) e quantidade de reclamações (ReclameAqui) para integração com front-end HTML/JS.
 
-# Importação das bibliotecas necessárias
-import pandas as pd  # Para manipulação de dados CSV
-import os, time     # os para operações de sistema, time para delays
-import requests     # Para fazer requisições HTTP
-from twilio.rest import Client  # Cliente da API do Twilio
-from flask import Flask, request  # Framework web Flask
+Endpoints:
+- /api/info_carro: Recebe marca e modelo, retorna preço médio e reclamações.
 
-# Inicialização da aplicação Flask
+Funções auxiliares:
+- buscar_precos_webmotors: Faz scrapping de preços no Webmotors.
+- buscar_reclamacoes_reclameaqui: Faz scrapping de reclamações no ReclameAqui.
+
+Uso acadêmico/experimental.
+"""
+
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import requests
+from bs4 import BeautifulSoup
+import re, os, csv
+
 app = Flask(__name__)
+CORS(app)
 
-# Variáveis de ambiente
-NGROK_URL = os.getenv("NGROK_URL")                      # URL do ngrok para o N8N
-WEBHOOK = os.getenv("WEBHOOK")                          # URL local do N8N
-TWILIO_SID = os.getenv("TWILIO_SID")                    # Account SID do Twilio
-AUTH_TOKEN = os.getenv("AUTH_TOKEN")                    # Token de autenticação do Twilio
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))   # Diretório base do projeto
+# ========= CONFIG CSV =========
 
-N8N_WEBHOOK_URL = f"{NGROK_URL}/webhook/{WEBHOOK}"
+CSV_PATH = os.environ.get('CSV_PATH', 'dados_corrigidos_sem_duplicatas.csv')
 
-# Dicionário para armazenar o estado de cada usuário (número -> informações)
-usuario = {}
+_catalogo_rows = []
+_catalogo_loaded = False
 
-# Função para enviar e receber dados de resposta do n8n
-def chat_com_n8n(payload):
+def _carregar_catalogo():
+    """Carregar o CSV uma vez na memória."""
+    global _catalogo_rows, _catalogo_loaded
+    if _catalogo_loaded:
+        return
+    sep = ';'
+
+    try:
+        with open(CSV_PATH, 'r', encoding='utf-8', newline='') as f:
+            sample = f.read(2048)
+            f.seek(0)
+            # Tentar auto-detectar o separador
+            sep = ';' if sample.count(';') >= sample.count(',') else ','
+            reader = csv.DictReader(f, delimiter=sep)
+            _catalogo_rows = [row for row in reader]
+            _catalogo_loaded = True
+    except FileNotFoundError:
+        _catalogo_rows = []
+        _catalogo_loaded = True
+
+def _listar_versoes(marca: str, modelo: str, max_items: int=25):
+    """Listar versões únicas do CSV para marca+modelo (case-insensitive)"""
+    _carregar_catalogo()
+    m = (marca or '').strip().lower()
+    mod = (modelo or '').strip().lower()
+    seen = set()
+    versoes = []
+
+    for row in _catalogo_rows:
+        marca_row = (row.get('Marca') or row.get('marca') or '').strip().lower()
+        modelo_row = (row.get('Modelo') or row.get('modelo') or '').strip().lower()
+        versao_row = (row.get('Versão') or row.get('versão') or '').strip()
+
+        if m == marca_row and mod == modelo_row and versao_row:
+            key = versao_row.lower()
+            if key not in seen:
+                seen.add(key)
+                versoes.append(versao_row)
+                if len(versoes) >= max_items:
+                    break
+    return versoes
+
+# ========= Webmotors =========
+def buscar_precos_webmotors(marca, modelo, limite=10):
     """
-    Envia dados para o webhook do N8N e retorna a resposta
-    
-    Parâmetros:
-    - payload: dados a serem enviados para o N8N
-    
-    Retorna:
-    - JSON da resposta se sucesso, None se erro
+    Busca preços de veículos no Webmotors por marca e modelo.
+    Args:
+        marca (str): Marca do veículo (ex: 'honda')
+        modelo (str): Modelo do veículo (ex: 'civic')
+        limite (int): Número máximo de preços a coletar (default=10)
+    Returns:
+        tuple: (media dos preços encontrados ou None, lista de preços)
     """
-    response = requests.post(N8N_WEBHOOK_URL, json=payload)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        print("Erro ao conversar com o N8N: ", response.text)
-        return None
-    
-# Função que envia uma mensagem através da API do Twilio
-def enviar_mensagem(destino, texto):
-    """
-    Enviar uma mensagem para o número de destino pela API do Twilio
-
-    Parâmetros:
-    - destino: string, número do WhatsApp no formato +5584XXXXXXXX
-    - texto: string, mensagem a ser enviada
-    """
-    # Criação do cliente Twilio com as credenciais
-    client = Client(TWILIO_SID, AUTH_TOKEN)
-
-    # Envio da mensagem via WhatsApp
-    message = client.messages.create(
-        from_='whatsapp:+14155238886',  # Número da sandbox do Twilio
-        body=texto,                     # Texto da mensagem
-        to=f'whatsapp:{destino}'        # Número do destinatário
+    url = (
+        "https://www.webmotors.com.br/api/search/car"
+        "?displayPerPage=10"
+        "&actualPage=1"
+        "&showMenu=true"
+        "&showCount=true"
+        "&showBreadCrumb=true"
+        "&order=1"
+        f"&url=https://www.webmotors.com.br/carros/estoque/{marca.lower()}/{modelo.lower()}?marca={marca.lower()}&modelo={modelo.lower()}&autocomplete={modelo.lower()}&autocompleteTerm={marca.title()}%20{modelo.upper()}&tipoveiculo=carros&marca1={marca.upper()}&modelo1={modelo.upper()}&page=1"
+        "&mediaZeroKm=true"
     )
-    print(f"Mensagem enviada! SID {message.sid}")
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    r = requests.get(url, headers=headers)
+    if r.status_code != 200:
+        return 0, "Carro não encontrado"
+    data = r.json()
+    precos = []
+    for anuncio in data.get("SearchResults", [])[:limite]:
+        price = anuncio.get("Prices", {}).get("Price")
+        if price:
+            precos.append(float(price))
+    if precos:
+        media = sum(precos) / len(precos)
+        return media, precos
+    return 0, "Carro não encontrado"
 
-# Função para verificar se a marca existe no banco CSV
-def marcas_existentes(marca_usuario):
+# ========= ENDPOINTS =========
+@app.route('/api/info_carro', methods=['GET'])
+def info_carro():
     """
-    Verificar se a marca existe no banco CSV
-    Retornar TRUE se existir, FALSE caso contrário
+    Endpoint principal da API.
+    Recebe marca e modelo via query string e retorna:
+    - preço médio do veículo (Webmotors)
+    - lista de preços encontrados
+    - quantidade de reclamações (ReclameAqui)
+    Exemplo de uso:
+    GET /api/info_carro?marca=honda&modelo=civic
     """
-    try:
+    marca = request.args.get('marca', '').lower()
+    modelo = request.args.get('modelo', '').lower()
+    preco_medio, precos = buscar_precos_webmotors(marca, modelo)
+    # reclamacoes = buscar_reclamacoes_reclameaqui(marca, modelo)
 
-        # Caminho para o arquivo CSV com os dados dos carros
-        csv_path = os.path.join(BASE_DIR,"dados_corrigidos_sem_duplicatas.csv")
+    return jsonify({
+        'preco_medio': preco_medio,
+        'precos': precos,
+        # 'reclamacoes': reclamacoes
+    })
 
-        # Leitura do CSV e extração das marcas únicas
-        df = pd.read_csv(csv_path, sep=";")
-        marcas = df['Marca'].str.upper().unique()
+@app.route('/api/versoes', methods=['GET'])
+def versoes():
+    """marca+modelo -> lista de versões únicas do CSV"""
+    marca = request.args.get('marca', '')
+    modelo = request.args.get('modelo', '')
+    versoes = _listar_versoes(marca, modelo)
+    return jsonify({
+        'marca': marca,
+        'modelo': modelo,
+        'versoes': versoes,
+    })
 
-        # Verificação se a marca do usuário existe (comparação case-insensitive)
-        return marca_usuario.upper() in marcas
-    except Exception as e:
-        print(f"Erro ao verificar marca: {e}")
-        return False
-
-def modelos_existentes(marca_usuario, modelo_usuario):
+@app.route('/api/comparar', methods=['GET'])
+def comparar():
     """
-    Verificar se o modelo de carro daquela marca existe no banco CSV
-    Retornar TRUE se existir, FALSE caso contrário
+    marca1, modelo1, versao1, marca2, modelo2, versao2 -> comparação
+    Preço médio usa o mesmo critério do /api/info_carro (marca+modelo)
     """
-    try:
-        # Caminho para o arquivo CSV com os dados dos carros
-        csv_path = os.path.join(BASE_DIR, "dados_corrigidos_sem_duplicatas.csv")
+    p = request.args
 
-        # Leitura do CSV e extração dos modelos únicos para a marca do usuário
-        df = pd.read_csv(csv_path, sep=";")
-        modelos = df['Modelo'].str.upper().unique()
+    c1 = {
+        'marca': p.get('marca1', '').lower(),
+        'modelo': p.get('modelo1', '').lower(),
+        'versao': p.get('versao1', '') or None,
+    }
 
-        # Verificação se o modelo do usuário existe para a marca específica
-        return modelo_usuario.upper() in modelos
-    except Exception as e:
-        print(f"Erro ao verificar modelo: {e}")
-        return False
+    c2 = {
+        'marca': p.get('marca2', '').lower(),
+        'modelo': p.get('modelo2', '').lower(),
+        'versao': p.get('versao2', '') or None,
+    }
 
-# Endpoints para receber mensagens do WhatsApp via N8N
-@app.route("/webhook", methods=["POST"])
-def webhook():
-    """
-    Endpoint principal que recebe mensagens do WhatsApp via N8N
-    Gerencia o fluxo de conversa com o usuário
-    """
-    try:
-        # Verificar o tipo de requisição (form ou JSON) e extrair dados
-        if request.is_json:
-            data = request.get_json()
-        else:
-            data = request.form
+    media1, precos1 = buscar_precos_webmotors(c1['marca'], c1['modelo'])
+    media2, precos2 = buscar_precos_webmotors(c2['marca'], c2['modelo'])
 
-        # Extração da mensagem e número do usuário
-        mensagem = data.get("mensagem")
-        numero = data.get("numero")
-        etapa = data.get({"etapa": "hello"})
+    amostras1 = len(precos1) if isinstance(precos1, list) else 0
+    amostras2 = len(precos2) if isinstance(precos2, list) else 0
 
-        # Validação dos dados recebidos
-        if not numero or not mensagem:
-            return {"erro": "Requisição mal formatada"}, 400
-        
-        # Limpeza do número (remove prefixo whatsapp:)
-        numero = numero.replace("whatsapp:", "")
-        print(f"Mensagem recebida de {numero}: {mensagem}")
+    diff = media1 - media2
+    if media1 == media2:
+        mais_barato = 'empate'
+    else:
+        mais_barato = 'carro1' if media1 < media2 else 'carro2'
 
-        payload = {
-            "mensagem" : mensagem,
-            "numero": numero,
-            "etapa": etapa
-        }
+    return jsonify({
+        'carro1': {**c1, 'preco_medio': media1, 'amostras': amostras1},
+        'carro2': {**c2, 'preco_medio': media2, 'amostras': amostras2},
+        'diferenca': diff,
+        'mais_barato': mais_barato
+    })
 
-        # Fazer a requisição interna para validar_marca
-        response = requests.post("http://127.0.0.1:5002/validar_marca")
-        # Recuperar o estado do usuário ou iniciar um novo
-        estado = usuario.get(numero, {"etapa": "hello"})
-
-        # Atualização do estado do usuário no dicionário
-        usuario[numero] = estado
-        return payload, 200
-        
-    except Exception as e:
-        # Tratamento de erros
-        print("Erro no webhook: ", e)
-        return {"erro": str(e)}, 500
-
-@app.route("/validar_marca", methods=["POST"])
-def validar_marca():
-    """
-    Endpoint para validar se a marca existe no banco CSV
-    """
-
-    try:
-        data = request.get_json()
-        marca = data.get("mensagem")
-        numero = data.get("numero")
-        etapa = data.get("etapa")
-
-        print(f"DATA: {data}")
-
-        if not numero:
-            return {"erro": "Número não informado!"}, 400
-        elif not marca:
-            return {"erro": "Marca não informada!"}, 400
-        elif marcas_existentes(marca):
-            if (etapa == "hello"):
-                enviar_mensagem(numero, "Qual seria a marca do primeiro carro que deseja comparar?")
-            elif (etapa == "modelo1"):
-                enviar_mensagem(numero, "Digite novamente a marca do primeiro carro!")
-
-            return {
-                "validade": True,
-                "etapa": "modelo1",
-                "mensagem": "Marca encontrada! Agora digite o modelo de carro 1."
-            }, 200
-        else:
-            return {
-                "validade": False,
-                "etapa": "modelo1",
-                "mensagem": "Marca não encontrada!"
-            }, 200
-    except Exception as e:
-        print("Erro na validação da marca: ",e)
-        return { "erro": str(e)}, 500
-
-@app.route("/validar_modelo", methods=["POST"])
-def validar_modelo():
-    """
-    Endpoint para validar se o modelo existe no banco CSV
-    """
-    try:
-        data = request.get_json()
-        marca = data.get("marca")
-        modelo = data.get("mensagem")
-        numero = data.get("numero")
-        etapa = data.get("etapa")
-
-        if not numero:
-            return {"erro": "Número não informado!"}, 400
-        elif not modelo:
-            return {"erro": "Modelo não informado"}, 400
-        elif modelos_existentes(marca, modelo):
-            return {"validade": True}, 200
-        else:
-            return {"validade": False}, 200
-    except Exception as e:
-        print("Erro na validação do modelo: ",e)
-        return { "erro": str(e)}, 500
-
-# Execução da aplicação Flask
-if __name__ == "__main__":
-    app.run(port=5002, debug=True)  # Inicia o servidor na porta 5002 com debug ativado
+if __name__ == '__main__':
+    # Inicia o servidor Flask em modo debug
+    app.run(host='0.0.0.0', port=5000, debug=True)
