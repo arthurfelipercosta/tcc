@@ -119,6 +119,49 @@ def buscar_precos_webmotors(marca, modelo, limite=10):
     return 0, "Carro não encontrado"
 
 # ========= ENDPOINTS =========
+@app.route('/api/validar_marca', methods=['GET'])
+def validar_marca():
+    """Valida se uma marca existe no CSV (case-insensitive)"""
+    marca=request.args.get('marca','').strip()
+    if not marca:
+        return jsonify({'valid': False, 'error': 'Marca não informada!'})
+    
+    _carregar_catalogo()
+    m_upper = marca.upper()     # Converter para uppercase
+
+    # Buscar se a marca existe
+    marca_existe = any(
+        ((row.get('Marca') or '').strip().upper() == m_upper)
+        for row in _catalogo_rows
+    )
+
+    return jsonify({'valid': marca_existe, 'marca': m_upper})
+
+@app.route('/api/validar_modelo', methods=['GET'])
+def validar_modelo():
+    """Valida se um modelo existe no CSV (case-insensitive)"""
+    modelo=request.args.get('modelo','').strip()
+    if not modelo:
+        return jsonify({'valid': False, 'error': 'mMdelo não informado!'})
+    
+    _carregar_catalogo()
+    modelo_upper = modelo.upper()     # Converter para uppercase
+
+    # Buscar se a marca existe
+    modelo_encontrado = False
+    for row in _catalogo_rows:
+        modelo_row = (row.get('Modelo') or '').strip()
+        if modelo_upper == modelo_row.row:
+            modelo_encontrado = True
+            break
+
+    return jsonify({
+        'valid': modelo_encontrado,
+        'modelo_input': modelo,
+        'modelo_upper': modelo_upper,
+        'encontrado': modelo_encontrado
+    })
+
 @app.route('/api/info_carro', methods=['GET'])
 def info_carro():
     """
