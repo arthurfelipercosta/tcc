@@ -632,88 +632,88 @@ Fora de Estrada Grande;JEEP;COMMANDER;OVERLAND TD380;2.0T;Combustão;A-9;S;E;D;6
 Fora de Estrada Grande;JEEP;COMMANDER;LIMITED TD380;2.0T;Combustão;A-9;S;E;D;60;18;ND;A;\;175;\;\;\;10,2;13,2;\;\;2,37;\;B;D;NÃO
 Fora de Estrada Grande;JEEP;WRANGLER;UNLIMITED SAHARA;2.0-16VT;Combustão;A-8;S;E-H;G;27;151;1;A;\;165;\;\;\;7,9;8,8;\;\;2,67;\;C;E;NÃO
 Fora de Estrada Grande;JEEP;WRANGLER;UNLIMITED RUBICON;2.0-16VT;Combustão;A-8;S;E-H;G;24;205;1;A;\;176;\;\;\;7,5;8,2;\;\;2,86;\;D;E;NÃO
-Fora de Estrada Grande;LANDROVER;RANGE ROVER;D350;3.0-24V;Híbrido;A-8;S;E;D;33;58;ND;A;\;194;\;\;\;9,5;11,3;\;\;2,63;\;C;D;NÃO
-Fora de Estrada Grande;LANDROVER;RANGE ROVER;D350AB;3.0-24V;Híbrido;A-8;S;E;D;33;58;ND;A;\;194;\;\;\;9,5;11,3;\;\;2,63;\;C;D;NÃO
-Fora de Estrada Grande;LANDROVER;RANGE ROVER;D350HSE;3.0-24V;Híbrido;A-8;S;E;D;33;58;ND;A;\;194;\;\;\;9,5;11,3;\;\;2,63;\;C;D;NÃO
-Fora de Estrada Grande;LANDROVER;RANGE ROVER;D350LE;3.0-24V;Híbrido;A-8;S;E;D;33;58;ND;A;\;194;\;\;\;9,5;11,3;\;\;2,63;\;C;D;NÃO
-Fora de Estrada Grande;LANDROVER;RANGE ROVER;D350SE;3.0-24V;Híbrido;A-8;S;E;D;33;58;ND;A;\;194;\;\;\;9,5;11,3;\;\;2,63;\;C;D;NÃO
-Fora de Estrada Grande;LANDROVER;RANGE ROVER;D350SV;3.0-24V;Híbrido;A-8;S;E;D;33;58;ND;A;\;194;\;\;\;9,5;11,3;\;\;2,63;\;C;D;NÃO
-Fora de Estrada Grande;LANDROVER;RANGE ROVER SPORT;D350AB;3.0-24V;Híbrido;A-8;S;E;D;82;22;ND;A;\;199;\;\;\;9,1;11,6;\;\;2,69;\;C;E;NÃO
-Fora de Estrada Grande;LANDROVER;RANGE ROVER SPORT;D350HSED;3.0-24V;Híbrido;A-8;S;E;D;82;22;ND;A;\;199;\;\;\;9,1;11,6;\;\;2,69;\;C;E;NÃO
-Fora de Estrada Grande;LANDROVER;RANGE ROVER SPORT;D350LE;3.0-24V;Híbrido;A-8;S;E;D;82;22;ND;A;\;199;\;\;\;9,1;11,6;\;\;2,69;\;C;E;NÃO
-Fora de Estrada Grande;LANDROVER;RANGE ROVER SPORT;D350S;3.0-24V;Híbrido;A-8;S;E;D;82;22;ND;A;\;199;\;\;\;9,1;11,6;\;\;2,69;\;C;E;NÃO
-Fora de Estrada Grande;LANDROVER;RANGE ROVER SPORT;D350SD;3.0-24V;Híbrido;A-8;S;E;D;82;22;ND;A;\;199;\;\;\;9,1;11,6;\;\;2,69;\;C;E;NÃO
-Fora de Estrada Grande;LANDROVER;RANGE ROVER SPORT;D350SE;3.0-24V;Híbrido;A-8;S;E;D;82;22;ND;A;\;199;\;\;\;9,1;11,6;\;\;2,69;\;C;E;NÃO
-Fora de Estrada Grande;LANDROVER;RANGE ROVER SPORT;D350SED;3.0-24V;Híbrido;A-8;S;E;D;82;22;ND;A;\;199;\;\;\;9,1;11,6;\;\;2,69;\;C;E;NÃO
-Fora de Estrada Grande;LANDROVER;RANGE ROVER;PHEVSTD;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
-Fora de Estrada Grande;LANDROVER;RANGE ROVER;PHEVSE;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
-Fora de Estrada Grande;LANDROVER;RANGE ROVER;PHEVHSE;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
-Fora de Estrada Grande;LANDROVER;RANGE ROVER;PHEVAB;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
-Fora de Estrada Grande;LANDROVER;RANGE ROVER;PHEVSV;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
-Fora de Estrada Grande;LANDROVER;RANGE ROVER;PHEVLE;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
-Fora de Estrada Grande;LANDROVER;EVOQUE;P250FF HSED;2.0-16V;Combustão;A-9;S;E;F;12;361;3;A;0;151;\;5,4;7,1;8,2;10,4;\;\;2,49;\;B;D;NÃO
-Fora de Estrada Grande;LANDROVER;EVOQUE;P250FF S;2.0-16V;Combustão;A-9;S;E;F;12;361;3;A;0;151;\;5,4;7,1;8,2;10,4;\;\;2,49;\;B;D;NÃO
-Fora de Estrada Grande;LANDROVER;DISCOVERY SPORT;P250FF SED7L;2.0-16V;Combustão;A-9;S;E;F;13;338;4;A;0;181;\;4,9;6,2;7;8,6;\;\;2,9;\;D;E;NÃO
-Fora de Estrada Grande;LANDROVER;DISCOVERY SPORT;P250FF S;2.0-16V;Combustão;A-9;S;E;F;13;338;4;A;0;181;\;4,9;6,2;7;8,6;\;\;2,9;\;D;E;NÃO
-Fora de Estrada Grande;LANDROVER;DISCOVERY SPORT;P250FF S7L;2.0-16V;Combustão;A-9;S;E;F;13;338;4;A;0;181;\;4,9;6,2;7;8,6;\;\;2,9;\;D;E;NÃO
-Fora de Estrada Grande;LANDROVER;DISCOVERY SPORT;P250FF SED;2.0-16V;Combustão;A-9;S;E;F;13;338;4;A;0;181;\;4,9;6,2;7;8,6;\;\;2,9;\;D;E;NÃO
-Fora de Estrada Grande;LANDROVER;DISCOVERY SPORT;D200S;2.0-16V;Híbrido;A-9;S;E;D;25;32;ND;A;\;170;\;\;\;10,7;12,9;\;\;2,3;\;B;D;NÃO
-Fora de Estrada Grande;LANDROVER;DISCOVERY SPORT;D200SED;2.0-16V;Híbrido;A-9;S;E;D;25;32;ND;A;\;170;\;\;\;10,7;12,9;\;\;2,3;\;B;D;NÃO
-Fora de Estrada Grande;LANDROVER;DISCOVERY SPORT;D200SED 7L;2.0-16V;Híbrido;A-9;S;E;D;25;32;ND;A;\;170;\;\;\;10,7;12,9;\;\;2,3;\;B;D;NÃO
-Fora de Estrada Grande;LANDROVER;DISCOVERY SPORT;D200S7L;2.0-16V;Híbrido;A-9;S;E;D;25;32;ND;A;\;170;\;\;\;10,7;12,9;\;\;2,3;\;B;D;NÃO
-Fora de Estrada Grande;LANDROVER;VELAR;P340;3.0-24V;Híbrido;A-8;S;E;G;13;375;0;A;\;159;\;\;\;7,8;9,9;\;\;2,59;\;C;D;NÃO
-Fora de Estrada Grande;LANDROVER;VELAR;P340SE;3.0-24V;Híbrido;A-8;S;E;G;13;375;0;A;\;159;\;\;\;7,8;9,9;\;\;2,59;\;C;D;NÃO
-Fora de Estrada Grande;LANDROVER;VELAR;P340SERDYN;3.0-24V;Híbrido;A-8;S;E;G;13;375;0;A;\;159;\;\;\;7,8;9,9;\;\;2,59;\;C;D;NÃO
-Fora de Estrada Grande;LANDROVER;VELAR;P340HSERDYN;3.0-24V;Híbrido;A-8;S;E;G;13;375;0;A;\;159;\;\;\;7,8;9,9;\;\;2,59;\;C;D;NÃO
-Fora de Estrada Grande;LANDROVER;VELAR;PHEVSERDYN;2.0-16V;Plug-in;A-8;S;E;G;13;66;0;A;\;164;51;\;\;7,9;9;19,7;21,2;1;38;A;B;SIM
-Fora de Estrada Grande;LANDROVER;VELAR;PHEVHSERDYN;2.0-16V;Plug-in;A-8;S;E;G;13;66;0;A;\;164;51;\;\;7,9;9;19,7;21,2;1;38;A;B;SIM
-Fora de Estrada Grande;LANDROVER;VELAR;PHEVS;2.0-16V;Plug-in;A-8;S;E;G;13;66;0;A;\;164;51;\;\;7,9;9;19,7;21,2;1;38;A;B;SIM
-Fora de Estrada Grande;LANDROVER;VELAR;PHEVSEDYN;2.0-16V;Plug-in;A-8;S;E;G;13;66;0;A;\;164;51;\;\;7,9;9;19,7;21,2;1;38;A;B;SIM
-Fora de Estrada Grande;LANDROVER;VELAR;PHEVHSEDYN;2.0-16V;Plug-in;A-8;S;E;G;13;66;0;A;\;164;51;\;\;7,9;9;19,7;21,2;1;38;A;B;SIM
-Fora de Estrada Grande;LANDROVER;VELAR;PHEVS;2.0-16V;Plug-in;A-8;S;E;G;10;69;1;A;\;164;47;\;\;7,8;9;20,3;23,3;0,94;39;A;A;SIM
-Fora de Estrada Grande;LANDROVER;VELAR;PHEVSEDYN;2.0-16V;Plug-in;A-8;S;E;G;10;69;1;A;\;164;47;\;\;7,8;9;20,3;23,3;0,94;39;A;A;SIM
-Fora de Estrada Grande;LANDROVER;VELAR;PHEVHSEDYN;2.0-16V;Plug-in;A-8;S;E;G;10;69;1;A;\;164;47;\;\;7,8;9;20,3;23,3;0,94;39;A;A;SIM
-Fora de Estrada Grande;LANDROVER;DISCOVERY;D300LE;3.0-24V;Híbrido;A-8;S;E;D;25;43;ND;A;\;193;\;\;\;9,5;11,4;\;\;2,62;\;C;D;NÃO
-Fora de Estrada Grande;LANDROVER;DISCOVERY;D300HSED;3.0-24V;Híbrido;A-8;S;E;D;25;43;ND;A;\;193;\;\;\;9,5;11,4;\;\;2,62;\;C;D;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 90;-;3.0-24V;Híbrido;A-8;S;E;D;23;52;ND;A;\;203;\;\;\;9,2;10,8;\;\;2,75;\;C;E;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 90;S;3.0-24V;Híbrido;A-8;S;E;D;23;52;ND;A;\;203;\;\;\;9,2;10,8;\;\;2,75;\;C;E;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 90;SE;3.0-24V;Híbrido;A-8;S;E;D;23;52;ND;A;\;203;\;\;\;9,2;10,8;\;\;2,75;\;C;E;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 90;HSE;3.0-24V;Híbrido;A-8;S;E;D;23;52;ND;A;\;203;\;\;\;9,2;10,8;\;\;2,75;\;C;E;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 90;SEXD;3.0-24V;Híbrido;A-8;S;E;D;23;52;ND;A;\;203;\;\;\;9,2;10,8;\;\;2,75;\;C;E;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 90;HSEXD;3.0-24V;Híbrido;A-8;S;E;D;23;52;ND;A;\;203;\;\;\;9,2;10,8;\;\;2,75;\;C;E;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 110;-;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 110;7L;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 110;SE;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 110;SE7L;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 110;SEXD;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 110;SEXD7L;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 110;HSE;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 110;HSE7L;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 110;HSEXD;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 110;HSEXD 7L;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 110;X;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 110;X7L;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 110;LE75TH;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 110;SXD;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 110;SXD7L;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 130;S;3.0-24V;Híbrido;A-8;S;E;D;46;67;ND;A;\;201;\;\;\;9,5;10,3;\;\;2,73;\;C;E;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 130;SE;3.0-24V;Híbrido;A-8;S;E;D;46;67;ND;A;\;201;\;\;\;9,5;10,3;\;\;2,73;\;C;E;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 130;HSE;3.0-24V;Híbrido;A-8;S;E;D;46;67;ND;A;\;201;\;\;\;9,5;10,3;\;\;2,73;\;C;E;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 130;SXD;3.0-24V;Híbrido;A-8;S;E;D;46;67;ND;A;\;201;\;\;\;9,5;10,3;\;\;2,73;\;C;E;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 130;SEXD;3.0-24V;Híbrido;A-8;S;E;D;46;67;ND;A;\;201;\;\;\;9,5;10,3;\;\;2,73;\;C;E;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 130;HSEXD;3.0-24V;Híbrido;A-8;S;E;D;46;67;ND;A;\;201;\;\;\;9,5;10,3;\;\;2,73;\;C;E;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 130;X;3.0-24V;Híbrido;A-8;S;E;D;46;67;ND;A;\;201;\;\;\;9,5;10,3;\;\;2,73;\;C;E;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 130;LE;3.0-24V;Híbrido;A-8;S;E;D;46;67;ND;A;\;201;\;\;\;9,5;10,3;\;\;2,73;\;C;E;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 130;OB;3.0-24V;Híbrido;A-8;S;E;D;46;67;ND;A;\;201;\;\;\;9,5;10,3;\;\;2,73;\;C;E;NÃO
-Fora de Estrada Grande;LANDROVER;DEFENDER 110;PHEVHSEXD;2.0-16V;Plug-in;A-8;S;E;G;14;42;0;A;\;175;62;\;\;7,7;7,9;16,9;27,5;0,99;33;A;B;SIM
-Fora de Estrada Grande;LANDROVER;DEFENDER 110;PHEVX;2.0-16V;Plug-in;A-8;S;E;G;14;42;0;A;\;175;62;\;\;7,7;7,9;16,9;27,5;0,99;33;A;B;SIM
-Fora de Estrada Grande;LANDROVER;RANGE ROVER SPORT;PHEVS;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
-Fora de Estrada Grande;LANDROVER;RANGE ROVER SPORT;PHEVSD;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
-Fora de Estrada Grande;LANDROVER;RANGE ROVER SPORT;PHEVSE;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
-Fora de Estrada Grande;LANDROVER;RANGE ROVER SPORT;PHEVSED;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
-Fora de Estrada Grande;LANDROVER;RANGE ROVER SPORT;PHEVHSED;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
-Fora de Estrada Grande;LANDROVER;RANGE ROVER SPORT;PHEVAB;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
-Fora de Estrada Grande;LANDROVER;RANGE ROVER SPORT;PHEVLE;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER;D350;3.0-24V;Híbrido;A-8;S;E;D;33;58;ND;A;\;194;\;\;\;9,5;11,3;\;\;2,63;\;C;D;NÃO
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER;D350AB;3.0-24V;Híbrido;A-8;S;E;D;33;58;ND;A;\;194;\;\;\;9,5;11,3;\;\;2,63;\;C;D;NÃO
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER;D350HSE;3.0-24V;Híbrido;A-8;S;E;D;33;58;ND;A;\;194;\;\;\;9,5;11,3;\;\;2,63;\;C;D;NÃO
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER;D350LE;3.0-24V;Híbrido;A-8;S;E;D;33;58;ND;A;\;194;\;\;\;9,5;11,3;\;\;2,63;\;C;D;NÃO
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER;D350SE;3.0-24V;Híbrido;A-8;S;E;D;33;58;ND;A;\;194;\;\;\;9,5;11,3;\;\;2,63;\;C;D;NÃO
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER;D350SV;3.0-24V;Híbrido;A-8;S;E;D;33;58;ND;A;\;194;\;\;\;9,5;11,3;\;\;2,63;\;C;D;NÃO
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER SPORT;D350AB;3.0-24V;Híbrido;A-8;S;E;D;82;22;ND;A;\;199;\;\;\;9,1;11,6;\;\;2,69;\;C;E;NÃO
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER SPORT;D350HSED;3.0-24V;Híbrido;A-8;S;E;D;82;22;ND;A;\;199;\;\;\;9,1;11,6;\;\;2,69;\;C;E;NÃO
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER SPORT;D350LE;3.0-24V;Híbrido;A-8;S;E;D;82;22;ND;A;\;199;\;\;\;9,1;11,6;\;\;2,69;\;C;E;NÃO
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER SPORT;D350S;3.0-24V;Híbrido;A-8;S;E;D;82;22;ND;A;\;199;\;\;\;9,1;11,6;\;\;2,69;\;C;E;NÃO
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER SPORT;D350SD;3.0-24V;Híbrido;A-8;S;E;D;82;22;ND;A;\;199;\;\;\;9,1;11,6;\;\;2,69;\;C;E;NÃO
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER SPORT;D350SE;3.0-24V;Híbrido;A-8;S;E;D;82;22;ND;A;\;199;\;\;\;9,1;11,6;\;\;2,69;\;C;E;NÃO
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER SPORT;D350SED;3.0-24V;Híbrido;A-8;S;E;D;82;22;ND;A;\;199;\;\;\;9,1;11,6;\;\;2,69;\;C;E;NÃO
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER;PHEVSTD;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER;PHEVSE;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER;PHEVHSE;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER;PHEVAB;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER;PHEVSV;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER;PHEVLE;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
+Fora de Estrada Grande;LAND ROVER;EVOQUE;P250FF HSED;2.0-16V;Combustão;A-9;S;E;F;12;361;3;A;0;151;\;5,4;7,1;8,2;10,4;\;\;2,49;\;B;D;NÃO
+Fora de Estrada Grande;LAND ROVER;EVOQUE;P250FF S;2.0-16V;Combustão;A-9;S;E;F;12;361;3;A;0;151;\;5,4;7,1;8,2;10,4;\;\;2,49;\;B;D;NÃO
+Fora de Estrada Grande;LAND ROVER;DISCOVERY SPORT;P250FF SED7L;2.0-16V;Combustão;A-9;S;E;F;13;338;4;A;0;181;\;4,9;6,2;7;8,6;\;\;2,9;\;D;E;NÃO
+Fora de Estrada Grande;LAND ROVER;DISCOVERY SPORT;P250FF S;2.0-16V;Combustão;A-9;S;E;F;13;338;4;A;0;181;\;4,9;6,2;7;8,6;\;\;2,9;\;D;E;NÃO
+Fora de Estrada Grande;LAND ROVER;DISCOVERY SPORT;P250FF S7L;2.0-16V;Combustão;A-9;S;E;F;13;338;4;A;0;181;\;4,9;6,2;7;8,6;\;\;2,9;\;D;E;NÃO
+Fora de Estrada Grande;LAND ROVER;DISCOVERY SPORT;P250FF SED;2.0-16V;Combustão;A-9;S;E;F;13;338;4;A;0;181;\;4,9;6,2;7;8,6;\;\;2,9;\;D;E;NÃO
+Fora de Estrada Grande;LAND ROVER;DISCOVERY SPORT;D200S;2.0-16V;Híbrido;A-9;S;E;D;25;32;ND;A;\;170;\;\;\;10,7;12,9;\;\;2,3;\;B;D;NÃO
+Fora de Estrada Grande;LAND ROVER;DISCOVERY SPORT;D200SED;2.0-16V;Híbrido;A-9;S;E;D;25;32;ND;A;\;170;\;\;\;10,7;12,9;\;\;2,3;\;B;D;NÃO
+Fora de Estrada Grande;LAND ROVER;DISCOVERY SPORT;D200SED 7L;2.0-16V;Híbrido;A-9;S;E;D;25;32;ND;A;\;170;\;\;\;10,7;12,9;\;\;2,3;\;B;D;NÃO
+Fora de Estrada Grande;LAND ROVER;DISCOVERY SPORT;D200S7L;2.0-16V;Híbrido;A-9;S;E;D;25;32;ND;A;\;170;\;\;\;10,7;12,9;\;\;2,3;\;B;D;NÃO
+Fora de Estrada Grande;LAND ROVER;VELAR;P340;3.0-24V;Híbrido;A-8;S;E;G;13;375;0;A;\;159;\;\;\;7,8;9,9;\;\;2,59;\;C;D;NÃO
+Fora de Estrada Grande;LAND ROVER;VELAR;P340SE;3.0-24V;Híbrido;A-8;S;E;G;13;375;0;A;\;159;\;\;\;7,8;9,9;\;\;2,59;\;C;D;NÃO
+Fora de Estrada Grande;LAND ROVER;VELAR;P340SERDYN;3.0-24V;Híbrido;A-8;S;E;G;13;375;0;A;\;159;\;\;\;7,8;9,9;\;\;2,59;\;C;D;NÃO
+Fora de Estrada Grande;LAND ROVER;VELAR;P340HSERDYN;3.0-24V;Híbrido;A-8;S;E;G;13;375;0;A;\;159;\;\;\;7,8;9,9;\;\;2,59;\;C;D;NÃO
+Fora de Estrada Grande;LAND ROVER;VELAR;PHEVSERDYN;2.0-16V;Plug-in;A-8;S;E;G;13;66;0;A;\;164;51;\;\;7,9;9;19,7;21,2;1;38;A;B;SIM
+Fora de Estrada Grande;LAND ROVER;VELAR;PHEVHSERDYN;2.0-16V;Plug-in;A-8;S;E;G;13;66;0;A;\;164;51;\;\;7,9;9;19,7;21,2;1;38;A;B;SIM
+Fora de Estrada Grande;LAND ROVER;VELAR;PHEVS;2.0-16V;Plug-in;A-8;S;E;G;13;66;0;A;\;164;51;\;\;7,9;9;19,7;21,2;1;38;A;B;SIM
+Fora de Estrada Grande;LAND ROVER;VELAR;PHEVSEDYN;2.0-16V;Plug-in;A-8;S;E;G;13;66;0;A;\;164;51;\;\;7,9;9;19,7;21,2;1;38;A;B;SIM
+Fora de Estrada Grande;LAND ROVER;VELAR;PHEVHSEDYN;2.0-16V;Plug-in;A-8;S;E;G;13;66;0;A;\;164;51;\;\;7,9;9;19,7;21,2;1;38;A;B;SIM
+Fora de Estrada Grande;LAND ROVER;VELAR;PHEVS;2.0-16V;Plug-in;A-8;S;E;G;10;69;1;A;\;164;47;\;\;7,8;9;20,3;23,3;0,94;39;A;A;SIM
+Fora de Estrada Grande;LAND ROVER;VELAR;PHEVSEDYN;2.0-16V;Plug-in;A-8;S;E;G;10;69;1;A;\;164;47;\;\;7,8;9;20,3;23,3;0,94;39;A;A;SIM
+Fora de Estrada Grande;LAND ROVER;VELAR;PHEVHSEDYN;2.0-16V;Plug-in;A-8;S;E;G;10;69;1;A;\;164;47;\;\;7,8;9;20,3;23,3;0,94;39;A;A;SIM
+Fora de Estrada Grande;LAND ROVER;DISCOVERY;D300LE;3.0-24V;Híbrido;A-8;S;E;D;25;43;ND;A;\;193;\;\;\;9,5;11,4;\;\;2,62;\;C;D;NÃO
+Fora de Estrada Grande;LAND ROVER;DISCOVERY;D300HSED;3.0-24V;Híbrido;A-8;S;E;D;25;43;ND;A;\;193;\;\;\;9,5;11,4;\;\;2,62;\;C;D;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 90;-;3.0-24V;Híbrido;A-8;S;E;D;23;52;ND;A;\;203;\;\;\;9,2;10,8;\;\;2,75;\;C;E;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 90;S;3.0-24V;Híbrido;A-8;S;E;D;23;52;ND;A;\;203;\;\;\;9,2;10,8;\;\;2,75;\;C;E;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 90;SE;3.0-24V;Híbrido;A-8;S;E;D;23;52;ND;A;\;203;\;\;\;9,2;10,8;\;\;2,75;\;C;E;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 90;HSE;3.0-24V;Híbrido;A-8;S;E;D;23;52;ND;A;\;203;\;\;\;9,2;10,8;\;\;2,75;\;C;E;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 90;SEXD;3.0-24V;Híbrido;A-8;S;E;D;23;52;ND;A;\;203;\;\;\;9,2;10,8;\;\;2,75;\;C;E;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 90;HSEXD;3.0-24V;Híbrido;A-8;S;E;D;23;52;ND;A;\;203;\;\;\;9,2;10,8;\;\;2,75;\;C;E;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 110;-;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 110;7L;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 110;SE;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 110;SE7L;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 110;SEXD;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 110;SEXD7L;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 110;HSE;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 110;HSE7L;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 110;HSEXD;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 110;HSEXD 7L;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 110;X;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 110;X7L;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 110;LE75TH;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 110;SXD;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 110;SXD7L;3.0-24V;Híbrido;A-8;S;E;D;29;78;ND;A;\;189;\;\;\;9,9;11,4;\;\;2,56;\;B;D;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 130;S;3.0-24V;Híbrido;A-8;S;E;D;46;67;ND;A;\;201;\;\;\;9,5;10,3;\;\;2,73;\;C;E;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 130;SE;3.0-24V;Híbrido;A-8;S;E;D;46;67;ND;A;\;201;\;\;\;9,5;10,3;\;\;2,73;\;C;E;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 130;HSE;3.0-24V;Híbrido;A-8;S;E;D;46;67;ND;A;\;201;\;\;\;9,5;10,3;\;\;2,73;\;C;E;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 130;SXD;3.0-24V;Híbrido;A-8;S;E;D;46;67;ND;A;\;201;\;\;\;9,5;10,3;\;\;2,73;\;C;E;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 130;SEXD;3.0-24V;Híbrido;A-8;S;E;D;46;67;ND;A;\;201;\;\;\;9,5;10,3;\;\;2,73;\;C;E;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 130;HSEXD;3.0-24V;Híbrido;A-8;S;E;D;46;67;ND;A;\;201;\;\;\;9,5;10,3;\;\;2,73;\;C;E;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 130;X;3.0-24V;Híbrido;A-8;S;E;D;46;67;ND;A;\;201;\;\;\;9,5;10,3;\;\;2,73;\;C;E;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 130;LE;3.0-24V;Híbrido;A-8;S;E;D;46;67;ND;A;\;201;\;\;\;9,5;10,3;\;\;2,73;\;C;E;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 130;OB;3.0-24V;Híbrido;A-8;S;E;D;46;67;ND;A;\;201;\;\;\;9,5;10,3;\;\;2,73;\;C;E;NÃO
+Fora de Estrada Grande;LAND ROVER;DEFENDER 110;PHEVHSEXD;2.0-16V;Plug-in;A-8;S;E;G;14;42;0;A;\;175;62;\;\;7,7;7,9;16,9;27,5;0,99;33;A;B;SIM
+Fora de Estrada Grande;LAND ROVER;DEFENDER 110;PHEVX;2.0-16V;Plug-in;A-8;S;E;G;14;42;0;A;\;175;62;\;\;7,7;7,9;16,9;27,5;0,99;33;A;B;SIM
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER SPORT;PHEVS;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER SPORT;PHEVSD;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER SPORT;PHEVSE;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER SPORT;PHEVSED;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER SPORT;PHEVHSED;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER SPORT;PHEVAB;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
+Fora de Estrada Grande;LAND ROVER;RANGE ROVER SPORT;PHEVLE;3.0-24V;Plug-in;A-8;S;E;G;11;29;1;A;\;186;23;\;\;6,8;8,3;17,7;18,2;1,13;69;A;B;SIM
 Fora de Estrada Grande;MERCEDES-BENZ;AMG G63 4M;;4.0-32V;Combustão;A-9;S;E;G;12;243;2;A;\;246;\;\;\;5,2;6,2;\;\;4,02;\;E;E;NÃO
 Fora de Estrada Grande;MERCEDES-BENZ;AMG G63 4M;GRD;4.0-32V;Combustão;A-9;S;E;G;12;243;2;A;\;246;\;\;\;5,2;6,2;\;\;4,02;\;E;E;NÃO
 Fora de Estrada Grande;MERCEDES-BENZ;G580 EQ;;Elétrico;Elétrico;A-1;S;E;E;ND;ND;ND;A;\;-;\;\;\;\;\;25,8;20,6;0,88;369;A;A;NÃO
@@ -832,8 +832,8 @@ Picape;FIAT;TITANO;VOLCANO;2.2T;Combustão;A-6;S;H;D;63;19;ND;A;\;225;\;\;\;8,6;
 Picape;FIAT;TITANO;RANCH;2.2T;Combustão;A-6;S;H;D;44;23;ND;A;\;229;\;\;\;8,5;9,2;\;\;3,09;\;D;E;NÃO
 Picape;FORD;MAVERICK;XLT;2.0GTDi;Combustão;A-8;S;E;G;26;367;1;B;\;139;\;\;\;8,8;11,1;\;\;2,26;\;A;D;NÃO
 Picape;FORD;MAVERICK;Lariat FX4;2.0GTDi;Combustão;A-8;S;E;G;26;367;1;B;\;139;\;\;\;8,8;11,1;\;\;2,26;\;A;D;NÃO
-Picape;FORD;F150;Lariat;5.0-32V;Combustão;A-10;S;E;G;40;484;1;B;\;193;\;\;\;6,3;8,6;\;\;3,13;\;E;E;NÃO
-Picape;FORD;F150;Platinum;5.0-32V;Combustão;A-10;S;E;G;40;484;1;B;\;193;\;\;\;6,3;8,6;\;\;3,13;\;E;E;NÃO
+Picape;FORD;F-150;Lariat;5.0-32V;Combustão;A-10;S;E;G;40;484;1;B;\;193;\;\;\;6,3;8,6;\;\;3,13;\;E;E;NÃO
+Picape;FORD;F-150;Platinum;5.0-32V;Combustão;A-10;S;E;G;40;484;1;B;\;193;\;\;\;6,3;8,6;\;\;3,13;\;E;E;NÃO
 Picape;FORD;MAVERICK;HíbridoLariat;2.5FHEV;Híbrido;eCVT;S;E;G;16;193;0;A;\;89;\;\;\;15,7;13,6;\;\;1,44;\;A;B;SIM
 Picape;FORD;NOVA RANGER 4X4;XL;2.0-16V;Combustão;M-6;S;E;D;229;42;ND;B;\;188;\;\;\;10,2;11;\;\;2,53;\;B;D;NÃO
 Picape;FORD;NOVA RANGER 4X4;XLS;2.0-16V;Combustão;M-6;S;E;D;229;42;ND;B;\;188;\;\;\;10,2;11;\;\;2,53;\;B;D;NÃO
