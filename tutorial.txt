@@ -3,5 +3,16 @@ Para rodar o aplicativo web:
 - "python -m http.server *nº da porta*"
 - "python api.py"
 
+Para rodar no N8N e whatsapp:
+- Abrir 2 prompts e rodar os comandos abaixo:
+- "ngrok http 5678"
+- "python n8n_bot.py"
+- Copiar o url gerada pelo ngrok
+- Colar no .env
+- Abrir o https://console.twilio.com
+- Ir no menu lateral em "Messaging" -> "try it out" -> "Send a whatsapp message"
+- Abrir a aba "Sandbox settings" e colar o URL no campo de "When a message comes in"
+
+
 Depois de estar rodando o servidor, abrir o browser em:
 http://localhost:*nº da porta*/projeto-busca-carros
