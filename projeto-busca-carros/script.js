@@ -13,6 +13,7 @@
 
 import { buscarInfoCarro } from "./scrapping.js";
 
+// === VARIÁVEIS GLOBAIS ===
 // Array com todos os veículos carregados do CSV
 let dadosVeiculos = [];
 // Array com veículos filtrados (não usado diretamente, mas pode ser útil futuramente)
@@ -170,6 +171,14 @@ function processarCSV(csv) {
 
 /**
  * Cria os checkboxes para seleção dos campos de comparação.
+ * Gera dinamicamente checkboxes para cada campo definido em camposComparacao,
+ * permitindo ao usuário escolher quais campos deseja comparar na tabela.
+ * 
+ * Funcionalidades:
+ * - Cria checkboxes para todos os campos de comparação
+ * - Marca todos como selecionados por padrão
+ * - Adiciona eventos para atualizar tabela quando campos são marcados/desmarcados
+ * - Atualiza tabela comparativa automaticamente
  */
 function criarSelecaoCampos() {
     const container = document.getElementById('botoes-centro');
@@ -195,7 +204,17 @@ function criarSelecaoCampos() {
     })
 }
 
-// Inicializa os filtros com opções únicas
+/**
+ * Inicializa os filtros com opções únicas extraídas dos dados.
+ * Popula os selects de categoria e marca com valores únicos encontrados
+ * no dataset, removendo duplicatas e organizando alfabeticamente.
+ * 
+ * Funcionalidades:
+ * - Extrai categorias e marcas únicas dos dados
+ * - Popula selects para ambos os carros (Carro 1 e Carro 2)
+ * - Atualiza modelos baseado nos filtros iniciais
+ * - Remove duplicatas automaticamente
+ */
 function inicializarFiltros() {
     const categorias = new Set();
     const marcas = new Set();
@@ -343,7 +362,19 @@ function atualizarFiltros(idMarca, idCategoria, idModelo) {
     }
 }
 
-// Atualiza modelos para selects dinâmicos
+/**
+ * Atualiza as opções do select de modelos baseado na marca e categoria selecionadas.
+ * Filtra os modelos disponíveis considerando os filtros atuais de marca e categoria.
+ * 
+ * @param {string} idMarca - ID do select de marca
+ * @param {string} idCategoria - ID do select de categoria  
+ * @param {string} idModelo - ID do select de modelo a ser atualizado
+ * 
+ * Funcionalidades:
+ * - Filtra modelos baseado na marca e categoria selecionadas
+ * - Atualiza opções do select de modelo
+ * - Mantém "Todos" como primeira opção
+ */
 function atualizarModelos(idMarca, idCategoria, idModelo) {
     const marcaSelecionada = document.getElementById(idMarca).value;
     const categoriaSelecionada = document.getElementById(idCategoria).value;
@@ -369,7 +400,16 @@ function atualizarModelos(idMarca, idCategoria, idModelo) {
     });
 }
 
-// Pesquisa e monta tabela comparativa
+/**
+ * Pesquisa veículos com base nos filtros selecionados e monta as listas de resultados.
+ * Esta função é chamada automaticamente sempre que os filtros são alterados.
+ * 
+ * Funcionalidades:
+ * - Filtra veículos baseado em categoria, marca e modelo para ambos os carros
+ * - Agrupa resultados por Marca e Modelo para facilitar seleção
+ * - Exibe listas de resultados nas áreas designadas
+ * - Limpa a tabela comparativa ao realizar nova pesquisa
+ */
 function pesquisar() {
     // Carro 1
     const categoria1 = document.getElementById('categoria').value;
@@ -407,7 +447,23 @@ function pesquisar() {
     montarTabelaComparativa([], null, null);
 }
 
-// Função para agrupar veículos por Marca e Modelo
+/**
+ * Agrupa uma lista de veículos por Marca e Modelo.
+ * Cria um objeto onde cada chave é "Marca|Modelo" e o valor contém
+ * a marca, modelo e array de versões disponíveis.
+ * 
+ * @param {Array} veiculos - Array de objetos de veículos
+ * @returns {Array} Array de objetos agrupados por marca e modelo
+ * 
+ * Exemplo de retorno:
+ *   [
+ *     {
+ *       marca: "Honda",
+ *       modelo: "Civic",
+ *       versoes: [veiculo1, veiculo2, ...]
+ *     }
+ *   ]
+ */
 function agruparPorMarcaModelo(veiculos) {
     const agrupados = {};
     veiculos.forEach(veiculo => {
@@ -424,7 +480,18 @@ function agruparPorMarcaModelo(veiculos) {
     return Object.values(agrupados);
 }
 
-// Função para exibir os resultados agrupados em uma lista (scrollview)
+/**
+ * Exibe os resultados agrupados em uma lista com scroll.
+ * Cria elementos clicáveis para cada grupo de marca/modelo encontrado.
+ * 
+ * @param {Array} resultadosAgrupados - Array de objetos agrupados por marca/modelo
+ * @param {string} idLista - ID do container da lista ('lista-carro-1' ou 'lista-carro-2')
+ * 
+ * Funcionalidades:
+ * - Cria itens clicáveis para cada marca/modelo
+ * - Adiciona eventos de clique para seleção de modelo
+ * - Exibe mensagem quando nenhum carro é encontrado
+ */
 function exibirListaResultados(resultadosAgrupados, idLista) {
     const listaContainer = document.querySelector(`#${idLista} .lista-scrollview`);
     listaContainer.innerHTML = ''; // Limpa a lista anterior
@@ -448,10 +515,26 @@ function exibirListaResultados(resultadosAgrupados, idLista) {
     });
 }
 
+// === VARIÁVEIS DE SELEÇÃO ===
+// Armazena o veículo específico selecionado para comparação (lado esquerdo)
 let carroSelecionado1 = null;
+// Armazena o veículo específico selecionado para comparação (lado direito)
 let carroSelecionado2 = null;
 
-// Função chamada ao selecionar um MODELO da lista
+/**
+ * Função chamada quando o usuário seleciona um modelo da lista.
+ * Exibe as versões disponíveis para o modelo selecionado e permite
+ * a seleção de uma versão específica para comparação.
+ * 
+ * @param {Object} grupo - Objeto contendo marca, modelo e array de versões
+ * @param {string} idLista - ID da lista ('lista-carro-1' ou 'lista-carro-2')
+ * 
+ * Funcionalidades:
+ * - Destaca o modelo selecionado visualmente
+ * - Exibe área de seleção de versões
+ * - Lista todas as versões disponíveis para o modelo
+ * - Limpa seleção anterior de carro específico
+ */
 function selecionarModeloParaVersao(grupo, idLista) {
     // Remove a classe 'selecionado' dos itens anteriores na mesma lista
     const listaAnterior = document.querySelector(`#${idLista} .lista-scrollview`);
@@ -502,7 +585,20 @@ function selecionarModeloParaVersao(grupo, idLista) {
     montarTabelaComparativa(camposSelecionados, carroSelecionado1, carroSelecionado2);
 }
 
-// Função chamada DEPOIS que a versão/transmissão for selecionada
+/**
+ * Função chamada quando o usuário seleciona uma versão específica de um modelo.
+ * Armazena o veículo selecionado e atualiza a tabela comparativa.
+ * 
+ * @param {Object} veiculo - Objeto do veículo específico selecionado
+ * @param {string} idLista - ID da lista ('lista-carro-1' ou 'lista-carro-2')
+ * @param {HTMLElement} itemClicado - Elemento HTML da versão clicada
+ * 
+ * Funcionalidades:
+ * - Destaca a versão selecionada visualmente
+ * - Armazena o veículo selecionado nas variáveis globais
+ * - Busca informações de preço médio via API
+ * - Atualiza a tabela comparativa
+ */
 function selecionarVersaoParaComparacao(veiculo, idLista, itemClicado) {
     // Remove a classe 'selecionado-versao' dos itens anteriores na mesma lista de versões
     const versoesScrollview = document.querySelector(`#${idLista} .versoes-selecao .versoes-scrollview`);
@@ -524,13 +620,30 @@ function selecionarVersaoParaComparacao(veiculo, idLista, itemClicado) {
         carroSelecionado2 = veiculo;
         // Mostra info do carro 2
         mostrarInfoCarroLado(carroSelecionado2, 2);
-    
+
     }
     // Atualiza a tabela comparativa com o carro específico selecionado
     const camposSelecionados = Array.from(document.querySelectorAll('#botoes-centro input[type=checkbox]:checked')).map(cb => cb.value);
     montarTabelaComparativa(camposSelecionados, carroSelecionado1, carroSelecionado2);
 }
 
+/**
+ * Monta e exibe a tabela comparativa entre dois veículos selecionados.
+ * Compara os campos especificados e aplica critérios de avaliação para
+ * determinar qual veículo é melhor em cada aspecto.
+ * 
+ * @param {Array} campos - Array com os nomes dos campos a serem comparados
+ * @param {Object} v1 - Objeto do primeiro veículo selecionado
+ * @param {Object} v2 - Objeto do segundo veículo selecionado
+ * 
+ * Funcionalidades:
+ * - Cria cabeçalho da tabela com nomes dos veículos
+ * - Compara cada campo usando critérios específicos
+ * - Aplica sistema de pontuação (🟢 melhor, ❌ pior, - empate)
+ * - Exibe preço médio quando disponível
+ * - Adiciona tooltips explicativos nos campos
+ * - Gera resumo textual comparativo
+ */
 function montarTabelaComparativa(campos, v1, v2) {
     const thead = document.querySelector('#tabelaResultados thead');
     const tbody = document.querySelector('#tabelaResultados tbody');
@@ -546,7 +659,16 @@ function montarTabelaComparativa(campos, v1, v2) {
     let pontos1 = 0;
     let pontos2 = 0;
 
-    // Função de comparação para cada campo
+    /**
+     * Função de comparação para cada campo específico.
+     * Aplica critérios de avaliação específicos para cada tipo de campo,
+     * retornando qual valor é melhor, pior ou se há empate.
+     * 
+     * @param {string} campo - Nome do campo sendo comparado
+     * @param {string} valor1 - Valor do primeiro veículo
+     * @param {string} valor2 - Valor do segundo veículo
+     * @returns {number} 1 se valor1 é melhor, -1 se valor2 é melhor, 0 se empate
+     */
     function compararCampo(campo, valor1, valor2) {
         // Critério para comparar tipo de propulsão entre os automóveis
         if (campo === 'Tipo de Propulsão') {
@@ -791,6 +913,10 @@ function montarTabelaComparativa(campos, v1, v2) {
         tbody.appendChild(trPreco);
     }
 
+    if (v1 && v2) {
+        gerarResumo(v1, v2);
+    }
+
     // Adiciona tooltip nas células da coluna do meio
     document.querySelectorAll('#tabelaResultados tbody tr td:nth-child(2)').forEach((td, idx) => {
         const campo = campos[idx];
@@ -817,7 +943,16 @@ function montarTabelaComparativa(campos, v1, v2) {
     });
 }
 
-// Limpa todos os filtros
+/**
+ * Limpa todos os filtros de pesquisa e atualiza a interface.
+ * Reseta todos os selects de categoria, marca e modelo para ambos os carros
+ * e aplica os filtros automaticamente para atualizar as listas.
+ * 
+ * Funcionalidades:
+ * - Limpa valores de todos os selects de filtro
+ * - Aplica filtros automáticos para atualizar listas
+ * - Reseta interface para estado inicial
+ */
 function limparFiltros() {
     ['categoria', 'marca', 'modelo', 'categoria2', 'marca2', 'modelo2'].forEach(id => {
         const el = document.getElementById(id);
@@ -826,7 +961,16 @@ function limparFiltros() {
     aplicarFiltrosAutomatico();
 }
 
-// Eventos dinâmicos para selects - AGORA COM FILTRO AUTOMÁTICO
+/**
+ * Adiciona eventos dinâmicos aos selects de filtros para atualização automática.
+ * Implementa filtro automático que atualiza as listas de resultados sempre que
+ * o usuário altera categoria, marca ou modelo em qualquer um dos dois carros.
+ * 
+ * Funcionalidades:
+ * - Reset automático de campos dependentes (marca/modelo quando categoria muda)
+ * - Atualização automática das listas de resultados
+ * - Atualização da tabela comparativa quando ambos os carros estão selecionados
+ */
 function adicionarEventosSelectsAutomatico() {
     // Eventos para Carro 1
     document.getElementById('categoria').addEventListener('change', function () {
@@ -869,7 +1013,15 @@ function adicionarEventosSelectsAutomatico() {
     });
 }
 
-// Nova função para aplicar filtros automaticamente e atualizar listas
+/**
+ * Aplica filtros automaticamente e atualiza as listas de resultados.
+ * Esta função é chamada sempre que há mudança nos filtros de categoria, marca ou modelo.
+ * 
+ * Funcionalidades:
+ * - Atualiza opções disponíveis nos selects de marca e modelo
+ * - Aplica filtros atuais e atualiza as listas de carros encontrados
+ * - Atualiza a tabela comparativa se ambos os carros estiverem selecionados
+ */
 function aplicarFiltrosAutomatico() {
     // Atualizar as opções dos selects (Marca e Modelo) para Carro 1
     atualizarModelos('marca', 'categoria', 'modelo');
@@ -933,10 +1085,180 @@ async function mostrarInfoCarroLado(veiculo, lado) {
         const camposSelecionados = Array.from(document.querySelectorAll('#botoes-centro input[type=checkbox]:checked')).map(cb => cb.value);
         montarTabelaComparativa(camposSelecionados, carroSelecionado1, carroSelecionado2);
 
+        // Atualiza resumo textual incluindo preço
+        if (carroSelecionado1 && carroSelecionado2) {
+            gerarResumo(carroSelecionado1, carroSelecionado2);
+        }
+
     } catch (error) {
         console.error(`Erro ao buscar informações do carro (lado ${lado}):`, error);
         window['precoMedio' + lado] = '-';
     }
     // console.log(`PREÇOS LADO ${lado == 1 ? 'esquerdo' : 'direito'}: `, precoMedio);
 
+}
+
+/**
+ * Gera um resumo comparativo dinâmico entre dois veículos selecionados.
+ * Compara preço, poluentes, consumo energético, classificações PBE, combustível e transmissão.
+ * Exibe as diferenças em formato de frases legíveis para o usuário.
+ * 
+ * @param {Object} v1 - Objeto do primeiro veículo selecionado
+ * @param {Object} v2 - Objeto do segundo veículo selecionado
+ * 
+ * Exemplo de uso:
+ *   gerarResumo(carroSelecionado1, carroSelecionado2);
+ */
+function gerarResumo(v1, v2) {
+    // Verifica se ambos os veículos foram selecionados
+    if (!v1 || !v2) {
+        document.getElementById("info-carro").innerText = "";
+        return;
+    }
+
+    // Monta os nomes completos dos veículos (Marca + Modelo)
+    const nome1 = `${v1['Marca']} ${v1['Modelo']}`;
+    const nome2 = `${v2['Marca']} ${v2['Modelo']}`;
+
+    /**
+     * Função auxiliar para converter valores de string para número.
+     * Remove caracteres não numéricos e converte vírgula para ponto.
+     * 
+     * @param {string|number} val - Valor a ser convertido
+     * @param {number} fallback - Valor padrão caso a conversão falhe
+     * @returns {number} Número convertido ou fallback
+     */
+    const parseNum = (val, fallback = NaN) => {
+        if (val === undefined || val === null) return fallback;
+        const n = parseFloat(val.toString().replace(/[^\d.,-]/g, '').replace(',', '.'));
+        return isNaN(n) ? fallback : n;
+    };
+
+    // Array para armazenar as frases comparativas
+    let frases = [];
+
+    // === COMPARAÇÃO DE PREÇO MÉDIO ===
+    // Usa as variáveis globais window.precoMedio1/2 atualizadas por mostrarInfoCarroLado
+    let p1 = typeof window.precoMedio1 === 'number' ? window.precoMedio1 : NaN;
+    let p2 = typeof window.precoMedio2 === 'number' ? window.precoMedio2 : NaN;
+    if (!isNaN(p1) && !isNaN(p2)) {
+        if (p1 > p2) {
+            frases.push(`${nome1} é mais caro (R$ ${p1.toLocaleString('pt-BR')}) que ${nome2} (R$ ${p2.toLocaleString('pt-BR')}).`);
+        } else if (p2 > p1) {
+            frases.push(`${nome2} é mais caro (R$ ${p2.toLocaleString('pt-BR')}) que ${nome1} (R$ ${p1.toLocaleString('pt-BR')}).`);
+        }
+    }
+
+    // === COMPARAÇÃO DE POLUENTES ===
+    // Define os campos de poluentes e seus rótulos para exibição
+    const polCampos = [
+        { key: 'Poluentes(NMOG+NOx [mg/km])', label: 'NMOG+NOx' },
+        { key: 'Poluentes(CO [mg/km])', label: 'CO' },
+        { key: 'Poluentes(CHO [mg/km])', label: 'CHO' }
+    ];
+    
+    // Itera sobre cada tipo de poluente e compara os valores
+    polCampos.forEach(pc => {
+        const a = parseNum(v1[pc.key]);
+        const b = parseNum(v2[pc.key]);
+        if (!isNaN(a) && !isNaN(b)) {
+            if (a < b) {
+                frases.push(`${nome1} emite menos ${pc.label} (${a}) que ${nome2} (${b}).`);
+            } else if (b < a) {
+                frases.push(`${nome2} emite menos ${pc.label} (${b}) que ${nome1} (${a}).`);
+            }
+        }
+    });
+
+    // === COMPARAÇÃO DE CONSUMO ENERGÉTICO ===
+    // Menor valor = melhor eficiência energética
+    let c1 = parseNum(v1['Consumo Energético']);
+    let c2 = parseNum(v2['Consumo Energético']);
+    if (!isNaN(c1) && !isNaN(c2)) {
+        if (c1 < c2) {
+            frases.push(`${nome1} é mais eficiente em consumo energético (${c1}) que ${nome2} (${c2}).`);
+        } else if (c2 < c1) {
+            frases.push(`${nome2} é mais eficiente em consumo energético (${c2}) que ${nome1} (${c1}).`);
+        }
+    }
+
+    // === COMPARAÇÃO DE CLASSIFICAÇÕES PBE ===
+    // Ordem: A (melhor) > B > C > D > E (pior)
+    const ordemPBE = ['A', 'B', 'C', 'D', 'E'];
+    
+    /**
+     * Função auxiliar para comparar classificações PBE.
+     * 
+     * @param {string} campo - Nome do campo PBE a ser comparado
+     * @param {string} rotulo - Rótulo descritivo para exibição
+     */
+    const compPBE = (campo, rotulo) => {
+        const a = (v1[campo] || '').toString().trim().toUpperCase();
+        const b = (v2[campo] || '').toString().trim().toUpperCase();
+        const ia = ordemPBE.indexOf(a);
+        const ib = ordemPBE.indexOf(b);
+        
+        if (ia !== -1 && ib !== -1 && a && b) {
+            if (ia < ib) {
+                frases.push(`${nome1} tem melhor ${rotulo} (${a}) que ${nome2} (${b}).`);
+            } else if (ib < ia) {
+                frases.push(`${nome2} tem melhor ${rotulo} (${b}) que ${nome1} (${a}).`);
+            }
+        }
+    };
+    
+    // Compara PBE relativa e absoluta
+    compPBE('Classificação PBE (Comparação Relativa)', 'Classificação PBE relativa');
+    compPBE('Classificação PBE (Absoluta na Categoria)', 'Classificação PBE na categoria');
+
+    // === COMPARAÇÃO DE COMBUSTÍVEL ===
+    // Ordem do menos poluente para o mais poluente: E > A > F > G > D
+    // E = Elétrico, A = Álcool, F = Flex, G = Gasolina, D = Diesel
+    const ordemComb = ['E', 'A', 'F', 'G', 'D'];
+    const ca = (v1['Combustível'] || '').toString().trim().toUpperCase();
+    const cb = (v2['Combustível'] || '').toString().trim().toUpperCase();
+    const ia = ordemComb.indexOf(ca);
+    const ib = ordemComb.indexOf(cb);
+    
+    if (ia !== -1 && ib !== -1) {
+        if (ia < ib) {
+            frases.push(`${nome1} usa combustível potencialmente menos poluente (${ca}) que ${nome2} (${cb}).`);
+        } else if (ib < ia) {
+            frases.push(`${nome2} usa combustível potencialmente menos poluente (${cb}) que ${nome1} (${ca}).`);
+        }
+    }
+
+    // === COMPARAÇÃO DE TRANSMISSÃO ===
+    // Ordem da mais moderna para a mais antiga (mesma ordem usada na tabela comparativa)
+    const ordemTransm = [
+        'eCVT', 'DHT-2', 'DHT', 'DCT-8', 'DCT-7', 'DCT-6', 'DCT', 'A-10', 'A-9', 'A-8',
+        'A-7', 'A-6', 'CVT-7', 'CVT', 'A-5', 'A-4', 'A-1', 'M-6', 'M-5', 'A', 'N.A.', '--'
+    ];
+    const ta = (v1['Transmissão'] || '').toString().trim();
+    const tb = (v2['Transmissão'] || '').toString().trim();
+    const ita = ordemTransm.indexOf(ta);
+    const itb = ordemTransm.indexOf(tb);
+    
+    if (ita !== -1 && itb !== -1) {
+        if (ita < itb) {
+            frases.push(`${nome1} tem transmissão mais moderna (${ta}) que ${nome2} (${tb}).`);
+        } else if (itb < ita) {
+            frases.push(`${nome2} tem transmissão mais moderna (${tb}) que ${nome1} (${ta}).`);
+        }
+    }
+
+    // === EXIBIÇÃO DO RESULTADO ===
+    // Atualiza o elemento HTML com as frases comparativas em formato de lista
+    const alvo = document.getElementById("info-carro");
+    if (frases.length > 0) {
+        // Cria uma lista HTML estruturada com destaque para frases com preços
+        const listaHTML = '<ul>' + frases.map(frase => {
+            const temPreco = frase.includes('R$');
+            const classeEspecial = temPreco ? ' class="destaque-preco"' : '';
+            return `<li${classeEspecial}>${frase}</li>`;
+        }).join('') + '</ul>';
+        alvo.innerHTML = listaHTML;
+    } else {
+        alvo.innerHTML = "";
+    }
 }

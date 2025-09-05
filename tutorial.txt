@@ -1,6 +1,7 @@
-Abrir o prompt e rodar os comandos abaixo:
-"python -m http.server"
-"python api.py"
+Para rodar o aplicativo web:
+- Abrir 2 prompts e rodar os comandos abaixo:
+- "python -m http.server *nº da porta*"
+- "python api.py"
 
 Depois de estar rodando o servidor, abrir o browser em:
-http://localhost:8000/projeto-busca-carros
+http://localhost:*nº da porta*/projeto-busca-carros
