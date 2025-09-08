@@ -141,17 +141,19 @@ def validar_marca():
 def validar_modelo():
     """Valida se um modelo existe no CSV (case-insensitive)"""
     modelo=request.args.get('modelo','').strip()
+    marca=request.args.get('marca','').strip()
     if not modelo:
-        return jsonify({'valid': False, 'error': 'mMdelo não informado!'})
+        return jsonify({'valid': False, 'error': 'modelo não informado!'})
     
     _carregar_catalogo()
     modelo_upper = modelo.upper()     # Converter para uppercase
+    marca_upper = marca.upper()     # Converter para uppercase
 
     # Buscar se a marca existe
     modelo_encontrado = False
     for row in _catalogo_rows:
         modelo_row = (row.get('Modelo') or '').strip()
-        if modelo_upper == modelo_row.row:
+        if modelo_upper == modelo_row.upper():
             modelo_encontrado = True
             break
 
@@ -159,6 +161,7 @@ def validar_modelo():
         'valid': modelo_encontrado,
         'modelo_input': modelo,
         'modelo_upper': modelo_upper,
+        'marca_upper': marca_upper,
         'encontrado': modelo_encontrado
     })
 
