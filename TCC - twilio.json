@@ -1,0 +1,936 @@
+{
+  "name": "TCC - twilio",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        16,
+        208
+      ],
+      "id": "03b9bbb0-1102-48c3-95ac-61f1fced8446",
+      "name": "When clicking ‘Execute workflow’",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.step }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    },
+                    "id": "e7580e0f-9791-47ea-a245-3b617266201d"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "bcbc435c-48fd-4cfe-bd97-e84e8344ffe3",
+                    "leftValue": "={{ $json.body.step }}",
+                    "rightValue": 1,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c1da75f7-71ec-487b-82dc-3490f86c4313",
+                    "leftValue": "={{ $json.body.step }}",
+                    "rightValue": 2,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "89f56a2f-db4b-4c10-b334-0cfe418d1331",
+                    "leftValue": "={{ $json.body.step }}",
+                    "rightValue": 3,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "03b167f3-21e4-4a56-94d8-663b62c8d1d9",
+                    "leftValue": "={{ $json.body.step }}",
+                    "rightValue": 4,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d170373b-2323-4102-b390-76ee57f5c41f",
+                    "leftValue": "={{ $json.body.step }}",
+                    "rightValue": 5,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "442aff2e-ea0d-48fa-b572-51807c394a4e",
+                    "leftValue": "={{ $json.body.step }}",
+                    "rightValue": 6,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        656,
+        -32
+      ],
+      "id": "2677e744-604d-43ce-b329-5cb873db292b",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "9fb1d93e-9cad-4bc8-aa69-1e1bb15f06c0",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f9d6f898-28eb-4581-ba00-6ffe587d2a0c",
+      "name": "Webhook",
+      "webhookId": "9fb1d93e-9cad-4bc8-aa69-1e1bb15f06c0"
+    },
+    {
+      "parameters": {
+        "from": "={{ $('Webhook').item.json.body.To }}",
+        "to": "=whatsapp:+{{ $('Webhook').item.json.body.WaId }}",
+        "message": "={{ $json.message }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        2384,
+        -32
+      ],
+      "id": "2e0ccc47-ab5e-4235-ba04-f74b93d8922b",
+      "name": "Send an SMS/MMS/WhatsApp message",
+      "credentials": {
+        "twilioApi": {
+          "id": "mrd5eEljdUJTv81Q",
+          "name": "Twilio account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Ler a mensagem\nconst rawMsg = $input.first().json.body.Body || '';\nconst msg = String(rawMsg).trim();\nconst msgUpper = msg.toUpperCase();\n\n// Dados globais\nconst staticData = this.$getWorkflowStaticData('global');\nif (!staticData.steps) staticData.steps = {};\nif (!staticData.answers) staticData.answers = {};\nif (!staticData.contacts) staticData.contacts = {};\n\nconst userId = $input.first().json.body.WaId || 'test';\nconst toNumber = $input.first().json.body.To || null;\n\n// Lista de palavras para parar a conversa\nconst exits = ['sair', 'encerrar', 'finalizar', 'terminar', 'acabar', 'parar', 'cancelar', 'cancela',\n  'chega', 'encerra', 'fim', 'fechar', 'fechar conversa', 'parou', 'stop', 'end', 'exit', 'quit', 'tchau', 'ate mais', 'ate logo', 'falou', 'fui', 'valeu', 'obrigado, ate mais']\n\n// Lista de palavras para iniciar a conversa\nconst greetings = ['oi', 'ola', 'olá', 'eai', 'eaí', 'bom dia', 'boa tarde', 'boa noite', 'salve', 'opa', 'hello', 'hi'];\n\n// Lista de palavras para reiniciar a conversa\nconst resets = ['reiniciar', 'recomecar', 'recomeçar', 'reset', 'restart', 'comecar de novo', 'começar de novo', 'start', 'iniciar', 'voltar', 'inicio', 'início'];\n\n// Helpers\nconst normalize = (t) => String(t).trim().toLowerCase().normalize('NFD').replace(/\\p{Diacritic}/gu, '');\nconst matches = (text, terms) => {\n  const t = normalize(text);\n  return terms.some(term => {\n    const norm = normalize(term);\n    return t === norm || t.includes(norm);\n  });\n};\n\nlet step = staticData.steps[userId];       // Para produção\n//let step = $input.first().json.body.step   // Para testes\n\nif (!staticData.answers[userId]) {\n  staticData.answers[userId] = {\n    brand1: null, model1: null, version1: null,\n    brand2: null, model2: null, version2: null,\n  };\n}\n\nconst A = staticData.answers[userId];\n\nconst computeStep = () => {\n  if (A.brand1 === null) return 1;    // Dizer marca do carro 1\n  if (A.model1 === null) return 2;    // Dizer modelo do carro 1\n  if (A.version1 === null) return 3;  // Dizer versão do carro 1\n  if (A.brand2 === null) return 4;    // Dizer marca do carro 2\n  if (A.model2 === null) return 5;    // Dizer modelo do carro 2\n  if (A.version2 === null) return 6;  // Dizer versão do carro 2\n  return 7;                           // Acionar comparação entre ambos\n};\n\n// Fluxo de operações\nif (matches(msg, exits)) { step = 0; } // finalizar o fluxo de mensagens\nelse if (matches(msg, resets)) {\n  A.brand1 = A.model1 = A.version1 = A.brand2 = A.model2 = A.version2 = null;\n  step = 1;\n} // reiniciar o fluxo de mensagens\nelse if (matches(msg, greetings) && (step === undefined || step === null)) {\n  step = 1;\n} else if (matches(msg, greetings)) {\n  // Nunca grava \"oi/olá\" nos slots; apenas posiciona o step certo\n  step = computeStep();\n} else {\n  // Preencher os campos sequencialmente\n  // Decidir o passo (step) que está\n  if (A.brand1 === null && msgUpper) { A.brand1 = msgUpper; }\n  else if (A.model1 === null && msgUpper) { A.model1 = msgUpper; }\n  else if (A.version1 === null && msgUpper) { A.version1 = msgUpper; }\n  else if (A.brand2 === null && msgUpper) { A.brand2 = msgUpper; }\n  else if (A.model2 === null && msgUpper) { A.model2 = msgUpper; }\n  else if (A.version2 === null && msgUpper) { A.version2 = msgUpper; }\n  step = computeStep();\n}\n\n// Persistência do estado para a conversa se desenrolar\nstaticData.steps[userId] = step;\n$input.first().json.body.step = step;\n$input.first().json.answers = {\n  brand1: A.brand1, model1: A.model1, version1: A.version1,\n  brand2: A.brand2, model2: A.model2, version2: A.version2\n};\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        0
+      ],
+      "id": "3377cbdc-4f23-4ab2-9b62-2fa000b43689",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "191aa371-277f-4fe2-b172-bf3e649b9e00",
+              "name": "body.From",
+              "value": "={{ $json.body.From }}",
+              "type": "string"
+            },
+            {
+              "id": "1a848f59-3da2-4583-b31f-9a79fb880128",
+              "name": "body.To",
+              "value": "={{ $json.body.To }}",
+              "type": "string"
+            },
+            {
+              "id": "97118e98-472b-4aa8-864d-a6fdda91ef8f",
+              "name": "body.step",
+              "value": "={{ $json.body.step }}",
+              "type": "number"
+            },
+            {
+              "id": "b8ef46c7-f704-41e6-93b4-5e4af032af54",
+              "name": "message",
+              "value": "Olá, bem-vindo ao comparador de carros, qual o modelo do carro 1 que deseja comparar? (ex: FIAT)",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        960,
+        -16
+      ],
+      "id": "682a9c8b-935f-44cb-aaf9-83fc04f3c5a0",
+      "name": "Greeting Set Message"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "191aa371-277f-4fe2-b172-bf3e649b9e00",
+              "name": "body.From",
+              "value": "={{ $json.body.From }}",
+              "type": "string"
+            },
+            {
+              "id": "1a848f59-3da2-4583-b31f-9a79fb880128",
+              "name": "body.To",
+              "value": "={{ $json.body.To }}",
+              "type": "string"
+            },
+            {
+              "id": "97118e98-472b-4aa8-864d-a6fdda91ef8f",
+              "name": "body.step",
+              "value": "={{ $json.body.step }}",
+              "type": "number"
+            },
+            {
+              "id": "b8ef46c7-f704-41e6-93b4-5e4af032af54",
+              "name": "message",
+              "value": "Tudo bem, quiser começar novamente, me mande um 'oi'. :)",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        960,
+        -144
+      ],
+      "id": "221a7eea-df87-450e-8f3d-ae0b169d6737",
+      "name": "Ending Set Message"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f241ae0f-1258-4ec8-8c9a-0cb33f8af9a8",
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1120,
+        128
+      ],
+      "id": "a781a061-b232-4133-be07-2204ca757f9f",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:5000/api/validar_marca",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "marca",
+              "value": "={{ $json.body.Body }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        144
+      ],
+      "id": "93c8dc8a-024b-4f58-b709-54a3f58a81f5",
+      "name": "HTTP Request Check Brand1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "191aa371-277f-4fe2-b172-bf3e649b9e00",
+              "name": "body.From",
+              "value": "={{ $json.body.From }}",
+              "type": "string"
+            },
+            {
+              "id": "1a848f59-3da2-4583-b31f-9a79fb880128",
+              "name": "body.To",
+              "value": "={{ $json.body.To }}",
+              "type": "string"
+            },
+            {
+              "id": "97118e98-472b-4aa8-864d-a6fdda91ef8f",
+              "name": "body.step",
+              "value": "={{ $json.body.step }}",
+              "type": "number"
+            },
+            {
+              "id": "b8ef46c7-f704-41e6-93b4-5e4af032af54",
+              "name": "message",
+              "value": "Certo, agora diga qual o modelo do carro 1. (ex: MOBI)",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1376,
+        0
+      ],
+      "id": "ebfda4ce-c22a-4da8-99e1-4995aa93f57d",
+      "name": "True Brand1 Set Message"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "191aa371-277f-4fe2-b172-bf3e649b9e00",
+              "name": "body.From",
+              "value": "={{ $json.body.From }}",
+              "type": "string"
+            },
+            {
+              "id": "1a848f59-3da2-4583-b31f-9a79fb880128",
+              "name": "body.To",
+              "value": "={{ $json.body.To }}",
+              "type": "string"
+            },
+            {
+              "id": "97118e98-472b-4aa8-864d-a6fdda91ef8f",
+              "name": "body.step",
+              "value": "={{ $json.body.step }}",
+              "type": "number"
+            },
+            {
+              "id": "b8ef46c7-f704-41e6-93b4-5e4af032af54",
+              "name": "message",
+              "value": "Essa marca não foi encontrada, digite outra ou tente novamente.",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1376,
+        128
+      ],
+      "id": "65d5745f-5082-4475-88b7-9c5b69d0daca",
+      "name": "False Brand1 Set Message"
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:5000/api/validar_modelo",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "modelo",
+              "value": "={{ $('Code').item.json.answers.model1 }}"
+            },
+            {
+              "name": "marca",
+              "value": "={{ $('Code').item.json.answers.brand1 }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        320
+      ],
+      "id": "4b0301ef-e96c-4eff-b5df-293f7b7400d0",
+      "name": "HTTP Request Check Model 1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f241ae0f-1258-4ec8-8c9a-0cb33f8af9a8",
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1184,
+        336
+      ],
+      "id": "5032f67c-4370-42bd-913b-adb9145e2ad1",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "191aa371-277f-4fe2-b172-bf3e649b9e00",
+              "name": "body.From",
+              "value": "={{ $json.body.From }}",
+              "type": "string"
+            },
+            {
+              "id": "1a848f59-3da2-4583-b31f-9a79fb880128",
+              "name": "body.To",
+              "value": "={{ $json.body.To }}",
+              "type": "string"
+            },
+            {
+              "id": "97118e98-472b-4aa8-864d-a6fdda91ef8f",
+              "name": "body.step",
+              "value": "={{ $json.body.step }}",
+              "type": "number"
+            },
+            {
+              "id": "b8ef46c7-f704-41e6-93b4-5e4af032af54",
+              "name": "message",
+              "value": "={{ $json.message }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2096,
+        240
+      ],
+      "id": "c61b521d-0655-4421-ab57-b314149c30cd",
+      "name": "True Model1 Set Message1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "191aa371-277f-4fe2-b172-bf3e649b9e00",
+              "name": "body.From",
+              "value": "={{ $json.body.From }}",
+              "type": "string"
+            },
+            {
+              "id": "1a848f59-3da2-4583-b31f-9a79fb880128",
+              "name": "body.To",
+              "value": "={{ $json.body.To }}",
+              "type": "string"
+            },
+            {
+              "id": "97118e98-472b-4aa8-864d-a6fdda91ef8f",
+              "name": "body.step",
+              "value": "={{ $json.body.step }}",
+              "type": "number"
+            },
+            {
+              "id": "b8ef46c7-f704-41e6-93b4-5e4af032af54",
+              "name": "message",
+              "value": "Esse modelo não foi encontrado, digite outro ou tente novamente.",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1376,
+        464
+      ],
+      "id": "7bb78b9d-13ed-437a-b47c-0273b6e2e638",
+      "name": "False Model1 Set Message1"
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:5000/api/versoes",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "marca",
+              "value": "={{ $json.marca_upper }}"
+            },
+            {
+              "name": "modelo",
+              "value": "={{ $json.modelo_input }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1440,
+        320
+      ],
+      "id": "29420227-cb56-43e1-90ff-25098d464974",
+      "name": "HTTP Request Check Version 1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = items[0].json;\nconst versoes = Array.isArray(input.versoes) ? input.versoes : [];\n\nconst linhas = versoes.map((v, i) => `${i + 1} - ${v}`);\nconst cabecalho = 'Certo, agora digite o número de um versão:';\nconst message = [cabecalho, ...linhas].join('\\n');\n\ninput.max = versoes.length;\n\ninput.message = message;\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1648,
+        320
+      ],
+      "id": "511c27bc-a636-4d70-b358-fb2c2a5d5f63",
+      "name": "Code Select Versions 1"
+    }
+  ],
+  "pinData": {
+    "When clicking ‘Execute workflow’": [
+      {
+        "json": {
+          "body": {
+            "Body": "FIAT"
+          }
+        }
+      },
+      {
+        "json": {
+          "body": {
+            "Body": "MOBI"
+          }
+        }
+      },
+      {
+        "json": {
+          "body": {
+            "Body": "LIKE 1.0"
+          }
+        }
+      }
+    ],
+    "Code": [
+      {
+        "json": {
+          "body": {
+            "Body": "FIAT",
+            "step": 2
+          },
+          "answers": {
+            "brand1": "FIAT",
+            "model1": "MOBI",
+            "version1": null,
+            "brand2": null,
+            "model2": null,
+            "version2": null
+          },
+          "userId": "test"
+        }
+      },
+      {
+        "json": {
+          "body": {
+            "Body": "MOBI"
+          }
+        }
+      },
+      {
+        "json": {
+          "body": {
+            "Body": "LIKE 1.0"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Ending Set Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Greeting Set Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request Check Brand1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request Check Model 1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        [],
+        []
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Greeting Set Message": {
+      "main": [
+        [
+          {
+            "node": "Send an SMS/MMS/WhatsApp message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ending Set Message": {
+      "main": [
+        [
+          {
+            "node": "Send an SMS/MMS/WhatsApp message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "True Brand1 Set Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "False Brand1 Set Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request Check Brand1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "True Brand1 Set Message": {
+      "main": [
+        [
+          {
+            "node": "Send an SMS/MMS/WhatsApp message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "False Brand1 Set Message": {
+      "main": [
+        [
+          {
+            "node": "Send an SMS/MMS/WhatsApp message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request Check Model 1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request Check Version 1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "False Model1 Set Message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "True Model1 Set Message1": {
+      "main": [
+        [
+          {
+            "node": "Send an SMS/MMS/WhatsApp message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "False Model1 Set Message1": {
+      "main": [
+        [
+          {
+            "node": "Send an SMS/MMS/WhatsApp message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request Check Version 1": {
+      "main": [
+        [
+          {
+            "node": "Code Select Versions 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Select Versions 1": {
+      "main": [
+        [
+          {
+            "node": "True Model1 Set Message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Sao_Paulo",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "73fd4da7-df8d-4724-a7c8-1e1dd4168e68",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e642b48252ffda908f755ff91d6422ac6f6404fb5f3f7e435eab9ee5a7a88c9e"
+  },
+  "id": "Midjv6AznAUJ4bpa",
+  "tags": []
+}
