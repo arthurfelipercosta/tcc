@@ -11,16 +11,23 @@
 # Uso acadêmico/experimental.
 """
 api.py
-Backend Flask para fornecer informações de preço médio de veículos (Webmotors) e quantidade de reclamações (ReclameAqui) para integração com front-end HTML/JS.
+Backend Flask para consulta de informações de veículos com integração a:
+- Webmotors (preços) via chamada pública
+- Catálogo local (CSV) para validação de marca/modelo e listagem de versões
 
-Endpoints:
-- /api/info_carro: Recebe marca e modelo, retorna preço médio e reclamações.
+Principais endpoints (GET):
+- /api/validar_marca?marca=FIAT
+    Confere se a marca existe no CSV.
+- /api/validar_modelo?marca=FIAT&modelo=MOBI
+    Confere se o modelo existe no CSV (independente da marca informada).
+- /api/versoes?marca=FIAT&modelo=MOBI
+    Lista versões únicas do CSV para a combinação marca+modelo.
+- /api/validar_versao?marca=FIAT&modelo=MOBI&numero=1
+    Valida se o número informado corresponde a uma versão da lista retornada em /api/versoes.
+- /api/info_carro?marca=honda&modelo=civic
+    Busca preços na Webmotors e retorna média e amostras.
 
-Funções auxiliares:
-- buscar_precos_webmotors: Faz scrapping de preços no Webmotors.
-- buscar_reclamacoes_reclameaqui: Faz scrapping de reclamações no ReclameAqui.
-
-Uso acadêmico/experimental.
+Observação: código para uso acadêmico/experimental.
 """
 
 from flask import Flask, request, jsonify
@@ -40,7 +47,12 @@ _catalogo_rows = []
 _catalogo_loaded = False
 
 def _carregar_catalogo():
-    """Carregar o CSV uma vez na memória."""
+    """Carregar o CSV uma vez na memória.
+
+    - Usa o caminho definido em CSV_PATH (env ou default)
+    - Detecta automaticamente o separador ("," ou ";")
+    - Preenche a lista global `_catalogo_rows`
+    """
     global _catalogo_rows, _catalogo_loaded
     if _catalogo_loaded:
         return
@@ -60,7 +72,16 @@ def _carregar_catalogo():
         _catalogo_loaded = True
 
 def _listar_versoes(marca: str, modelo: str, max_items: int=25):
-    """Listar versões únicas do CSV para marca+modelo (case-insensitive)"""
+    """Listar versões únicas do CSV para marca+modelo (case-insensitive).
+
+    Params:
+        marca: Nome da marca (ex.: "FIAT")
+        modelo: Nome do modelo (ex.: "MOBI")
+        max_items: Limite máximo de versões a retornar (default: 25)
+
+    Returns:
+        list[str]: Versões únicas em ordem de primeira ocorrência no CSV
+    """
     _carregar_catalogo()
     m = (marca or '').strip().lower()
     mod = (modelo or '').strip().lower()
@@ -83,14 +104,16 @@ def _listar_versoes(marca: str, modelo: str, max_items: int=25):
 
 # ========= Webmotors =========
 def buscar_precos_webmotors(marca, modelo, limite=10):
-    """
-    Busca preços de veículos no Webmotors por marca e modelo.
+    """Consulta a API pública do Webmotors para obter preços.
+
     Args:
-        marca (str): Marca do veículo (ex: 'honda')
-        modelo (str): Modelo do veículo (ex: 'civic')
-        limite (int): Número máximo de preços a coletar (default=10)
+        marca (str): Marca do veículo (ex.: "honda")
+        modelo (str): Modelo do veículo (ex.: "civic")
+        limite (int): Máximo de preços a coletar (default: 10)
+
     Returns:
-        tuple: (media dos preços encontrados ou None, lista de preços)
+        tuple[float, list[float] | str]:
+            (media, precos) quando sucesso; (0, "Carro não encontrado") quando vazio/erro.
     """
     url = (
         "https://www.webmotors.com.br/api/search/car"
@@ -121,7 +144,16 @@ def buscar_precos_webmotors(marca, modelo, limite=10):
 # ========= ENDPOINTS =========
 @app.route('/api/validar_marca', methods=['GET'])
 def validar_marca():
-    """Valida se uma marca existe no CSV (case-insensitive)"""
+    """Valida se uma marca existe no CSV (case-insensitive).
+
+    Query:
+        - marca: nome da marca (ex.: FIAT)
+
+    Response JSON:
+        - valid (bool): True se encontrada
+        - marca (str): Entrada normalizada para UPPERCASE
+        - error (str, opcional): quando entrada ausente
+    """
     marca=request.args.get('marca','').strip()
     if not marca:
         return jsonify({'valid': False, 'error': 'Marca não informada!'})
@@ -139,7 +171,19 @@ def validar_marca():
 
 @app.route('/api/validar_modelo', methods=['GET'])
 def validar_modelo():
-    """Valida se um modelo existe no CSV (case-insensitive)"""
+    """Valida se um modelo existe no CSV (case-insensitive).
+
+    Query:
+        - modelo: nome do modelo (ex.: MOBI)
+        - marca: nome da marca (opcional, usado apenas para eco/depuração)
+
+    Response JSON:
+        - valid (bool): True se encontrado
+        - modelo_input (str): valor recebido
+        - modelo_upper (str): normalizado para UPPERCASE
+        - marca_upper (str): marca em UPPERCASE (eco)
+        - encontrado (bool): igual a valid
+    """
     modelo=request.args.get('modelo','').strip()
     marca=request.args.get('marca','').strip()
     if not modelo:
@@ -165,16 +209,94 @@ def validar_modelo():
         'encontrado': modelo_encontrado
     })
 
+@app.route('/api/validar_versao', methods=['GET'])
+def validar_versao():
+    """Valida se o número informado corresponde a uma versão de marca+modelo.
+
+    Query:
+        - marca: nome da marca (ex.: FIAT)
+        - modelo: nome do modelo (ex.: MOBI)
+        - numero: índice 1-based escolhido pelo usuário (ex.: 1, 2, ...)
+
+    Response JSON (válido):
+        - valid (bool) = True
+        - marca (str)
+        - modelo (str)
+        - numero (int): o número recebido
+        - versao (str): versão selecionada
+        - total (int): total de versões disponíveis
+        - versoes (list[str]): lista de versões (para referência)
+
+    Response JSON (inválido):
+        - valid (bool) = False
+        - error (str): motivo (inválido/fora do intervalo)
+        - demais campos para contexto
+
+    Exemplo:
+        /api/validar_versao?marca=FIAT&modelo=MOBI&numero=1
+    """
+    marca = request.args.get('marca', '')
+    modelo = request.args.get('modelo', '')
+    numero_raw = request.args.get('versao', '')
+
+    # Listar versões possíveis
+    versoes = _listar_versoes(marca, modelo)
+    total = len(versoes)
+
+    # Validar número
+    try:
+        numero = int(str(numero_raw).strip())
+    except (TypeError, ValueError):
+        return jsonify({
+            'valid': False,
+            'error': 'numero inválido',
+            'marca': marca,
+            'modelo': modelo,
+            'numero': numero_raw,
+            'versao': None,
+            'total': total,
+            'versoes': versoes,
+        })
+
+    # Converter para índice 0-based
+    idx = numero - 1
+    if idx < 0 or idx >= total:
+        return jsonify({
+            'valid': False,
+            'error': 'numero fora do intervalo',
+            'marca': marca,
+            'modelo': modelo,
+            'numero': numero,
+            'versao': None,
+            'total': total,
+            'versoes': versoes,
+        })
+
+    versao_escolhida = versoes[idx]
+    return jsonify({
+        'valid': True,
+        'marca': marca,
+        'modelo': modelo,
+        'numero': numero,
+        'versao': versao_escolhida,
+        'total': total,
+        'versoes': versoes,
+    })
+
 @app.route('/api/info_carro', methods=['GET'])
 def info_carro():
-    """
-    Endpoint principal da API.
-    Recebe marca e modelo via query string e retorna:
-    - preço médio do veículo (Webmotors)
-    - lista de preços encontrados
-    - quantidade de reclamações (ReclameAqui)
-    Exemplo de uso:
-    GET /api/info_carro?marca=honda&modelo=civic
+    """Retorna preços do Webmotors para marca+modelo.
+
+    Query:
+        - marca: ex.: honda
+        - modelo: ex.: civic
+
+    Response JSON:
+        - preco_medio (float): média das amostras
+        - precos (list[float] | str): lista de preços ou mensagem "Carro não encontrado"
+
+    Exemplo:
+        GET /api/info_carro?marca=honda&modelo=civic
     """
     marca = request.args.get('marca', '').lower()
     modelo = request.args.get('modelo', '').lower()
@@ -189,7 +311,17 @@ def info_carro():
 
 @app.route('/api/versoes', methods=['GET'])
 def versoes():
-    """marca+modelo -> lista de versões únicas do CSV"""
+    """Lista versões únicas do CSV para a combinação marca+modelo.
+
+    Query:
+        - marca
+        - modelo
+
+    Response JSON:
+        - marca (str)
+        - modelo (str)
+        - versoes (list[str])
+    """
     marca = request.args.get('marca', '')
     modelo = request.args.get('modelo', '')
     versoes = _listar_versoes(marca, modelo)
@@ -201,9 +333,17 @@ def versoes():
 
 @app.route('/api/comparar', methods=['GET'])
 def comparar():
-    """
-    marca1, modelo1, versao1, marca2, modelo2, versao2 -> comparação
-    Preço médio usa o mesmo critério do /api/info_carro (marca+modelo)
+    """Compara dois carros pela média de preços (Webmotors).
+
+    Query:
+        - marca1, modelo1, versao1 (opcional)
+        - marca2, modelo2, versao2 (opcional)
+
+    Response JSON:
+        - carro1: { marca, modelo, versao, preco_medio, amostras }
+        - carro2: { marca, modelo, versao, preco_medio, amostras }
+        - diferenca (float): media1 - media2
+        - mais_barato (str): "carro1", "carro2" ou "empate"
     """
     p = request.args
 
