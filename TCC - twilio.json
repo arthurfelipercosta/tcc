@@ -27,7 +27,7 @@
                 },
                 "conditions": [
                   {
-                    "leftValue": "={{ $json.body.step }}",
+                    "leftValue": "={{ $json.step }}",
                     "rightValue": 0,
                     "operator": {
                       "type": "number",
@@ -50,7 +50,7 @@
                 "conditions": [
                   {
                     "id": "bcbc435c-48fd-4cfe-bd97-e84e8344ffe3",
-                    "leftValue": "={{ $json.body.step }}",
+                    "leftValue": "={{ $json.step }}",
                     "rightValue": 1,
                     "operator": {
                       "type": "number",
@@ -72,7 +72,7 @@
                 "conditions": [
                   {
                     "id": "c1da75f7-71ec-487b-82dc-3490f86c4313",
-                    "leftValue": "={{ $json.body.step }}",
+                    "leftValue": "={{ $json.step }}",
                     "rightValue": 2,
                     "operator": {
                       "type": "number",
@@ -94,7 +94,7 @@
                 "conditions": [
                   {
                     "id": "89f56a2f-db4b-4c10-b334-0cfe418d1331",
-                    "leftValue": "={{ $json.body.step }}",
+                    "leftValue": "={{ $json.step }}",
                     "rightValue": 3,
                     "operator": {
                       "type": "number",
@@ -116,7 +116,7 @@
                 "conditions": [
                   {
                     "id": "03b167f3-21e4-4a56-94d8-663b62c8d1d9",
-                    "leftValue": "={{ $json.body.step }}",
+                    "leftValue": "={{ $json.step }}",
                     "rightValue": 4,
                     "operator": {
                       "type": "number",
@@ -138,7 +138,7 @@
                 "conditions": [
                   {
                     "id": "d170373b-2323-4102-b390-76ee57f5c41f",
-                    "leftValue": "={{ $json.body.step }}",
+                    "leftValue": "={{ $json.step }}",
                     "rightValue": 5,
                     "operator": {
                       "type": "number",
@@ -160,8 +160,30 @@
                 "conditions": [
                   {
                     "id": "442aff2e-ea0d-48fa-b572-51807c394a4e",
-                    "leftValue": "={{ $json.body.step }}",
+                    "leftValue": "={{ $json.step }}",
                     "rightValue": 6,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "299ece9e-7fac-4633-b872-1e6f0c6aec95",
+                    "leftValue": "={{ $json.step }}",
+                    "rightValue": 7,
                     "operator": {
                       "type": "number",
                       "operation": "equals"
@@ -210,8 +232,8 @@
       "type": "n8n-nodes-base.twilio",
       "typeVersion": 1,
       "position": [
-        2384,
-        -32
+        2608,
+        -528
       ],
       "id": "2e0ccc47-ab5e-4235-ba04-f74b93d8922b",
       "name": "Send an SMS/MMS/WhatsApp message",
@@ -224,7 +246,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Ler a mensagem\nconst rawMsg = $input.first().json.body.Body || '';\nconst msg = String(rawMsg).trim();\nconst msgUpper = msg.toUpperCase();\n\n// Dados globais\nconst staticData = this.$getWorkflowStaticData('global');\nif (!staticData.steps) staticData.steps = {};\nif (!staticData.answers) staticData.answers = {};\nif (!staticData.contacts) staticData.contacts = {};\n\nconst userId = $input.first().json.body.WaId || 'test';\nconst toNumber = $input.first().json.body.To || null;\n\n// Lista de palavras para parar a conversa\nconst exits = ['sair', 'encerrar', 'finalizar', 'terminar', 'acabar', 'parar', 'cancelar', 'cancela',\n  'chega', 'encerra', 'fim', 'fechar', 'fechar conversa', 'parou', 'stop', 'end', 'exit', 'quit', 'tchau', 'ate mais', 'ate logo', 'falou', 'fui', 'valeu', 'obrigado, ate mais']\n\n// Lista de palavras para iniciar a conversa\nconst greetings = ['oi', 'ola', 'olá', 'eai', 'eaí', 'bom dia', 'boa tarde', 'boa noite', 'salve', 'opa', 'hello', 'hi'];\n\n// Lista de palavras para reiniciar a conversa\nconst resets = ['reiniciar', 'recomecar', 'recomeçar', 'reset', 'restart', 'comecar de novo', 'começar de novo', 'start', 'iniciar', 'voltar', 'inicio', 'início'];\n\n// Helpers\nconst normalize = (t) => String(t).trim().toLowerCase().normalize('NFD').replace(/\\p{Diacritic}/gu, '');\nconst matches = (text, terms) => {\n  const t = normalize(text);\n  return terms.some(term => {\n    const norm = normalize(term);\n    return t === norm || t.includes(norm);\n  });\n};\n\nlet step = staticData.steps[userId];       // Para produção\n//let step = $input.first().json.body.step   // Para testes\n\nif (!staticData.answers[userId]) {\n  staticData.answers[userId] = {\n    brand1: null, model1: null, version1: null,\n    brand2: null, model2: null, version2: null,\n  };\n}\n\nconst A = staticData.answers[userId];\n\nconst computeStep = () => {\n  if (A.brand1 === null) return 1;    // Dizer marca do carro 1\n  if (A.model1 === null) return 2;    // Dizer modelo do carro 1\n  if (A.version1 === null) return 3;  // Dizer versão do carro 1\n  if (A.brand2 === null) return 4;    // Dizer marca do carro 2\n  if (A.model2 === null) return 5;    // Dizer modelo do carro 2\n  if (A.version2 === null) return 6;  // Dizer versão do carro 2\n  return 7;                           // Acionar comparação entre ambos\n};\n\n// Fluxo de operações\nif (matches(msg, exits)) { step = 0; } // finalizar o fluxo de mensagens\nelse if (matches(msg, resets)) {\n  A.brand1 = A.model1 = A.version1 = A.brand2 = A.model2 = A.version2 = null;\n  step = 1;\n} // reiniciar o fluxo de mensagens\nelse if (matches(msg, greetings) && (step === undefined || step === null)) {\n  step = 1;\n} else if (matches(msg, greetings)) {\n  // Nunca grava \"oi/olá\" nos slots; apenas posiciona o step certo\n  step = computeStep();\n} else {\n  // Preencher os campos sequencialmente\n  // Decidir o passo (step) que está\n  if (A.brand1 === null && msgUpper) { A.brand1 = msgUpper; }\n  else if (A.model1 === null && msgUpper) { A.model1 = msgUpper; }\n  else if (A.version1 === null && msgUpper) { A.version1 = msgUpper; }\n  else if (A.brand2 === null && msgUpper) { A.brand2 = msgUpper; }\n  else if (A.model2 === null && msgUpper) { A.model2 = msgUpper; }\n  else if (A.version2 === null && msgUpper) { A.version2 = msgUpper; }\n  step = computeStep();\n}\n\n// Persistência do estado para a conversa se desenrolar\nstaticData.steps[userId] = step;\n$input.first().json.body.step = step;\n$input.first().json.answers = {\n  brand1: A.brand1, model1: A.model1, version1: A.version1,\n  brand2: A.brand2, model2: A.model2, version2: A.version2\n};\n\nreturn $input.all();"
+        "jsCode": "// Ler a mensagem do input\nconst body = $input.first().json.body || {};\nconst rawMsg = body.Body || '';\nconst msg = String(rawMsg).trim();\nconst msgUpper = msg.toUpperCase();\n\n// Dados persistentes no staticData\nconst staticData = this.$getWorkflowStaticData('global');\nif (!staticData.steps) { staticData.steps = {} };\nif (!staticData.answers) { staticData.answers = {} };\nif (!staticData.contacts) { staticData.contacts = {} };\n\nlet state = $input.first().json.state || staticData;\n\n// Helpers\n// Lista de palavras para parar a conversa\nconst exits = ['sair', 'encerrar', 'finalizar', 'terminar', 'acabar', 'parar', 'cancelar', 'cancela','chega', 'encerra', 'fim', 'fechar', 'fechar conversa', 'parou', 'stop', 'end', 'exit', 'quit', 'tchau', 'ate mais', 'ate logo', 'falou', 'fui', 'valeu', 'obrigado', 'até mais'];\n\n// Lista de palavras para iniciar a conversa\nconst greetings = ['oi', 'ola', 'olá', 'eai', 'eaí', 'bom dia', 'boa tarde', 'boa noite', 'salve', 'opa', 'hello', 'hi', 'comecar', 'começar'];\n\n// Lista de palavras para reiniciar a conversa\nconst resets = ['reiniciar', 'recomecar', 'recomeçar', 'reset', 'restart', 'comecar de novo', 'começar de novo', 'start', 'iniciar', 'voltar', 'inicio', 'início'];\n\n// Função para normalizar o texto\nconst normalize = (t) => String(t).trim().toLowerCase().normalize('NFD').replace(/\\p{Diacritic}/gu, '');\n\n// Função para match de textos\nconst matches = (text, terms) => {\n  const t = normalize(text);\n  return terms.some(term => {\n    const norm = normalize(term);\n    return t === norm || t.includes(norm);\n  });\n};\n\n// Identificação do usuário\nconst userId = $input.first().json.body.WaId;\nconst toNumber = $input.first().json.body.To;\nconst fromNumber = $input.first().json.body.From;\n\n// Etapas a serem preenchidas\nif (!state.answers[userId]) {\n  state.answers[userId] = {\n    brand1: null, model1: null, version1: null,\n    brand2: null, model2: null, version2: null,\n  };\n}\nif (!state.steps[userId]) { state.steps[userId] = 1; }\n\nconst A = state.answers[userId];\nlet step = state.steps[userId];\n\n// Calcular o step\nconst computeStep = () => {\n  if (A.brand1 === null)   return 2; // Dizer marca do carro 1\n  if (A.model1 === null)   return 3; // Dizer modelo do carro 1\n  if (A.version1 === null) return 4; // Dizer versão do carro 1\n  if (A.brand2 === null)   return 5; // Dizer marca do carro 2\n  if (A.model2 === null)   return 6; // Dizer modelo do carro 2\n  if (A.version2 === null) return 7; // Dizer versão do carro 2\n  return 8;\n}\n\nif (step === undefined || step === null) { step = computeStep(); }\n\nlet nextStep = step;\n// Fluxo de operações\nif (matches(msg, exits)) { step = 0; } // Finalizar fluxo de mensagens\nelse if (matches(msg, resets)) {\n  A.brand1 = A.model1 = A.version1 = A.brand2 = A.model2 = A.version2 = null;\n  step = 1;\n} // Reiniciar fluxo de mensagens\nelse if (matches(msg, greetings)) {\n  // Não gravar a mensagem de \"oi\" nos slots\n  A.brand1 = A.model1 = A.version1 = A.brand2 = A.model2 = A.version2 = null;\n  step = 1;\n} // Iniciar fluxo de mensagens\nelse {\n  step = computeStep();\n  nextStep = step;\n  // Preencher o campo com step atual\n  // Preencher campos sequencialmente\n  switch (nextStep) {\n    case 2: if (A.brand1 === null) { A.brand1 = msgUpper; } break;\n    case 3: if (A.model1 === null) { A.model1 = msgUpper; } break;\n    case 4: if (A.version1 === null) { A.version1 = msgUpper; } break;\n    case 5: if (A.brand2 === null) { A.brand2 = msgUpper; } break;\n    case 6: if (A.model2 === null) { A.model2 = msgUpper; } break;\n    case 7: if (A.version2 === null) { A.version2 = msgUpper; } break;\n  }\n}\n\n// Persistência do estado para a conversa se desenrolar\nstate.steps[userId] = step;\n\n// Devolver JSON atualizado na saída\n$input.first().json.body.step = step;\n$input.first().json.answers = {\n    brand1: A.brand1, model1: A.model1, version1: A.version1,\n    brand2: A.brand2, model2: A.model2, version2: A.version2\n};\n$input.first().json.state = state;\n\n// Retornos\nreturn [{\n  json: {\n    userId,\n    step: state.steps[userId],\n    staticData,\n    answers: A,\n    fromNumber,\n    toNumber,\n    msg,\n    msgUpper\n  }\n}]"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -241,20 +263,20 @@
           "assignments": [
             {
               "id": "191aa371-277f-4fe2-b172-bf3e649b9e00",
-              "name": "body.From",
-              "value": "={{ $json.body.From }}",
+              "name": "fromNumber",
+              "value": "={{ $json.fromNumber }}",
               "type": "string"
             },
             {
               "id": "1a848f59-3da2-4583-b31f-9a79fb880128",
-              "name": "body.To",
-              "value": "={{ $json.body.To }}",
+              "name": "toNumber",
+              "value": "={{ $json.toNumber }}",
               "type": "string"
             },
             {
               "id": "97118e98-472b-4aa8-864d-a6fdda91ef8f",
-              "name": "body.step",
-              "value": "={{ $json.body.step }}",
+              "name": "step",
+              "value": "={{ $json.step }}",
               "type": "number"
             },
             {
@@ -266,13 +288,15 @@
           ]
         },
         "includeOtherFields": true,
+        "include": "selected",
+        "includeFields": "staticData.steps, staticData.answers",
         "options": {}
       },
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        960,
-        -16
+        1040,
+        -256
       ],
       "id": "682a9c8b-935f-44cb-aaf9-83fc04f3c5a0",
       "name": "Greeting Set Message"
@@ -313,45 +337,11 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        960,
-        -144
+        1040,
+        -400
       ],
       "id": "221a7eea-df87-450e-8f3d-ae0b169d6737",
       "name": "Ending Set Message"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "f241ae0f-1258-4ec8-8c9a-0cb33f8af9a8",
-              "leftValue": "={{ $json.valid }}",
-              "rightValue": "",
-              "operator": {
-                "type": "boolean",
-                "operation": "true",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        1120,
-        128
-      ],
-      "id": "a781a061-b232-4133-be07-2204ca757f9f",
-      "name": "If"
     },
     {
       "parameters": {
@@ -361,7 +351,7 @@
           "parameters": [
             {
               "name": "marca",
-              "value": "={{ $json.body.Body }}"
+              "value": "={{ $json.staticData.answers[$json.userId].brand1 }}"
             }
           ]
         },
@@ -370,8 +360,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        960,
-        144
+        1024,
+        -96
       ],
       "id": "93c8dc8a-024b-4f58-b709-54a3f58a81f5",
       "name": "HTTP Request Check Brand1"
@@ -382,20 +372,20 @@
           "assignments": [
             {
               "id": "191aa371-277f-4fe2-b172-bf3e649b9e00",
-              "name": "body.From",
-              "value": "={{ $json.body.From }}",
+              "name": "fromNumber",
+              "value": "={{ $('Code').item.json.fromNumber }}",
               "type": "string"
             },
             {
               "id": "1a848f59-3da2-4583-b31f-9a79fb880128",
-              "name": "body.To",
-              "value": "={{ $json.body.To }}",
+              "name": "toNumber",
+              "value": "={{ $('Code').item.json.toNumber }}",
               "type": "string"
             },
             {
               "id": "97118e98-472b-4aa8-864d-a6fdda91ef8f",
-              "name": "body.step",
-              "value": "={{ $json.body.step }}",
+              "name": "step",
+              "value": "={{ $('Code').item.json.step }}",
               "type": "number"
             },
             {
@@ -412,53 +402,11 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1376,
-        0
+        1456,
+        -112
       ],
       "id": "ebfda4ce-c22a-4da8-99e1-4995aa93f57d",
       "name": "True Brand1 Set Message"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "191aa371-277f-4fe2-b172-bf3e649b9e00",
-              "name": "body.From",
-              "value": "={{ $json.body.From }}",
-              "type": "string"
-            },
-            {
-              "id": "1a848f59-3da2-4583-b31f-9a79fb880128",
-              "name": "body.To",
-              "value": "={{ $json.body.To }}",
-              "type": "string"
-            },
-            {
-              "id": "97118e98-472b-4aa8-864d-a6fdda91ef8f",
-              "name": "body.step",
-              "value": "={{ $json.body.step }}",
-              "type": "number"
-            },
-            {
-              "id": "b8ef46c7-f704-41e6-93b4-5e4af032af54",
-              "name": "message",
-              "value": "Essa marca não foi encontrada, digite outra ou tente novamente.",
-              "type": "string"
-            }
-          ]
-        },
-        "includeOtherFields": true,
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        1376,
-        128
-      ],
-      "id": "65d5745f-5082-4475-88b7-9c5b69d0daca",
-      "name": "False Brand1 Set Message"
     },
     {
       "parameters": {
@@ -468,11 +416,11 @@
           "parameters": [
             {
               "name": "modelo",
-              "value": "={{ $('Code').item.json.answers.model1 }}"
+              "value": "={{ $json.staticData.answers[$json.userId].model1 }}"
             },
             {
               "name": "marca",
-              "value": "={{ $('Code').item.json.answers.brand1 }}"
+              "value": "={{ $json.staticData.answers[$json.userId].brand1 }}"
             }
           ]
         },
@@ -481,45 +429,11 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        960,
-        320
+        1024,
+        80
       ],
       "id": "4b0301ef-e96c-4eff-b5df-293f7b7400d0",
       "name": "HTTP Request Check Model 1"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "f241ae0f-1258-4ec8-8c9a-0cb33f8af9a8",
-              "leftValue": "={{ $json.valid }}",
-              "rightValue": "",
-              "operator": {
-                "type": "boolean",
-                "operation": "true",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        1184,
-        336
-      ],
-      "id": "5032f67c-4370-42bd-913b-adb9145e2ad1",
-      "name": "If1"
     },
     {
       "parameters": {
@@ -527,20 +441,20 @@
           "assignments": [
             {
               "id": "191aa371-277f-4fe2-b172-bf3e649b9e00",
-              "name": "body.From",
-              "value": "={{ $json.body.From }}",
+              "name": "fromNumber",
+              "value": "={{ $('Switch').item.json.fromNumber }}",
               "type": "string"
             },
             {
               "id": "1a848f59-3da2-4583-b31f-9a79fb880128",
-              "name": "body.To",
-              "value": "={{ $json.body.To }}",
+              "name": "toNumber",
+              "value": "={{ $('Switch').item.json.toNumber }}",
               "type": "string"
             },
             {
               "id": "97118e98-472b-4aa8-864d-a6fdda91ef8f",
-              "name": "body.step",
-              "value": "={{ $json.body.step }}",
+              "name": "step",
+              "value": "={{ $('Switch').item.json.step }}",
               "type": "number"
             },
             {
@@ -557,53 +471,11 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        2096,
-        240
+        1856,
+        96
       ],
       "id": "c61b521d-0655-4421-ab57-b314149c30cd",
       "name": "True Model1 Set Message1"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "191aa371-277f-4fe2-b172-bf3e649b9e00",
-              "name": "body.From",
-              "value": "={{ $json.body.From }}",
-              "type": "string"
-            },
-            {
-              "id": "1a848f59-3da2-4583-b31f-9a79fb880128",
-              "name": "body.To",
-              "value": "={{ $json.body.To }}",
-              "type": "string"
-            },
-            {
-              "id": "97118e98-472b-4aa8-864d-a6fdda91ef8f",
-              "name": "body.step",
-              "value": "={{ $json.body.step }}",
-              "type": "number"
-            },
-            {
-              "id": "b8ef46c7-f704-41e6-93b4-5e4af032af54",
-              "name": "message",
-              "value": "Esse modelo não foi encontrado, digite outro ou tente novamente.",
-              "type": "string"
-            }
-          ]
-        },
-        "includeOtherFields": true,
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        1376,
-        464
-      ],
-      "id": "7bb78b9d-13ed-437a-b47c-0273b6e2e638",
-      "name": "False Model1 Set Message1"
     },
     {
       "parameters": {
@@ -626,24 +498,570 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1440,
-        320
+        1424,
+        96
       ],
       "id": "29420227-cb56-43e1-90ff-25098d464974",
       "name": "HTTP Request Check Version 1"
     },
     {
       "parameters": {
-        "jsCode": "const input = items[0].json;\nconst versoes = Array.isArray(input.versoes) ? input.versoes : [];\n\nconst linhas = versoes.map((v, i) => `${i + 1} - ${v}`);\nconst cabecalho = 'Certo, agora digite o número de um versão:';\nconst message = [cabecalho, ...linhas].join('\\n');\n\ninput.max = versoes.length;\n\ninput.message = message;\n\nreturn items;"
+        "jsCode": "const input = items[0].json;\nconst versoes = Array.isArray(input.versoes) ? input.versoes : [];\n\nconst linhas = versoes.map((v, i) => `${i + 1} - ${v}`);\nconst cabecalho = 'Certo, agora digite o número de uma versão:';\nconst message = [cabecalho, ...linhas].join('\\n');\n\ninput.max = versoes.length;\n\ninput.message = message;\n\nreturn items;"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1648,
-        320
+        1664,
+        96
       ],
       "id": "511c27bc-a636-4d70-b358-fb2c2a5d5f63",
       "name": "Code Select Versions 1"
+    },
+    {
+      "parameters": {
+        "from": "={{ $json.toNumber }}",
+        "to": "={{ $json.fromNumber }}",
+        "message": "={{ $json.message }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        2512,
+        64
+      ],
+      "id": "fd71337e-eff1-4107-b926-6af99b058a7f",
+      "name": "Send an SMS/MMS/WhatsApp message1",
+      "credentials": {
+        "twilioApi": {
+          "id": "mrd5eEljdUJTv81Q",
+          "name": "Twilio account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:5000/api/validar_versao",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "marca",
+              "value": "={{ $json.staticData.answers[$json.userId].brand1 }}"
+            },
+            {
+              "name": "modelo",
+              "value": "={{ $json.staticData.answers[$json.userId].model1 }}"
+            },
+            {
+              "name": "versao",
+              "value": "={{ $json.staticData.answers[$json.userId].version1 }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1024,
+        272
+      ],
+      "id": "820d42ba-e965-4482-96e1-1302c73d3470",
+      "name": "HTTP Request Check Version1"
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:5000/api/validar_marca",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "marca",
+              "value": "={{ $json.staticData.answers[$json.userId].brand2 }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1024,
+        464
+      ],
+      "id": "6cba9e31-694d-4baa-bc06-d57d8eefaf87",
+      "name": "HTTP Request Check Brand2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f241ae0f-1258-4ec8-8c9a-0cb33f8af9a8",
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1216,
+        464
+      ],
+      "id": "0b643ef3-0b13-435d-9d2f-0a4c25b16348",
+      "name": "Ifbrand2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "191aa371-277f-4fe2-b172-bf3e649b9e00",
+              "name": "fromNumber",
+              "value": "={{ $('Code').item.json.fromNumber }}",
+              "type": "string"
+            },
+            {
+              "id": "1a848f59-3da2-4583-b31f-9a79fb880128",
+              "name": "toNumber",
+              "value": "={{ $('Code').item.json.toNumber }}",
+              "type": "string"
+            },
+            {
+              "id": "97118e98-472b-4aa8-864d-a6fdda91ef8f",
+              "name": "step",
+              "value": "={{ $('Code').item.json.step }}",
+              "type": "number"
+            },
+            {
+              "id": "b8ef46c7-f704-41e6-93b4-5e4af032af54",
+              "name": "message",
+              "value": "Certo, agora diga qual o modelo do carro 2.",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1456,
+        448
+      ],
+      "id": "e702ec90-d166-47e4-8e9d-c2756c83b941",
+      "name": "True Brand Set Message2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f241ae0f-1258-4ec8-8c9a-0cb33f8af9a8",
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1296,
+        272
+      ],
+      "id": "3cc5b467-5043-4511-bbc1-6f0f93b65de7",
+      "name": "Ifversion1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f241ae0f-1258-4ec8-8c9a-0cb33f8af9a8",
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1200,
+        112
+      ],
+      "id": "5032f67c-4370-42bd-913b-adb9145e2ad1",
+      "name": "Ifmodel1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f241ae0f-1258-4ec8-8c9a-0cb33f8af9a8",
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1200,
+        -96
+      ],
+      "id": "a781a061-b232-4133-be07-2204ca757f9f",
+      "name": "Ifbrand1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "191aa371-277f-4fe2-b172-bf3e649b9e00",
+              "name": "fromNumber",
+              "value": "={{ $('Code').item.json.fromNumber }}",
+              "type": "string"
+            },
+            {
+              "id": "1a848f59-3da2-4583-b31f-9a79fb880128",
+              "name": "toNumber",
+              "value": "={{ $('Code').item.json.toNumber }}",
+              "type": "string"
+            },
+            {
+              "id": "97118e98-472b-4aa8-864d-a6fdda91ef8f",
+              "name": "step",
+              "value": "={{ $('Code').item.json.step }}",
+              "type": "number"
+            },
+            {
+              "id": "b8ef46c7-f704-41e6-93b4-5e4af032af54",
+              "name": "message",
+              "value": "Agora que a versão do carro 1 já foi escolhida, por favor, escreva a marca do carro 2.",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1584,
+        784
+      ],
+      "id": "c7850adf-c5cb-4c93-8bc5-3d5c49b5e9ea",
+      "name": "True Version Set Message 2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "191aa371-277f-4fe2-b172-bf3e649b9e00",
+              "name": "fromNumber",
+              "value": "={{ $('Code').item.json.fromNumber }}",
+              "type": "string"
+            },
+            {
+              "id": "1a848f59-3da2-4583-b31f-9a79fb880128",
+              "name": "toNumber",
+              "value": "={{ $('Code').item.json.toNumber }}",
+              "type": "string"
+            },
+            {
+              "id": "97118e98-472b-4aa8-864d-a6fdda91ef8f",
+              "name": "step",
+              "value": "={{ $('Code').item.json.step }}",
+              "type": "number"
+            },
+            {
+              "id": "b8ef46c7-f704-41e6-93b4-5e4af032af54",
+              "name": "message",
+              "value": "Agora que a versão do carro 1 já foi escolhida, por favor, escreva a marca do carro 2.",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1584,
+        256
+      ],
+      "id": "48b7194e-81b1-4ab7-985b-399b3e14f574",
+      "name": "True Version Set Message1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f241ae0f-1258-4ec8-8c9a-0cb33f8af9a8",
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1296,
+        800
+      ],
+      "id": "359b59cf-3e20-48de-856a-39a3b948e694",
+      "name": "Ifversion2"
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:5000/api/validar_versao",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "marca",
+              "value": "={{ $json.staticData.answers[$json.userId].brand2 }}"
+            },
+            {
+              "name": "modelo",
+              "value": "={{ $json.staticData.answers[$json.userId].model2 }}"
+            },
+            {
+              "name": "versao",
+              "value": "={{ $json.staticData.answers[$json.userId].version1 }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1024,
+        800
+      ],
+      "id": "6aff930f-4c40-44d8-a203-f25c44037d88",
+      "name": "HTTP Request Check Version2"
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:5000/api/validar_modelo",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "modelo",
+              "value": "={{ $json.staticData.answers[$json.userId].model2 }}"
+            },
+            {
+              "name": "marca",
+              "value": "={{ $json.staticData.answers[$json.userId].brand2 }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1024,
+        624
+      ],
+      "id": "7017fff1-8179-4ca0-9e8e-b0d101436d95",
+      "name": "HTTP Request Check Model2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f241ae0f-1258-4ec8-8c9a-0cb33f8af9a8",
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1200,
+        624
+      ],
+      "id": "bef220bc-6c64-45c5-bf09-a30978864ab6",
+      "name": "Ifmodel2"
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:5000/api/versoes",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "marca",
+              "value": "={{ $json.marca_upper }}"
+            },
+            {
+              "name": "modelo",
+              "value": "={{ $json.modelo_input }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1424,
+        608
+      ],
+      "id": "9e8c8021-9d5e-42db-bb93-607e6e7a9e73",
+      "name": "HTTP Request Check Version"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "191aa371-277f-4fe2-b172-bf3e649b9e00",
+              "name": "fromNumber",
+              "value": "={{ $('Switch').item.json.fromNumber }}",
+              "type": "string"
+            },
+            {
+              "id": "1a848f59-3da2-4583-b31f-9a79fb880128",
+              "name": "toNumber",
+              "value": "={{ $('Switch').item.json.toNumber }}",
+              "type": "string"
+            },
+            {
+              "id": "97118e98-472b-4aa8-864d-a6fdda91ef8f",
+              "name": "step",
+              "value": "={{ $('Switch').item.json.step }}",
+              "type": "number"
+            },
+            {
+              "id": "b8ef46c7-f704-41e6-93b4-5e4af032af54",
+              "name": "message",
+              "value": "={{ $json.message }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1856,
+        608
+      ],
+      "id": "e6c62781-08ea-45c4-bc66-551befe15de8",
+      "name": "True Model 2 Set Message"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = items[0].json;\nconst versoes = Array.isArray(input.versoes) ? input.versoes : [];\n\nconst linhas = versoes.map((v, i) => `${i + 1} - ${v}`);\nconst cabecalho = 'Certo, agora digite o número de uma versão:';\nconst message = [cabecalho, ...linhas].join('\\n');\n\ninput.max = versoes.length;\n\ninput.message = message;\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1664,
+        608
+      ],
+      "id": "fb1ac76c-780d-4bc1-8fea-152c504971cf",
+      "name": "Code Select Versions 2"
     }
   ],
   "pinData": {
@@ -651,21 +1069,10 @@
       {
         "json": {
           "body": {
-            "Body": "FIAT"
-          }
-        }
-      },
-      {
-        "json": {
-          "body": {
-            "Body": "MOBI"
-          }
-        }
-      },
-      {
-        "json": {
-          "body": {
-            "Body": "LIKE 1.0"
+            "WaId": "558499397770",
+            "Body": "SPIN",
+            "To": "whatsapp:+14155238886",
+            "From": "whatsapp:+558499397770"
           }
         }
       }
@@ -673,33 +1080,36 @@
     "Code": [
       {
         "json": {
-          "body": {
-            "Body": "FIAT",
-            "step": 2
+          "userId": "558499397770",
+          "step": 6,
+          "staticData": {
+            "steps": {
+              "558499397770": 6
+            },
+            "answers": {
+              "558499397770": {
+                "brand1": "FIAT",
+                "model1": "MOBI",
+                "version1": 1,
+                "brand2": "CHEVROLET",
+                "model2": "SPIN",
+                "version2": null
+              }
+            },
+            "contacts": {}
           },
           "answers": {
             "brand1": "FIAT",
             "model1": "MOBI",
-            "version1": null,
-            "brand2": null,
-            "model2": null,
+            "version1": 1,
+            "brand2": "CHEVROLET",
+            "model2": "SPIN",
             "version2": null
           },
-          "userId": "test"
-        }
-      },
-      {
-        "json": {
-          "body": {
-            "Body": "MOBI"
-          }
-        }
-      },
-      {
-        "json": {
-          "body": {
-            "Body": "LIKE 1.0"
-          }
+          "fromNumber": "whatsapp:+558499397770",
+          "toNumber": "whatsapp:+14155238886",
+          "msg": "SPIN",
+          "msgUpper": "SPIN"
         }
       }
     ]
@@ -746,9 +1156,34 @@
             "index": 0
           }
         ],
-        [],
-        [],
-        []
+        [
+          {
+            "node": "HTTP Request Check Version1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request Check Brand2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request Check Model2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request Check Version2",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Webhook": {
@@ -777,7 +1212,7 @@
       "main": [
         [
           {
-            "node": "Send an SMS/MMS/WhatsApp message",
+            "node": "Send an SMS/MMS/WhatsApp message1",
             "type": "main",
             "index": 0
           }
@@ -788,25 +1223,7 @@
       "main": [
         [
           {
-            "node": "Send an SMS/MMS/WhatsApp message",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "If": {
-      "main": [
-        [
-          {
-            "node": "True Brand1 Set Message",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "False Brand1 Set Message",
+            "node": "Send an SMS/MMS/WhatsApp message1",
             "type": "main",
             "index": 0
           }
@@ -817,7 +1234,7 @@
       "main": [
         [
           {
-            "node": "If",
+            "node": "Ifbrand1",
             "type": "main",
             "index": 0
           }
@@ -828,18 +1245,7 @@
       "main": [
         [
           {
-            "node": "Send an SMS/MMS/WhatsApp message",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "False Brand1 Set Message": {
-      "main": [
-        [
-          {
-            "node": "Send an SMS/MMS/WhatsApp message",
+            "node": "Send an SMS/MMS/WhatsApp message1",
             "type": "main",
             "index": 0
           }
@@ -850,25 +1256,7 @@
       "main": [
         [
           {
-            "node": "If1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "If1": {
-      "main": [
-        [
-          {
-            "node": "HTTP Request Check Version 1",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "False Model1 Set Message1",
+            "node": "Ifmodel1",
             "type": "main",
             "index": 0
           }
@@ -879,18 +1267,7 @@
       "main": [
         [
           {
-            "node": "Send an SMS/MMS/WhatsApp message",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "False Model1 Set Message1": {
-      "main": [
-        [
-          {
-            "node": "Send an SMS/MMS/WhatsApp message",
+            "node": "Send an SMS/MMS/WhatsApp message1",
             "type": "main",
             "index": 0
           }
@@ -918,6 +1295,184 @@
           }
         ]
       ]
+    },
+    "HTTP Request Check Version1": {
+      "main": [
+        [
+          {
+            "node": "Ifversion1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request Check Brand2": {
+      "main": [
+        [
+          {
+            "node": "Ifbrand2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ifbrand2": {
+      "main": [
+        [
+          {
+            "node": "True Brand Set Message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "True Brand Set Message2": {
+      "main": [
+        [
+          {
+            "node": "Send an SMS/MMS/WhatsApp message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ifversion1": {
+      "main": [
+        [
+          {
+            "node": "True Version Set Message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ifmodel1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request Check Version 1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Ifbrand1": {
+      "main": [
+        [
+          {
+            "node": "True Brand1 Set Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "True Version Set Message 2": {
+      "main": [
+        [
+          {
+            "node": "Send an SMS/MMS/WhatsApp message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "True Version Set Message1": {
+      "main": [
+        [
+          {
+            "node": "Send an SMS/MMS/WhatsApp message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ifversion2": {
+      "main": [
+        [
+          {
+            "node": "True Version Set Message 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request Check Version2": {
+      "main": [
+        [
+          {
+            "node": "Ifversion2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request Check Model2": {
+      "main": [
+        [
+          {
+            "node": "Ifmodel2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ifmodel2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request Check Version",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request Check Version": {
+      "main": [
+        [
+          {
+            "node": "Code Select Versions 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Select Versions 2": {
+      "main": [
+        [
+          {
+            "node": "True Model 2 Set Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "True Model 2 Set Message": {
+      "main": [
+        [
+          {
+            "node": "Send an SMS/MMS/WhatsApp message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": true,
@@ -926,7 +1481,7 @@
     "timezone": "America/Sao_Paulo",
     "callerPolicy": "workflowsFromSameOwner"
   },
-  "versionId": "73fd4da7-df8d-4724-a7c8-1e1dd4168e68",
+  "versionId": "3bb1b3cd-b829-48d5-a71e-b7d17eb4fe2a",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "e642b48252ffda908f755ff91d6422ac6f6404fb5f3f7e435eab9ee5a7a88c9e"
