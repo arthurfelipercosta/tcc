@@ -46,6 +46,8 @@ CSV_PATH = os.environ.get('CSV_PATH', 'dados_corrigidos_sem_duplicatas.csv')
 _catalogo_rows = []
 _catalogo_loaded = False
 
+# ========= FUNÇÕES =========
+
 def _carregar_catalogo():
     """Carregar o CSV uma vez na memória.
 
@@ -198,17 +200,6 @@ def pesquisar_preco(marca, modelo):
         
         print(f"📅 Anos disponíveis: {[ano['nome'] for ano in anos]}")
         
-        # 4. Pegar o ano mais recente
-        # Função para extrair o ano do código (ex: "2020-5" -> 2020)
-        def extrair_ano(codigo):
-            try:
-                # Se o código tem formato "2020-5", pega só a parte do ano
-                if '-' in str(codigo):
-                    return int(str(codigo).split('-')[0])
-                return int(codigo)
-            except (ValueError, TypeError):
-                return 0  # Retorna 0 para códigos inválidos
-        
         ano_mais_recente = max(anos, key=lambda x: extrair_ano(x['codigo']))
         ano_codigo = ano_mais_recente['codigo']
         ano_nome = ano_mais_recente['nome']
@@ -289,16 +280,6 @@ def buscar_precos_fipe(marca, modelo):
         if not anos:
             return 0, "Anos não encontrados na FIPE"
         
-        # Pegar o ano mais recente
-        # Função para extrair o ano do código (ex: "2020-5" -> 2020)
-        def extrair_ano(codigo):
-            try:
-                # Se o código tem formato "2020-5", pega só a parte do ano
-                if '-' in str(codigo):
-                    return int(str(codigo).split('-')[0])
-                return int(codigo)
-            except (ValueError, TypeError):
-                return 0  # Retorna 0 para códigos inválidos
         
         ano_mais_recente = max(anos, key=lambda x: extrair_ano(x['codigo']))
         ano_codigo = ano_mais_recente['codigo']
@@ -356,6 +337,29 @@ def buscar_precos_webmotors(marca, modelo, limite=10):
         media = sum(precos) / len(precos)
         return media, precos
     return 0, "Carro não encontrado"
+
+# Preços FIPE primeiro, Webmotors como fallback
+def buscar_preco_com_fallback(marca, modelo):
+    # Tenta FIPE primeiro
+    media, precos = buscar_precos_fipe(marca, modelo)
+    fonte = "FIPE"
+    
+    # Se FIPE falhar, tenta Webmotors
+    if media == 0:
+        media, precos = buscar_precos_webmotors(marca.lower(), modelo.lower())
+        fonte = "Webmotors"
+    
+    return media, precos, fonte
+
+# Função para extrair o ano do código (ex: "2020-5" -> 2020)
+def extrair_ano(codigo):
+    try:
+        # Se o código tem formato "2020-5", pega só a parte do ano
+        if '-' in str(codigo):
+            return int(str(codigo).split('-')[0])
+        return int(codigo)
+    except (ValueError, TypeError):
+        return 0  # Retorna 0 para códigos inválidos
 
 # ========= ENDPOINTS =========
 @app.route('/api/validar_marca', methods=['GET'])
@@ -536,19 +540,6 @@ def comparativo():
 
     versao1 = versoes1[idx1]
     versao2 = versoes2[idx2]
-
-    # Preços FIPE primeiro, Webmotors como fallback
-    def buscar_preco_com_fallback(marca, modelo):
-        # Tenta FIPE primeiro
-        media, precos = buscar_precos_fipe(marca, modelo)
-        fonte = "FIPE"
-        
-        # Se FIPE falhar, tenta Webmotors
-        if media == 0:
-            media, precos = buscar_precos_webmotors(marca.lower(), modelo.lower())
-            fonte = "Webmotors"
-        
-        return media, precos, fonte
     
     media1, precos1, fonte1 = buscar_preco_com_fallback(marca1, modelo1)
     media2, precos2, fonte2 = buscar_preco_com_fallback(marca2, modelo2)
@@ -739,19 +730,6 @@ def comparar():
         'modelo': p.get('modelo2', '').lower(),
         'versao': p.get('versao2', '') or None,
     }
-
-    # Preços FIPE primeiro, Webmotors como fallback
-    def buscar_preco_com_fallback(marca, modelo):
-        # Tenta FIPE primeiro
-        media, precos = buscar_precos_fipe(marca, modelo)
-        fonte = "FIPE"
-        
-        # Se FIPE falhar, tenta Webmotors
-        if media == 0:
-            media, precos = buscar_precos_webmotors(marca.lower(), modelo.lower())
-            fonte = "Webmotors"
-        
-        return media, precos, fonte
     
     media1, precos1, fonte1 = buscar_preco_com_fallback(c1['marca'], c1['modelo'])
     media2, precos2, fonte2 = buscar_preco_com_fallback(c2['marca'], c2['modelo'])
@@ -781,6 +759,170 @@ def teste_preco():
     
     resultado = pesquisar_preco(marca, modelo)
     return jsonify(resultado)
+
+@app.route('/api/dados_para_ia', methods=['GET'])
+def dados_para_ia():
+    """Endpoint específico para fornecer os dados para a IA poder conversar e responder ao usuário
+
+    Query:
+        - marca1, modelo1, versao1 (obrigatório)
+        - marca2, modelo2, versao2 (obrigatório)
+    
+    Response JSON:
+        - context_ia: string formatada para IA com todos os dados
+        - resumo: informações básicas para logs
+        - dados_brutos: dados estruturados (opcional)
+    """
+
+    p = request.args
+
+    # Carro 1
+    marca1 = p.get('marca1', '').strip().upper()
+    modelo1 = p.get('modelo1', '').strip().upper()
+    numero_versao1 = p.get('versao1', '').strip()
+    
+    # Carro 2
+    marca2 = p.get('marca2', '').strip().upper()
+    modelo2 = p.get('modelo2', '').strip().upper()
+    numero_versao2 = p.get('versao2', '').strip()
+
+    if not all([marca1, modelo1, numero_versao1, marca2, modelo2, numero_versao2]):
+        return jsonify({'error': 'Estão faltando dados!'}), 400
+
+    # Buscar a linha do carro no CSV
+    row = _buscar_linha_catalogo(marca, modelo, versao)
+    if not row:
+        return None, None
+
+    # Buscar preço do carro
+    media_preco, _, fonte_preco = buscar_preco_com_fallback(marca, modelo)
+
+    return row, {
+        'preco_medio': media_preco,
+        'fonte_preco': fonte_preco,
+        'versao_escolhida': versao
+    }
+
+    # Processar dados do carro 1
+    row1, extra1 = extrair_dados_completos(marca1, modelo1, numero_versao1)
+    if not row1:
+        return jsonify({'error': f'Informações sobre o carro {marca1} {modelo1} na versão escolhida não foram encontradas.'}), 404
+    
+    # Processar dados do carro 2
+    row2, extra2 = extrair_dados_completos(marca2, modelo2, numero_versao2)
+    if not row2:
+        return jsonify({'error': f'Informações sobre o carro {marca2} {modelo2} na versão escolhida não foram encontradas.'}), 404
+
+    # Montar contexto para a IA
+    context_ia = f"""DADOS TÉCNICOS PARA A CONSULTA/COMPARAÇÃO
+    CARRO 1: {marca1} {modelo1} - {extra1['versao_escolhida']}
+    Preço médio: R$ {extra1['preco_medio']:,.0f} (fonte: {extra1['fonte_preco']})
+    Categoria: {row1.get('Categoria', 'N/D')}
+    Motor: {row1.get('*Motor', 'N/D')}
+    Propulsão: {row1.get('*Tipo de Propulsão', 'N/D')}
+    Transmissão: {row1.get('*Transmissão', 'N/D')}
+    Combustível: {row1.get('Combustível', 'N/D')}
+    Ar Condicionado: {row1.get('Ar Condicionado', 'N/D')}
+    Direção Assistida: {row1.get('Direção Assistida', 'N/D')}
+
+    POLUENTES (menor é melhor):
+    - NMOG+NOx: {row1.get('Poluentes(NMOG+NOx [mg/km])', 'N/D')} mg/km
+    - CO: {row1.get('Poluentes(CO [mg/km])', 'N/D')} mg/km  
+    - CHO: {row1.get('Poluentes(CHO [mg/km])', 'N/D')} mg/km
+    - Redução vs Limite: {row1.get('*Redução Relativa ao Limite', 'N/D')}
+
+    GASES EFEITO ESTUFA (menor é melhor):
+    - Etanol CO2: {row1.get('*Gás Efeito Estufa (Etanol [CO2 fóssil] [g/km])', 'N/D')} g/km
+    - Gasolina/Diesel CO2: {row1.get('*Gás Efeito Estufa (Gasolina ou Diesel [CO2 fóssil] [g/km])', 'N/D')} g/km
+
+    CONSUMO (maior km/l é melhor):
+    - Etanol Cidade: {row1.get('Km - (Etanol[Cidade][km/l])', 'N/D')} km/l
+    - Etanol Estrada: {row1.get('Km - (Etanol[Estrada][km/l])', 'N/D')} km/l
+    - Gasolina Cidade: {row1.get('Km - (Gasolina ou Diesel[Cidade][km/l])', 'N/D')} km/l
+    - Gasolina Estrada: {row1.get('Km - (Gasolina ou Diesel[Estrada][km/l])', 'N/D')} km/l
+
+    EFICIÊNCIA:
+    - Consumo Energético: {row1.get('*Consumo Energético', 'N/D')}
+    - Classificação PBE Relativa: {row1.get('*Classificação PBE (Comparação Relativa)', 'N/D')} (A é melhor)
+    - Classificação PBE Absoluta: {row1.get('*Classificação PBE (Absoluta na Categoria)', 'N/D')} (A é melhor)
+    - Selo CONPET: {row1.get('Selo CONPET de Eficiência Energética', 'N/D')} (SIM é melhor)
+    """
+    context_ia += f"""
+    CARRO 2: {marca2} {modelo2} - {extra2['versao_escolhida']}
+    Preço médio: R$ {extra2['preco_medio']:,.0f} (fonte: {extra2['fonte_preco']})
+    Categoria: {row2.get('Categoria', 'N/D')}
+    Motor: {row2.get('*Motor', 'N/D')}
+    Propulsão: {row2.get('*Tipo de Propulsão', 'N/D')}
+    Transmissão: {row2.get('*Transmissão', 'N/D')}
+    Combustível: {row2.get('Combustível', 'N/D')}
+    Ar Condicionado: {row2.get('Ar Condicionado', 'N/D')}
+    Direção Assistida: {row2.get('Direção Assistida', 'N/D')}
+
+    POLUENTES (menor é melhor):
+    - NMOG+NOx: {row2.get('Poluentes(NMOG+NOx [mg/km])', 'N/D')} mg/km
+    - CO: {row2.get('Poluentes(CO [mg/km])', 'N/D')} mg/km  
+    - CHO: {row2.get('Poluentes(CHO [mg/km])', 'N/D')} mg/km
+    - Redução vs Limite: {row2.get('*Redução Relativa ao Limite', 'N/D')}
+
+    GASES EFEITO ESTUFA (menor é melhor):
+    - Etanol CO2: {row2.get('*Gás Efeito Estufa (Etanol [CO2 fóssil] [g/km])', 'N/D')} g/km
+    - Gasolina/Diesel CO2: {row2.get('*Gás Efeito Estufa (Gasolina ou Diesel [CO2 fóssil] [g/km])', 'N/D')} g/km
+
+    CONSUMO (maior km/l é melhor):
+    - Etanol Cidade: {row2.get('Km - (Etanol[Cidade][km/l])', 'N/D')} km/l
+    - Etanol Estrada: {row2.get('Km - (Etanol[Estrada][km/l])', 'N/D')} km/l
+    - Gasolina Cidade: {row2.get('Km - (Gasolina ou Diesel[Cidade][km/l])', 'N/D')} km/l
+    - Gasolina Estrada: {row2.get('Km - (Gasolina ou Diesel[Estrada][km/l])', 'N/D')} km/l
+
+    EFICIÊNCIA:
+    - Consumo Energético: {row2.get('*Consumo Energético', 'N/D')}
+    - Classificação PBE Relativa: {row2.get('*Classificação PBE (Comparação Relativa)', 'N/D')} (A é melhor)
+    - Classificação PBE Absoluta: {row2.get('*Classificação PBE (Absoluta na Categoria)', 'N/D')} (A é melhor)
+    - Selo CONPET: {row2.get('Selo CONPET de Eficiência Energética', 'N/D')} (SIM é melhor)
+    """
+
+    context_ia+= """
+    INSTRUÇÕES PARA IA:
+    - Você é um especialista em automóveis consultando dados oficiais do PBEV
+    - Responda perguntas sobre consumo, emissões, preço, equipamentos, comparações
+    - Explique termos técnicos de forma didática
+    - Para comparações: poluentes/GEE menor é melhor, consumo energético maior é melhor, PBE A>B>C>D>E
+    - Se não tiver dado específico, informe isso claramente
+    - Mantenha respostas objetivas e educativas
+    - Não invente dados, diga que não possui essa informação no momento
+    """
+
+    resultado = {
+        'context_ia': context_ia,
+        'resumo': {
+            'carro1': f"{marca1} {modelo1} - {extra1['versao_escolhida']}",
+            'carro2': f"{marca2} {modelo2} - {extra2['versao_escolhida']}",
+            'modo': 'comparativo',
+            'precos': {
+                'carro1': f"R$ {extra1['preco_medio']:,.2f}",
+                'carro2': f"R$ {extra2['preco_medio']:,.2f}",
+            }
+        }
+    }
+
+    return jsonify(resultado)
+
+def extrair_dados_completos(marca, modelo, numero_versao):
+        """Extrai a linha completa do CSV + preço"""
+        # Encontrar a versão do carro pelo número
+        versoes = _listar_versoes(marca,modelo)
+        try:
+            idx = int(numero_versao) - 1
+            if idx < 0 or idx >= len(versoes):
+                return None, None
+            versao = versoes[idx]
+        except (ValueError, TypeError):
+            return None, None
+
+        # Buscar a linha da versão do carro no CSV
+        row = _buscar_linha_catalogo(marca,modelo,versao)
+        if not row:
+            return None, None
 
 if __name__ == '__main__':
     # Inicia o servidor Flask em modo debug
