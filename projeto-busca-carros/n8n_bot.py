@@ -789,20 +789,6 @@ def dados_para_ia():
     if not all([marca1, modelo1, numero_versao1, marca2, modelo2, numero_versao2]):
         return jsonify({'error': 'Estão faltando dados!'}), 400
 
-    # Buscar a linha do carro no CSV
-    row = _buscar_linha_catalogo(marca, modelo, versao)
-    if not row:
-        return None, None
-
-    # Buscar preço do carro
-    media_preco, _, fonte_preco = buscar_preco_com_fallback(marca, modelo)
-
-    return row, {
-        'preco_medio': media_preco,
-        'fonte_preco': fonte_preco,
-        'versao_escolhida': versao
-    }
-
     # Processar dados do carro 1
     row1, extra1 = extrair_dados_completos(marca1, modelo1, numero_versao1)
     if not row1:
@@ -883,13 +869,13 @@ def dados_para_ia():
 
     context_ia+= """
     INSTRUÇÕES PARA IA:
-    - Você é um especialista em automóveis consultando dados oficiais do PBEV
-    - Responda perguntas sobre consumo, emissões, preço, equipamentos, comparações
-    - Explique termos técnicos de forma didática
-    - Para comparações: poluentes/GEE menor é melhor, consumo energético maior é melhor, PBE A>B>C>D>E
-    - Se não tiver dado específico, informe isso claramente
-    - Mantenha respostas objetivas e educativas
-    - Não invente dados, diga que não possui essa informação no momento
+    Sua ÚNICA e EXCLUSIVA fonte de informação é esse context fornecido a você.
+
+    Siga estas regras rigorosamente:
+    1. RESPONDA perguntas SOBRE OS CARROS COM BASE APENAS NOS DADOS FORNECIDOS.
+    2. NÃO INCLUA NENHUMA INFORMAÇÃO EXTERNA. Se a pergunta não puder ser respondida com os dados do JSON, diga que a informação não está disponível.
+    3. Mantenha as respostas curtas e diretas, no máximo 5 linhas, ideais para o WhatsApp.
+    4. Para a pergunta "qual o melhor carro?", compare os dois com base no preço e nos poluentes.
     """
 
     resultado = {
@@ -923,6 +909,15 @@ def extrair_dados_completos(marca, modelo, numero_versao):
         row = _buscar_linha_catalogo(marca,modelo,versao)
         if not row:
             return None, None
+
+        # Buscar preço do carro (FIPE com fallback)
+        media_preco, _, fonte_preco = buscar_preco_com_fallback(marca, modelo)
+
+        return row, {
+            'preco_medio': media_preco,
+            'fonte_preco': fonte_preco,
+            'versao_escolhida': versao
+        }
 
 if __name__ == '__main__':
     # Inicia o servidor Flask em modo debug
