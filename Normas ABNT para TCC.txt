@@ -1,0 +1,15 @@
+Normas ABNT para TCC e Monografia ✍️ [Resumo]
+
+    Folha: tamanho A4;
+    Capa (NBR 14724);
+    Folha de aprovação;
+    Margem: 3 cm para as margens superior e esquerda
+    e 2 cm para as margens inferior e direita;
+    Fonte: Arial ou Times New Roman ou Arial (tamanho 12) em cor preta;
+    Itálico: usa-se em palavras e expressões de outros idiomas;
+    Espaçamento: 1,5 no texto e 1,0 para citações com mais de três linhas;
+    Alinhamento: Justificado;
+    Paginação (NBR 14724);
+    Sumário (NBR 6027);
+    Citações e notas (NBR 6023 e NBR 10520);
+    Referências bibliográficas.

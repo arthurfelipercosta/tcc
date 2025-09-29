@@ -1,33 +1,83 @@
-# api.py
-# Backend Flask para fornecer informações de preço médio de veículos (Webmotors) e quantidade de reclamações (ReclameAqui) para integração com front-end HTML/JS.
-#
-# Endpoints:
-# - /api/info_carro: Recebe marca e modelo, retorna preço médio e reclamações.
-#
-# Funções auxiliares:
-# - buscar_precos_webmotors: Faz scrapping de preços no Webmotors.
-# - buscar_reclamacoes_reclameaqui: Faz scrapping de reclamações no ReclameAqui.
-#
-# Uso acadêmico/experimental.
 """
-api.py
-Backend Flask para consulta de informações de veículos com integração a:
-- Webmotors (preços) via chamada pública
-- Catálogo local (CSV) para validação de marca/modelo e listagem de versões
+n8n_bot.py
+Backend Flask para sistema de consulta e comparação de veículos com integração IA/WhatsApp
 
-Principais endpoints (GET):
-- /api/validar_marca?marca=FIAT
-    Confere se a marca existe no CSV.
-- /api/validar_modelo?marca=FIAT&modelo=MOBI
-    Confere se o modelo existe no CSV (independente da marca informada).
-- /api/versoes?marca=FIAT&modelo=MOBI
-    Lista versões únicas do CSV para a combinação marca+modelo.
-- /api/validar_versao?marca=FIAT&modelo=MOBI&numero=1
-    Valida se o número informado corresponde a uma versão da lista retornada em /api/versoes.
-- /api/info_carro?marca=honda&modelo=civic
-    Busca preços na Webmotors e retorna média e amostras.
+SISTEMA COMPLETO DE CONSULTA DE VEÍCULOS
+==========================================
 
-Observação: código para uso acadêmico/experimental.
+Este sistema fornece uma API REST completa para consulta de informações de veículos,
+integrando múltiplas fontes de dados e oferecendo funcionalidades avançadas para
+comparação, análise e suporte à IA conversacional.
+
+FONTES DE DADOS:
+- FIPE (API pública): Preços oficiais de veículos
+- Webmotors (API pública): Preços de mercado como fallback
+- CSV local: Catálogo completo com dados técnicos, emissões e consumo
+- Integração IA: Contexto estruturado para respostas inteligentes
+
+FUNCIONALIDADES PRINCIPAIS:
+============================
+
+1. VALIDAÇÃO E CONSULTA BÁSICA:
+   - Validação de marcas e modelos no catálogo
+   - Listagem de versões disponíveis por modelo
+   - Busca de preços (FIPE + Webmotors como fallback)
+
+2. COMPARAÇÃO AVANÇADA:
+   - Comparativo técnico entre dois veículos
+   - Análise de poluentes, consumo e eficiência
+   - Sistema de pontuação automático
+   - Geração de relatórios para IA
+
+3. ANÁLISE ESTATÍSTICA:
+   - Top 10 por qualquer coluna do catálogo
+   - Filtros por marca/modelo
+   - Suporte a colunas numéricas e categóricas
+   - Estatísticas descritivas
+
+4. HISTÓRICO DE PREÇOS:
+   - Consulta de preços FIPE por todos os anos disponíveis
+   - Estatísticas de variação de preços
+   - Análise temporal de valores
+
+5. INTEGRAÇÃO IA:
+   - Contexto estruturado para IA conversacional
+   - Dados formatados para WhatsApp/n8n
+   - Instruções específicas para respostas inteligentes
+
+ENDPOINTS DISPONÍVEIS:
+======================
+
+VALIDAÇÃO:
+- GET /api/validar_marca?marca=FIAT
+- GET /api/validar_modelo?modelo=MOBI&marca=FIAT  
+- GET /api/validar_versao?marca=FIAT&modelo=MOBI&versao=1
+- GET /api/versoes?marca=FIAT&modelo=MOBI
+
+PREÇOS:
+- GET /api/info_carro?marca=honda&modelo=civic
+- GET /api/fipe_todos_anos?marca=FIAT&modelo=MOBI
+- GET /teste_preco?marca=FIAT&modelo=MOBI
+
+COMPARAÇÃO:
+- GET /api/comparativo?marca1=FIAT&modelo1=MOBI&versao1=1&marca2=HONDA&modelo2=CIVIC&versao2=1
+- GET /api/comparar?marca1=honda&modelo1=civic&marca2=toyota&modelo2=corolla
+- GET /api/dados_para_ia?marca1=FIAT&modelo1=MOBI&versao1=1&marca2=HONDA&modelo2=CIVIC&versao2=1
+
+ANÁLISE:
+- GET /api/top10?coluna=Poluentes(CO [mg/km])&ordem=asc
+- GET /api/top10?coluna=Km - (Gasolina ou Diesel[Estrada][km/l])&ordem=desc&marca=FIAT
+
+CONFIGURAÇÃO:
+=============
+- CSV_PATH: Variável de ambiente para caminho do arquivo CSV (default: dados_corrigidos_sem_duplicatas.csv)
+- Porta: 5000 (configurável)
+- CORS: Habilitado para integração frontend
+
+USO ACADÊMICO/EXPERIMENTAL:
+===========================
+Este código foi desenvolvido para fins acadêmicos e experimentais.
+As APIs externas (FIPE, Webmotors) são consumidas de forma pública e responsável.
 """
 
 from flask import Flask, request, jsonify
@@ -39,14 +89,17 @@ import re, os, csv
 app = Flask(__name__)
 CORS(app)
 
-# ========= CONFIG CSV =========
+# ========= CONFIGURAÇÃO =========
 
+# Caminho para o arquivo CSV com dados dos veículos
+# Pode ser sobrescrito via variável de ambiente CSV_PATH
 CSV_PATH = os.environ.get('CSV_PATH', 'dados_corrigidos_sem_duplicatas.csv')
 
+# Cache global para o catálogo CSV (carregado uma vez na memória)
 _catalogo_rows = []
 _catalogo_loaded = False
 
-# ========= FUNÇÕES =========
+# ========= FUNÇÕES AUXILIARES =========
 
 def _carregar_catalogo():
     """Carregar o CSV uma vez na memória.
@@ -243,7 +296,7 @@ def pesquisar_preco(marca, modelo):
             'erro': f"Erro na consulta: {str(e)}"
         }
 
-# ========= FIPE =========
+# ========= CONSULTA DE PREÇOS FIPE =========
 def buscar_precos_fipe(marca, modelo):
     """
     Busca preço na FIPE usando a API pública (parallelum.com.br).
@@ -299,7 +352,7 @@ def buscar_precos_fipe(marca, modelo):
         print(f"Erro FIPE: {e}")
         return 0, "Erro na consulta FIPE"
 
-# ========= Webmotors =========
+# ========= CONSULTA DE PREÇOS WEBMOTORS =========
 def buscar_precos_webmotors(marca, modelo, limite=10):
     """Consulta a API pública do Webmotors para obter preços.
 
@@ -338,7 +391,7 @@ def buscar_precos_webmotors(marca, modelo, limite=10):
         return media, precos
     return 0, "Carro não encontrado"
 
-# Preços FIPE primeiro, Webmotors como fallback
+# ========= ESTRATÉGIA DE FALLBACK PARA PREÇOS =========
 def buscar_preco_com_fallback(marca, modelo):
     # Tenta FIPE primeiro
     media, precos = buscar_precos_fipe(marca, modelo)
@@ -351,7 +404,7 @@ def buscar_preco_com_fallback(marca, modelo):
     
     return media, precos, fonte
 
-# Função para extrair o ano do código (ex: "2020-5" -> 2020)
+# ========= UTILITÁRIOS =========
 def extrair_ano(codigo):
     try:
         # Se o código tem formato "2020-5", pega só a parte do ano
@@ -361,7 +414,238 @@ def extrair_ano(codigo):
     except (ValueError, TypeError):
         return 0  # Retorna 0 para códigos inválidos
 
-# ========= ENDPOINTS =========
+# ========= CONSULTA FIPE COMPLETA (TODOS OS ANOS) =========
+def buscar_precos_fipe_todos_anos(marca: str, modelo: str):
+    """
+    Retorna todos os preços da FIPE (parallelum) para marca+modelo em todos os anos disponíveis.
+    Útil para dar mais contexto à IA sobre variações de preço ao longo dos anos.
+    
+    Returns:
+        dict: {
+          'sucesso': bool,
+          'erro': str|None,
+          'marca': str,
+          'modelo': str,
+          'itens': [ { 'ano': str, 'codigo_ano': str, 'preco': float, 'preco_formatado': str,
+                       'codigo_fipe': str, 'referencia': str } ],
+          'stats': { 'media': float, 'min': float, 'max': float, 'amostras': int }
+        }
+    """
+    try:
+        session = requests.Session()
+        base = "https://parallelum.com.br/fipe/api/v1/carros"
+
+        # 1) Buscar marcas
+        r = session.get(f"{base}/marcas", timeout=10)
+        if r.status_code != 200:
+            return { 'sucesso': False, 'erro': 'FIPE indisponível!'}
+        marcas = r.json()
+        alvo_marca = (marca or '').strip().lower()
+        marca_item = next((m for m in marcas if alvo_marca in m.get('nome', '').lower()), None)
+        if not marca_item:
+            return {'sucesso': False, 'erro': f"Marca '{marca}' não encontrada na FIPE"}
+
+        # 2) Buscar modelos da marca
+        r = session.get(f"{base}/marcas/{marca_item['codigo']}/modelos", timeout=10)
+        if r.status_code != 200:
+            return {'sucesso': False, 'erro': 'FIPE indisponível'}
+        modelos = r.json().get('modelos', [])
+        alvo_modelo = (modelo or '').strip().lower()
+        modelo_item = next((m for m in modelos if alvo_modelo in m.get('nome', '').lower()), None)
+        if not modelo_item:
+            return {'sucesso': False, 'erro': f"Modelo '{modelo}' não encontrado para a marca '{marca_item['nome']}'"}
+
+        # 3) Buscar anos do modelo
+        r = session.get(f"{base}/marcas/{marca_item['codigo']}/modelos/{modelo_item['codigo']}/anos", timeout=10)
+        if r.status_code != 200:
+            return {'sucesso': False, 'erro': 'FIPE indisponível'}
+        anos = r.json()
+        if not anos:
+            return {'sucesso': False, 'erro': 'Sem anos disponíveis na FIPE'}
+
+        # 4) Buscar preços de todos os anos
+        itens = []
+        for ano in anos:
+            codigo_ano = ano['codigo']
+            r = session.get(f"{base}/marcas/{marca_item['codigo']}/modelos/{modelo_item['codigo']}/anos/{codigo_ano}", timeout=10)
+            if r.status_code != 200:
+                continue
+            dados = r.json()
+            valor_str = str(dados.get('Valor', '')).replace('R$', '').replace(' ', '').replace('.', '').replace(',', '.')
+            try:
+                preco = float(valor_str)
+            except ValueError:
+                continue
+            itens.append({
+                'ano': ano.get('nome', ''),
+                'codigo_ano': codigo_ano,
+                'preco': preco,
+                'preco_formatado': dados.get('Valor', ''),
+                'codigo_fipe': dados.get('CodigoFipe', ''),
+                'referencia': dados.get('MesReferencia', ''),
+            })
+
+        if not itens:
+            return {'sucesso': False, 'erro': 'Não foi possível obter preços na FIPE para os anos disponíveis'}
+
+        # Ordenar por ano desc (extrai parte antes do "-")
+        def ano_key(x):
+            try:
+                return int(str(x['codigo_ano']).split('-')[0])
+            except:
+                return 0
+        itens.sort(key=ano_key, reverse=True)
+
+        # Calcular estatísticas
+        precos = [i['preco'] for i in itens]
+        stats = {
+            'media': sum(precos) / len(precos),
+            'min': min(precos),
+            'max': max(precos),
+            'amostras': len(precos)
+        }
+        
+        return {
+            'sucesso': True,
+            'erro': None,
+            'marca': marca_item['nome'],
+            'modelo': modelo_item['nome'],
+            'itens': itens,
+            'stats': stats
+        }
+    except Exception as e:
+        return {'sucesso': False, 'erro': f'Erro na consulta FIPE: {e}'}
+
+# ========= ANÁLISE ESTATÍSTICA E TOP 10 =========
+def _resolver_nome_coluna(coluna: str) -> str | None:
+    """
+    Resolve nome de coluna de forma case-insensitive e tolerante a acentos/espaços.
+    Retorna o nome exato do header no CSV ou None.
+    """
+    import unicodedata
+    
+    def norm(s):
+        s = (s or '').strip()
+        s = ''.join(ch for ch in unicodedata.normalize('NFKD', s) if not unicodedata.combining(ch))
+        s = s.lower()
+        s = re.sub(r'\s+', ' ', s)
+        return s
+
+    _carregar_catalogo()
+    if not _catalogo_rows:
+        return None
+
+    alvo = norm(coluna)
+    headers = list(_catalogo_rows[0].keys())
+
+    # Match exato normalizado
+    map_norm = {norm(h): h for h in headers}
+    if alvo in map_norm:
+        return map_norm[alvo]
+
+    # Match parcial
+    for k, original in map_norm.items():
+        if alvo in k:
+            return original
+    return None
+
+def top10_coluna(coluna: str, ordem: str='desc', filtros: dict | None=None):
+    """
+    Retorna top 10 da coluna especificada.
+    - Para colunas numéricas: ordena por valor (ordem desc/asc).
+    - Para colunas de texto: retorna os 10 mais frequentes.
+    
+    Args:
+        coluna (str): Nome da coluna (ex: "Poluentes(CO [mg/km])", "consumo", "preço")
+        ordem (str): 'desc' para maior->menor, 'asc' para menor->maior (só para numéricas)
+        filtros (dict, opcional): {'Marca': 'FIAT', 'Modelo': 'MOBI'} etc. (case-insensitive)
+    
+    Returns:
+        dict: {
+            'sucesso': bool,
+            'tipo': 'numerica' | 'categorica',
+            'coluna': str,
+            'ordem': str,
+            'total_linhas': int,
+            'items': list
+        }
+    """
+    _carregar_catalogo()
+    if not _catalogo_rows:
+        return {'sucesso': False, 'erro': 'CSV vazio'}
+
+    nome = _resolver_nome_coluna(coluna)
+    if not nome:
+        return {'sucesso': False, 'erro': f"Coluna '{coluna}' não encontrada"}
+
+    rows = _catalogo_rows
+    
+    # Aplicar filtros simples por igualdade (case-insensitive)
+    if filtros:
+        flt = {k.lower(): (str(v) if v is not None else '').strip().lower() for k, v in filtros.items()}
+        def ok(r):
+            for k, v in flt.items():
+                # Tentar diferentes variações do nome da coluna
+                val = (str(r.get(k)) if k in r else 
+                       str(r.get(k.title())) if k.title() in r else 
+                       str(r.get(k.upper()))).strip().lower()
+                if v and val != v:
+                    return False
+            return True
+        rows = [r for r in rows if ok(r)]
+
+    # Tentar tratar como coluna numérica
+    valores = []
+    is_numeric = True
+    for r in rows:
+        v = _parse_number(r.get(nome))
+        if v is None:
+            continue
+        valores.append((r, v))
+    if not valores:
+        is_numeric = False
+
+    if is_numeric:
+        reverse = (ordem or 'desc').lower() != 'asc'
+        valores.sort(key=lambda t: t[1], reverse=reverse)
+        top = valores[:10]
+        return {
+            'sucesso': True,
+            'tipo': 'numerica',
+            'coluna': nome,
+            'ordem': 'desc' if reverse else 'asc',
+            'total_linhas': len(rows),
+            'items': [
+                {
+                    'valor': val, 
+                    'marca': row.get('Marca', 'N/D'),
+                    'modelo': row.get('Modelo', 'N/D'),
+                    'versao': row.get('Versão', 'N/D'),
+                    'linha_completa': row
+                } for (row, val) in top
+            ]
+        }
+
+    # Fallback: coluna categórica por frequência
+    from collections import Counter
+    cats = [str((r.get(nome) or '')).strip() for r in rows if (r.get(nome) or '').strip()]
+    cont = Counter(cats)
+    mais = cont.most_common(10)
+    return {
+        'sucesso': True,
+        'tipo': 'categorica',
+        'coluna': nome,
+        'ordem': 'freq',
+        'total_linhas': len(rows),
+        'items': [
+            {'valor': nome_cat, 'frequencia': freq} 
+            for (nome_cat, freq) in mais
+        ]
+    }
+
+    
+
+# ========= ENDPOINTS DA API =========
 @app.route('/api/validar_marca', methods=['GET'])
 def validar_marca():
     """Valida se uma marca existe no CSV (case-insensitive).
@@ -750,7 +1034,50 @@ def comparar():
         'mais_barato': mais_barato
     })
 
-# ========= TESTE TEMPORÁRIO =========
+# ========= ENDPOINTS DE ANÁLISE E CONSULTA AVANÇADA =========
+@app.route('/api/fipe_todos_anos', methods=['GET'])
+def fipe_todos_anos():
+    """Endpoint para buscar todos os preços FIPE de um modelo em todos os anos disponíveis."""
+    marca = request.args.get('marca', '').strip()
+    modelo = request.args.get('modelo', '').strip()
+    
+    if not marca or not modelo:
+        return jsonify({'sucesso': False, 'erro': 'Marca e modelo são obrigatórios'}), 400
+    
+    result = buscar_precos_fipe_todos_anos(marca, modelo)
+    status = 200 if result.get('sucesso') else 404
+    return jsonify(result), status
+
+@app.route('/api/top10', methods=['GET'])
+def api_top10():
+    """
+    Endpoint para buscar top 10 de uma coluna específica.
+    
+    Query params:
+        - coluna: nome da coluna (ex: "Poluentes(CO [mg/km])", "consumo", "preço")
+        - ordem: 'desc' (padrão) ou 'asc' para colunas numéricas
+        - marca: filtro opcional por marca
+        - modelo: filtro opcional por modelo
+    """
+    coluna = request.args.get('coluna', '').strip()
+    ordem = request.args.get('ordem', 'desc').strip()
+    filtro_marca = request.args.get('marca')
+    filtro_modelo = request.args.get('modelo')
+    
+    if not coluna:
+        return jsonify({'sucesso': False, 'erro': 'Parâmetro coluna é obrigatório'}), 400
+
+    filtros = {}
+    if filtro_marca: 
+        filtros['Marca'] = filtro_marca
+    if filtro_modelo: 
+        filtros['Modelo'] = filtro_modelo
+
+    result = top10_coluna(coluna, ordem=ordem, filtros=filtros or None)
+    status = 200 if result.get('sucesso') else 400
+    return jsonify(result), status
+
+# ========= ENDPOINTS DE TESTE E DESENVOLVIMENTO =========
 @app.route('/teste_preco', methods=['GET'])
 def teste_preco():
     """Endpoint temporário para testar a função pesquisar_preco no browser."""
@@ -893,31 +1220,46 @@ def dados_para_ia():
 
     return jsonify(resultado)
 
+
+
+# ========= FUNÇÃO AUXILIAR PARA EXTRAÇÃO DE DADOS =========
 def extrair_dados_completos(marca, modelo, numero_versao):
-        """Extrai a linha completa do CSV + preço"""
-        # Encontrar a versão do carro pelo número
-        versoes = _listar_versoes(marca,modelo)
-        try:
-            idx = int(numero_versao) - 1
-            if idx < 0 or idx >= len(versoes):
-                return None, None
-            versao = versoes[idx]
-        except (ValueError, TypeError):
+    """
+    Extrai a linha completa do CSV + preço para um veículo específico.
+    
+    Args:
+        marca (str): Marca do veículo
+        modelo (str): Modelo do veículo  
+        numero_versao (str): Número da versão (1-based)
+    
+    Returns:
+        tuple: (row, extra_data) onde:
+            - row: linha completa do CSV ou None
+            - extra_data: dict com preço, fonte e versão escolhida ou None
+    """
+    # Encontrar a versão do carro pelo número
+    versoes = _listar_versoes(marca,modelo)
+    try:
+        idx = int(numero_versao) - 1
+        if idx < 0 or idx >= len(versoes):
             return None, None
+        versao = versoes[idx]
+    except (ValueError, TypeError):
+        return None, None
 
-        # Buscar a linha da versão do carro no CSV
-        row = _buscar_linha_catalogo(marca,modelo,versao)
-        if not row:
-            return None, None
+    # Buscar a linha da versão do carro no CSV
+    row = _buscar_linha_catalogo(marca,modelo,versao)
+    if not row:
+        return None, None
 
-        # Buscar preço do carro (FIPE com fallback)
-        media_preco, _, fonte_preco = buscar_preco_com_fallback(marca, modelo)
+    # Buscar preço do carro (FIPE com fallback)
+    media_preco, _, fonte_preco = buscar_preco_com_fallback(marca, modelo)
 
-        return row, {
-            'preco_medio': media_preco,
-            'fonte_preco': fonte_preco,
-            'versao_escolhida': versao
-        }
+    return row, {
+        'preco_medio': media_preco,
+        'fonte_preco': fonte_preco,
+        'versao_escolhida': versao
+    }
 
 if __name__ == '__main__':
     # Inicia o servidor Flask em modo debug

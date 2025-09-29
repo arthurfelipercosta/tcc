@@ -1,0 +1,210 @@
+# ========= ANÁLISE ESTATÍSTICA E TOP 10 =========
+def _resolver_nome_coluna(coluna: str) -> str | None:
+    """
+    Resolve nome de coluna de forma case-insensitive e tolerante a acentos/espaços.
+    Retorna o nome exato do header no CSV ou None.
+    """
+    import unicodedata
+    
+    def norm(s):
+        s = (s or '').strip()
+        s = ''.join(ch for ch in unicodedata.normalize('NFKD', s) if not unicodedata.combining(ch))
+        s = s.lower()
+        s = re.sub(r'\s+', ' ', s)
+        return s
+
+    _carregar_catalogo()
+    if not _catalogo_rows:
+        return None
+
+    alvo = norm(coluna)
+    headers = list(_catalogo_rows[0].keys())
+
+    # Match exato normalizado
+    map_norm = {norm(h): h for h in headers}
+    if alvo in map_norm:
+        return map_norm[alvo]
+
+    # Match parcial
+    for k, original in map_norm.items():
+        if alvo in k:
+            return original
+    return None
+
+def top10_coluna(coluna: str, ordem: str='desc', filtros: dict | None=None):
+    """
+    Retorna top 10 da coluna especificada.
+    - Para colunas numéricas: ordena por valor (ordem desc/asc).
+    - Para colunas de texto: retorna os 10 mais frequentes.
+    
+    Args:
+        coluna (str): Nome da coluna (ex: "Poluentes(CO [mg/km])", "consumo", "preço")
+        ordem (str): 'desc' para maior->menor, 'asc' para menor->maior (só para numéricas)
+        filtros (dict, opcional): {'Marca': 'FIAT', 'Modelo': 'MOBI'} etc. (case-insensitive)
+    
+    Returns:
+        dict: {
+            'sucesso': bool,
+            'tipo': 'numerica' | 'categorica',
+            'coluna': str,
+            'ordem': str,
+            'total_linhas': int,
+            'items': list
+        }
+    """
+    _carregar_catalogo()
+    if not _catalogo_rows:
+        return {'sucesso': False, 'erro': 'CSV vazio'}
+
+    nome = _resolver_nome_coluna(coluna)
+    if not nome:
+        return {'sucesso': False, 'erro': f"Coluna '{coluna}' não encontrada"}
+
+    rows = _catalogo_rows
+    
+    # Aplicar filtros simples por igualdade (case-insensitive)
+    if filtros:
+        flt = {k.lower(): (str(v) if v is not None else '').strip().lower() for k, v in filtros.items()}
+        def ok(r):
+            for k, v in flt.items():
+                # Tentar diferentes variações do nome da coluna
+                val = (str(r.get(k)) if k in r else 
+                       str(r.get(k.title())) if k.title() in r else 
+                       str(r.get(k.upper()))).strip().lower()
+                if v and val != v:
+                    return False
+            return True
+        rows = [r for r in rows if ok(r)]
+
+    # Tentar tratar como coluna numérica
+    valores = []
+    is_numeric = True
+    for r in rows:
+        v = _parse_number(r.get(nome))
+        if v is None:
+            continue
+        valores.append((r, v))
+    if not valores:
+        is_numeric = False
+
+    if is_numeric:
+        reverse = (ordem or 'desc').lower() != 'asc'
+        valores.sort(key=lambda t: t[1], reverse=reverse)
+        top = valores[:10]
+        return {
+            'sucesso': True,
+            'tipo': 'numerica',
+            'coluna': nome,
+            'ordem': 'desc' if reverse else 'asc',
+            'total_linhas': len(rows),
+            'items': [
+                {
+                    'valor': val, 
+                    'marca': row.get('Marca', 'N/D'),
+                    'modelo': row.get('Modelo', 'N/D'),
+                    'versao': row.get('Versão', 'N/D'),
+                    'linha_completa': row
+                } for (row, val) in top
+            ]
+        }
+
+    # Fallback: coluna categórica por frequência
+    from collections import Counter
+    cats = [str((r.get(nome) or '')).strip() for r in rows if (r.get(nome) or '').strip()]
+    cont = Counter(cats)
+    mais = cont.most_common(10)
+    return {
+        'sucesso': True,
+        'tipo': 'categorica',
+        'coluna': nome,
+        'ordem': 'freq',
+        'total_linhas': len(rows),
+        'items': [
+            {'valor': nome_cat, 'frequencia': freq} 
+            for (nome_cat, freq) in mais
+        ]
+    }
+
+def top10_fipe_por_marca(marca: str, ordem: str='asc', limite: int=10):
+    """
+    Top 10 carros de uma marca ordenados por preço FIPE.
+    
+    Esta função busca todos os modelos de uma marca específica no CSV local,
+    consulta os preços na API FIPE para cada modelo e retorna o top N
+    ordenados por preço (mais baratos ou mais caros).
+    
+    Args:
+        marca (str): Marca do veículo (ex: "FIAT")
+        ordem (str): 'asc' para mais baratos primeiro, 'desc' para mais caros
+        limite (int): Número de carros a retornar (default: 10)
+    
+    Returns:
+        dict: {
+            'sucesso': bool,
+            'marca': str,
+            'ordem': str,
+            'total_encontrados': int,
+            'total_modelos_disponiveis': int,
+            'items': [{'marca': str, 'modelo': str, 'preco': float, 'fonte': str}]
+        }
+    """
+    _carregar_catalogo()
+    if not _catalogo_rows:
+        return {'sucesso': False, 'erro': 'CSV vazio'}
+
+    # Filtrar carros da marca especificada
+    marca_alvo = (marca or '').strip().lower()
+    carros_marca = []
+    
+    for row in _catalogo_rows:
+        marca_row = (row.get('Marca') or row.get('marca') or '').strip().lower()
+        if marca_row == marca_alvo:
+            modelo = (row.get('Modelo') or row.get('modelo') or '').strip()
+            if modelo:
+                carros_marca.append(modelo)
+    
+    # Remover duplicatas mantendo ordem
+    modelos_unicos = []
+    seen = set()
+    for modelo in carros_marca:
+        if modelo.lower() not in seen:
+            seen.add(modelo.lower())
+            modelos_unicos.append(modelo)
+    
+    if not modelos_unicos:
+        return {'sucesso': False, 'erro': f'Nenhum modelo encontrado para a marca {marca}'}
+    
+    # Buscar preços na FIPE para cada modelo
+    precos_carros = []
+    for modelo in modelos_unicos[:20]:  # Limitar a 20 para não sobrecarregar
+        try:
+            preco, _ = buscar_precos_fipe(marca, modelo)
+            if preco > 0:
+                precos_carros.append({
+                    'marca': marca.upper(),
+                    'modelo': modelo,
+                    'preco': preco,
+                    'fonte': 'FIPE'
+                })
+        except Exception as e:
+            print(f"Erro ao buscar preço para {marca} {modelo}: {e}")
+            continue
+    
+    if not precos_carros:
+        return {'sucesso': False, 'erro': f'Nenhum preço FIPE encontrado para a marca {marca}'}
+    
+    # Ordenar por preço
+    reverse = (ordem or 'asc').lower() == 'desc'
+    precos_carros.sort(key=lambda x: x['preco'], reverse=reverse)
+    
+    # Retornar top N
+    top_carros = precos_carros[:limite]
+    
+    return {
+        'sucesso': True,
+        'marca': marca.upper(),
+        'ordem': 'desc' if reverse else 'asc',
+        'total_encontrados': len(precos_carros),
+        'total_modelos_disponiveis': len(modelos_unicos),
+        'items': top_carros
+    }

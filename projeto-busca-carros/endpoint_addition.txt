@@ -1,0 +1,84 @@
+# ========= ENDPOINTS DE ANÁLISE E CONSULTA AVANÇADA =========
+@app.route('/api/fipe_todos_anos', methods=['GET'])
+def fipe_todos_anos():
+    """Endpoint para buscar todos os preços FIPE de um modelo em todos os anos disponíveis."""
+    marca = request.args.get('marca', '').strip()
+    modelo = request.args.get('modelo', '').strip()
+    
+    if not marca or not modelo:
+        return jsonify({'sucesso': False, 'erro': 'Marca e modelo são obrigatórios'}), 400
+    
+    result = buscar_precos_fipe_todos_anos(marca, modelo)
+    status = 200 if result.get('sucesso') else 404
+    return jsonify(result), status
+
+@app.route('/api/top10', methods=['GET'])
+def api_top10():
+    """
+    Endpoint para buscar top 10 de uma coluna específica.
+    
+    Query params:
+        - coluna: nome da coluna (ex: "Poluentes(CO [mg/km])", "consumo", "preço")
+        - ordem: 'desc' (padrão) ou 'asc' para colunas numéricas
+        - marca: filtro opcional por marca
+        - modelo: filtro opcional por modelo
+    """
+    coluna = request.args.get('coluna', '').strip()
+    ordem = request.args.get('ordem', 'desc').strip()
+    filtro_marca = request.args.get('marca')
+    filtro_modelo = request.args.get('modelo')
+    
+    if not coluna:
+        return jsonify({'sucesso': False, 'erro': 'Parâmetro coluna é obrigatório'}), 400
+
+    filtros = {}
+    if filtro_marca: 
+        filtros['Marca'] = filtro_marca
+    if filtro_modelo: 
+        filtros['Modelo'] = filtro_modelo
+
+    result = top10_coluna(coluna, ordem=ordem, filtros=filtros or None)
+    status = 200 if result.get('sucesso') else 400
+    return jsonify(result), status
+
+@app.route('/api/top10_fipe', methods=['GET'])
+def api_top10_fipe():
+    """
+    Endpoint para buscar top 10 carros de uma marca ordenados por preço FIPE.
+    
+    Esta funcionalidade busca todos os modelos de uma marca específica no catálogo local,
+    consulta os preços na API FIPE para cada modelo e retorna o ranking ordenado por preço.
+    Ideal para responder perguntas como "Quais são os 10 carros mais baratos da FIAT?"
+    
+    Query params:
+        - marca: marca do veículo (ex: FIAT, HONDA, TOYOTA)
+        - ordem: 'asc' (mais baratos primeiro) ou 'desc' (mais caros primeiro)
+        - limite: número de carros a retornar (default: 10, máximo: 20)
+    
+    Response JSON:
+        - sucesso: bool
+        - marca: str (marca pesquisada)
+        - ordem: str (asc/desc)
+        - total_encontrados: int (modelos com preço FIPE encontrado)
+        - total_modelos_disponiveis: int (modelos da marca no catálogo)
+        - items: [{'marca': str, 'modelo': str, 'preco': float, 'fonte': str}]
+    
+    Exemplos de uso:
+        GET /api/top10_fipe?marca=FIAT&ordem=asc
+        GET /api/top10_fipe?marca=HONDA&ordem=desc&limite=5
+    """
+    marca = request.args.get('marca', '').strip()
+    ordem = request.args.get('ordem', 'asc').strip()
+    
+    try:
+        limite = int(request.args.get('limite', 10))
+        limite = min(limite, 20)  # Máximo de 20 para não sobrecarregar
+    except ValueError:
+        limite = 10
+    
+    if not marca:
+        return jsonify({'sucesso': False, 'erro': 'Parâmetro marca é obrigatório'}), 400
+
+    result = top10_fipe_por_marca(marca, ordem=ordem, limite=limite)
+    status = 200 if result.get('sucesso') else 400
+    return jsonify(result), status
