@@ -192,6 +192,28 @@
                 ],
                 "combinator": "and"
               }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a039663f-dd37-4e32-b15d-a9b14bd680d4",
+                    "leftValue": "={{ $json.step }}",
+                    "rightValue": 7,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gt"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
             }
           ]
         },
@@ -221,28 +243,6 @@
       "id": "f9d6f898-28eb-4581-ba00-6ffe587d2a0c",
       "name": "Webhook",
       "webhookId": "9fb1d93e-9cad-4bc8-aa69-1e1bb15f06c0"
-    },
-    {
-      "parameters": {
-        "from": "={{ $('Webhook').item.json.body.To }}",
-        "to": "=whatsapp:+{{ $('Webhook').item.json.body.WaId }}",
-        "message": "={{ $json.message }}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.twilio",
-      "typeVersion": 1,
-      "position": [
-        2608,
-        -528
-      ],
-      "id": "2e0ccc47-ab5e-4235-ba04-f74b93d8922b",
-      "name": "Send an SMS/MMS/WhatsApp message",
-      "credentials": {
-        "twilioApi": {
-          "id": "mrd5eEljdUJTv81Q",
-          "name": "Twilio account"
-        }
-      }
     },
     {
       "parameters": {
@@ -402,8 +402,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1456,
-        -112
+        1744,
+        -368
       ],
       "id": "ebfda4ce-c22a-4da8-99e1-4995aa93f57d",
       "name": "True Brand1 Set Message"
@@ -471,8 +471,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1856,
-        96
+        1840,
+        -16
       ],
       "id": "c61b521d-0655-4421-ab57-b314149c30cd",
       "name": "True Model1 Set Message1"
@@ -499,7 +499,7 @@
       "typeVersion": 4.2,
       "position": [
         1424,
-        96
+        -16
       ],
       "id": "29420227-cb56-43e1-90ff-25098d464974",
       "name": "HTTP Request Check Version 1"
@@ -511,8 +511,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1664,
-        96
+        1648,
+        -16
       ],
       "id": "511c27bc-a636-4d70-b358-fb2c2a5d5f63",
       "name": "Code Select Versions 1"
@@ -527,7 +527,7 @@
       "type": "n8n-nodes-base.twilio",
       "typeVersion": 1,
       "position": [
-        2512,
+        2720,
         64
       ],
       "id": "fd71337e-eff1-4107-b926-6af99b058a7f",
@@ -663,8 +663,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1456,
-        448
+        1472,
+        416
       ],
       "id": "e702ec90-d166-47e4-8e9d-c2756c83b941",
       "name": "True Brand Set Message2"
@@ -796,7 +796,7 @@
             {
               "id": "b8ef46c7-f704-41e6-93b4-5e4af032af54",
               "name": "message",
-              "value": "Agora que a versão do carro 1 já foi escolhida, por favor, escreva a marca do carro 2.",
+              "value": "Agora que a versão do carro 2 também já foi escolhida, o que deseja comparar?",
               "type": "string"
             }
           ]
@@ -807,8 +807,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1584,
-        784
+        1552,
+        864
       ],
       "id": "c7850adf-c5cb-4c93-8bc5-3d5c49b5e9ea",
       "name": "True Version Set Message 2"
@@ -989,7 +989,7 @@
           "parameters": [
             {
               "name": "marca",
-              "value": "={{ $json.marca_upper }}"
+              "value": "={{ $json.marca }}"
             },
             {
               "name": "modelo",
@@ -1062,18 +1062,313 @@
       ],
       "id": "fb1ac76c-780d-4bc1-8fea-152c504971cf",
       "name": "Code Select Versions 2"
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:5000/api/dados_para_ia",
+        "sendQuery": true,
+        "specifyQuery": "json",
+        "jsonQuery": "={\n    \"marca1\":\"{{ $json.staticData.answers[$json.userId].brand1 }}\",\n    \"modelo1\":\"{{ $json.staticData.answers[$json.userId].model1 }}\",\n    \"versao1\":\"{{ $json.staticData.answers[$json.userId].version1 }}\",\n    \"marca2\":\"{{ $json.staticData.answers[$json.userId].brand2 }}\",\n    \"modelo2\":\"{{ $json.staticData.answers[$json.userId].model2 }}\",\n    \"versao2\":\"{{ $json.staticData.answers[$json.userId].version2 }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        1008
+      ],
+      "id": "099764f9-d97f-4ecd-8a2f-fd3083a9f089",
+      "name": "HTTP Request IA chat"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.context_ia }}{{ $('Switch').item.json.msg }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1328,
+        1008
+      ],
+      "id": "9746e309-8ff3-421b-8daa-0e92e3ef664b",
+      "name": "AI Agent",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1328,
+        1184
+      ],
+      "id": "7a30cf53-827c-49c5-ae60-fd25a0878563",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "su9Ord2vSsJsBj3F",
+          "name": "Google Gemini API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:5000/api/modelos_por_marca",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "marca",
+              "value": "={{ $json.marca }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1504,
+        -368
+      ],
+      "id": "c44422ea-dd4d-447a-9656-ee39d05f6b9e",
+      "name": "HTTP Request listar_modelos"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "191aa371-277f-4fe2-b172-bf3e649b9e00",
+              "name": "fromNumber",
+              "value": "={{ $('Code').item.json.fromNumber }}",
+              "type": "string"
+            },
+            {
+              "id": "1a848f59-3da2-4583-b31f-9a79fb880128",
+              "name": "toNumber",
+              "value": "={{ $('Code').item.json.toNumber }}",
+              "type": "string"
+            },
+            {
+              "id": "97118e98-472b-4aa8-864d-a6fdda91ef8f",
+              "name": "step",
+              "value": "={{ $('Code').item.json.step }}",
+              "type": "number"
+            },
+            {
+              "id": "b8ef46c7-f704-41e6-93b4-5e4af032af54",
+              "name": "message",
+              "value": "Marca não encontrada, poderia tentar novamente?",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1520,
+        -160
+      ],
+      "id": "5269d324-9ff9-4a3c-be01-c858efb5f317",
+      "name": "False Brand1 Set Message"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "191aa371-277f-4fe2-b172-bf3e649b9e00",
+              "name": "fromNumber",
+              "value": "={{ $('Code').item.json.fromNumber }}",
+              "type": "string"
+            },
+            {
+              "id": "1a848f59-3da2-4583-b31f-9a79fb880128",
+              "name": "toNumber",
+              "value": "={{ $('Code').item.json.toNumber }}",
+              "type": "string"
+            },
+            {
+              "id": "97118e98-472b-4aa8-864d-a6fdda91ef8f",
+              "name": "step",
+              "value": "={{ $('Code').item.json.step }}",
+              "type": "number"
+            },
+            {
+              "id": "b8ef46c7-f704-41e6-93b4-5e4af032af54",
+              "name": "message",
+              "value": "Modelo não encontrado, poderia tentar novamente?",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1536,
+        128
+      ],
+      "id": "dfd1628a-573e-4e9a-9fc7-c40724438702",
+      "name": "False Model1 Set Message"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "191aa371-277f-4fe2-b172-bf3e649b9e00",
+              "name": "fromNumber",
+              "value": "={{ $('Code').item.json.fromNumber }}",
+              "type": "string"
+            },
+            {
+              "id": "1a848f59-3da2-4583-b31f-9a79fb880128",
+              "name": "toNumber",
+              "value": "={{ $('Code').item.json.toNumber }}",
+              "type": "string"
+            },
+            {
+              "id": "97118e98-472b-4aa8-864d-a6fdda91ef8f",
+              "name": "step",
+              "value": "={{ $('Code').item.json.step }}",
+              "type": "number"
+            },
+            {
+              "id": "b8ef46c7-f704-41e6-93b4-5e4af032af54",
+              "name": "message",
+              "value": "Marca não encontrada, poderia tentar novamente?",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1696,
+        480
+      ],
+      "id": "da532522-d11a-46cd-9f29-ad047eefd534",
+      "name": "False Brand2 Set Message"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "191aa371-277f-4fe2-b172-bf3e649b9e00",
+              "name": "fromNumber",
+              "value": "={{ $('Code').item.json.fromNumber }}",
+              "type": "string"
+            },
+            {
+              "id": "1a848f59-3da2-4583-b31f-9a79fb880128",
+              "name": "toNumber",
+              "value": "={{ $('Code').item.json.toNumber }}",
+              "type": "string"
+            },
+            {
+              "id": "97118e98-472b-4aa8-864d-a6fdda91ef8f",
+              "name": "step",
+              "value": "={{ $('Code').item.json.step }}",
+              "type": "number"
+            },
+            {
+              "id": "b8ef46c7-f704-41e6-93b4-5e4af032af54",
+              "name": "message",
+              "value": "Modelo não encontrado, poderia tentar novamente?",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1680,
+        768
+      ],
+      "id": "5290982c-f9f6-454d-873e-c1de744a9cd0",
+      "name": "False Model2 Set Message"
+    },
+    {
+      "parameters": {
+        "from": "={{ $('Switch').item.json.toNumber }}",
+        "to": "={{ $('Switch').item.json.fromNumber }}",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        2336,
+        976
+      ],
+      "id": "5f572d05-6bb8-4c2f-afd5-34013bc5b1a3",
+      "name": "Send an SMS/MMS/WhatsApp message from IA",
+      "credentials": {
+        "twilioApi": {
+          "id": "mrd5eEljdUJTv81Q",
+          "name": "Twilio account"
+        }
+      }
     }
   ],
   "pinData": {
     "When clicking ‘Execute workflow’": [
       {
         "json": {
+          "headers": {
+            "host": "dab8d1d63a7d.ngrok-free.app",
+            "user-agent": "TwilioProxy/1.1",
+            "content-length": "591",
+            "accept": "*/*",
+            "content-type": "application/x-www-form-urlencoded",
+            "i-twilio-idempotency-token": "310c08bb-d8ed-44cd-aa92-7fc5259901c8",
+            "x-forwarded-for": "54.166.32.146",
+            "x-forwarded-host": "dab8d1d63a7d.ngrok-free.app",
+            "x-forwarded-proto": "https",
+            "x-home-region": "us1",
+            "x-twilio-signature": "fc+WCoPMc59Sb5A3sczrQ7RldlA=",
+            "accept-encoding": "gzip"
+          },
+          "params": {},
+          "query": {},
           "body": {
+            "SmsMessageSid": "SM64c2872c168561334b12997239eafcb2",
+            "NumMedia": "0",
+            "ProfileName": "Arthur Felipe",
+            "MessageType": "text",
+            "SmsSid": "SM64c2872c168561334b12997239eafcb2",
             "WaId": "558499397770",
-            "Body": "SPIN",
+            "SmsStatus": "received",
+            "Body": "Qual o preço de ambos?",
             "To": "whatsapp:+14155238886",
-            "From": "whatsapp:+558499397770"
-          }
+            "NumSegments": "1",
+            "ReferralNumMedia": "0",
+            "MessageSid": "SM64c2872c168561334b12997239eafcb2",
+            "AccountSid": "AC5aeb48cfa8766a20e488552a9a5a3331",
+            "ChannelMetadata": "{\"type\":\"whatsapp\",\"data\":{\"context\":{\"ProfileName\":\"Arthur Felipe\",\"WaId\":\"558499397770\"}}}",
+            "From": "whatsapp:+558499397770",
+            "ApiVersion": "2010-04-01"
+          },
+          "webhookUrl": "http://localhost:5678/webhook/9fb1d93e-9cad-4bc8-aa69-1e1bb15f06c0",
+          "executionMode": "production"
         }
       }
     ],
@@ -1081,35 +1376,50 @@
       {
         "json": {
           "userId": "558499397770",
-          "step": 6,
+          "step": 8,
           "staticData": {
+            "users": {
+              "558499397770": {
+                "state": "start"
+              }
+            },
+            "step": 1,
             "steps": {
-              "558499397770": 6
+              "whatsapp:+558499397770": 3,
+              "558499397770": 8
             },
             "answers": {
-              "558499397770": {
+              "whatsapp:+558499397770": {
                 "brand1": "FIAT",
-                "model1": "MOBI",
-                "version1": 1,
-                "brand2": "CHEVROLET",
-                "model2": "SPIN",
+                "model1": "FIAT",
+                "version1": null,
+                "brand2": null,
+                "model2": null,
                 "version2": null
+              },
+              "558499397770": {
+                "brand1": "CHEVROLET",
+                "model1": "CAMARO",
+                "version1": "2",
+                "brand2": "FERRARI",
+                "model2": "296",
+                "version2": "1"
               }
             },
             "contacts": {}
           },
           "answers": {
-            "brand1": "FIAT",
-            "model1": "MOBI",
-            "version1": 1,
-            "brand2": "CHEVROLET",
-            "model2": "SPIN",
-            "version2": null
+            "brand1": "CHEVROLET",
+            "model1": "CAMARO",
+            "version1": "2",
+            "brand2": "FERRARI",
+            "model2": "296",
+            "version2": "1"
           },
           "fromNumber": "whatsapp:+558499397770",
           "toNumber": "whatsapp:+14155238886",
-          "msg": "SPIN",
-          "msgUpper": "SPIN"
+          "msg": "Qual o preço de ambos?",
+          "msgUpper": "QUAL O PREÇO DE AMBOS?"
         }
       }
     ]
@@ -1180,6 +1490,13 @@
         [
           {
             "node": "HTTP Request Check Version2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request IA chat",
             "type": "main",
             "index": 0
           }
@@ -1326,6 +1643,13 @@
             "type": "main",
             "index": 0
           }
+        ],
+        [
+          {
+            "node": "False Brand2 Set Message",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
@@ -1360,19 +1684,31 @@
             "index": 0
           }
         ],
-        []
+        [
+          {
+            "node": "False Model1 Set Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Ifbrand1": {
       "main": [
         [
           {
-            "node": "True Brand1 Set Message",
+            "node": "HTTP Request listar_modelos",
             "type": "main",
             "index": 0
           }
         ],
-        []
+        [
+          {
+            "node": "False Brand1 Set Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "True Version Set Message 2": {
@@ -1405,7 +1741,8 @@
             "type": "main",
             "index": 0
           }
-        ]
+        ],
+        []
       ]
     },
     "HTTP Request Check Version2": {
@@ -1435,6 +1772,13 @@
         [
           {
             "node": "HTTP Request Check Version",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "False Model2 Set Message",
             "type": "main",
             "index": 0
           }
@@ -1473,15 +1817,103 @@
           }
         ]
       ]
+    },
+    "HTTP Request IA chat": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send an SMS/MMS/WhatsApp message from IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request listar_modelos": {
+      "main": [
+        [
+          {
+            "node": "True Brand1 Set Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "False Brand1 Set Message": {
+      "main": [
+        [
+          {
+            "node": "Send an SMS/MMS/WhatsApp message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "False Model1 Set Message": {
+      "main": [
+        [
+          {
+            "node": "Send an SMS/MMS/WhatsApp message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "False Brand2 Set Message": {
+      "main": [
+        [
+          {
+            "node": "Send an SMS/MMS/WhatsApp message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "False Model2 Set Message": {
+      "main": [
+        [
+          {
+            "node": "Send an SMS/MMS/WhatsApp message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
-  "active": true,
+  "active": false,
   "settings": {
     "executionOrder": "v1",
     "timezone": "America/Sao_Paulo",
     "callerPolicy": "workflowsFromSameOwner"
   },
-  "versionId": "3bb1b3cd-b829-48d5-a71e-b7d17eb4fe2a",
+  "versionId": "6e6cee89-f38b-4117-bbbb-4ad764400e6f",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "e642b48252ffda908f755ff91d6422ac6f6404fb5f3f7e435eab9ee5a7a88c9e"
