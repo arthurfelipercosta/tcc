@@ -157,6 +157,35 @@ def _listar_versoes(marca: str, modelo: str, max_items: int=25):
                     break
     return versoes
 
+def _listar_modelos(marca: str, max_items: int=10):
+    """Listar modelos únicos do CSV para a marca (case-insensitive).
+
+    Params:
+        marca: Nome da marca (ex.: "FIAT")
+        max_items: Limite máximo de modelos a retornar (default: 50)
+
+    Returns:
+        list[str]: Modelos únicos em ordem de primeira ocorrência no CSV
+    """
+
+    _carregar_catalogo()
+    m = (marca or '').strip().lower()
+    seen = set()
+    modelos = []
+
+    for row in _catalogo_rows:
+        marca_row = (row.get('Marca') or row.get('marca') or '').strip().lower()
+        modelo_row = (row.get('Modelo') or row.get('modelo') or '').strip()
+
+        if m == marca_row and modelo_row:
+            key = modelo_row.lower()
+            if key not in seen:
+                seen.add(key)
+                modelos.append(modelo_row)
+                if len(modelos) >= max_items:
+                    break
+    return modelos
+
 def _parse_number(value):
     """Converter valores do CSV para float, lidando com vírgula decimal e 'ND'."""
     if value is None:
@@ -985,6 +1014,29 @@ def versoes():
         'marca': marca,
         'modelo': modelo,
         'versoes': versoes,
+    })
+
+@app.route('/api/modelos_por_marca', methods=['GET'])
+def modelos_por_marca():
+    """Lista modelos únicos do CSV para a marca especificada.
+
+    Query:
+        - marca: Nome da marca (ex.: FIAT)
+
+    Response JSON:
+        - marca (str): A marca buscada (normalizada para UPPERCASE)
+        - modelos (list[str]): Lista de modelos únicos encontrados
+        - total (int): Número total de modelos únicos
+    """
+    marca = request.args.get('marca', '').strip()
+    if not marca:
+        return jsonify({'valid': False, 'error': 'Marca não informada!'}), 400
+
+    modelos = _listar_modelos(marca)
+    return jsonify({
+        'marca': marca.upper(),
+        'modelos': modelos,
+        'total': len(modelos)
     })
 
 @app.route('/api/comparar', methods=['GET'])
