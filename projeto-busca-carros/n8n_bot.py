@@ -672,6 +672,8 @@ def top10_coluna(coluna: str, ordem: str='desc', filtros: dict | None=None):
         ]
     }
 
+    
+
 # ========= ENDPOINTS DA API =========
 @app.route('/api/validar_marca', methods=['GET'])
 def validar_marca():
