@@ -1,0 +1,35 @@
+\pagestyle{myheadings}
+\newpage
+
+\chapter{Fundamentação Teórica}
+\thispagestyle{myheadings}
+
+Este capítulo tem como objetivo apresentar e discutir os conceitos teóricos e as tecnologias que fundamentam o desenvolvimento do \textit{n8n\_bot.py} e suas interfaces web e de comunicação. Ele contextualizará o leitor sobre os princípios da automação de processos, a importância do consumo e tratamento de dados estruturados, o desenvolvimento e consumo de APIs, o desenvolvimento web front-end e a utilização de plataformas de comunicação e inteligência artificial.
+
+\section{Automação de Processos e Fluxos de Trabalho}
+A automação de processos tem se estabelecido como um pilar fundamental na otimização de operações em diversos setores, transformando a maneira como tarefas repetitivas e complexas são executadas. No contexto tecnológico atual, onde a eficiência e a agilidade são imperativas, a capacidade de automatizar fluxos de trabalho torna-se um diferencial competitivo e uma necessidade operacional.
+
+\subsection{Conceitos de Automação}
+A automação pode ser definida como a utilização de tecnologia para executar tarefas ou sequências de atividades com mínima ou nenhuma intervenção humana (SOBRENOME, ANO). Essa abordagem visa otimizar processos, reduzir a carga de trabalho manual e mitigar erros, resultando em um aumento significativo da eficiência e produtividade. Os principais benefícios da implementação da automação incluem:
+\begin{itemize}
+    \item \textbf{Eficiência e Produtividade:} Tarefas rotineiras são executadas de forma mais rápida e consistente, liberando recursos humanos para atividades de maior valor estratégico.
+    \item \textbf{Redução de Erros:} A eliminação da intervenção humana em processos repetitivos minimiza a ocorrência de falhas e inconsistências.
+    \item \textbf{Economia de Tempo e Recursos:} A otimização dos fluxos de trabalho resulta em uma alocação mais eficaz de tempo e recursos organizacionais.
+    \item \textbf{Escalabilidade:} Sistemas automatizados podem facilmente se adaptar a um aumento no volume de trabalho sem a necessidade de um crescimento proporcional da força de trabalho.
+    \item \textbf{Consistência:} Garante que as operações sejam realizadas seguindo padrões predefinidos, mantendo a qualidade e a conformidade (SOBRENOME, ANO).
+\end{itemize}
+No âmbito deste projeto, a automação é crucial para otimizar a coleta, processamento e entrega de informações veiculares da lista PBEV, superando as limitações da busca manual e garantindo a atualização proativa dos dados para o usuário final.
+
+\subsection{Plataformas Low-Code/No-Code e o N8N}
+O avanço da tecnologia tem impulsionado o surgimento de ferramentas que democratizam o desenvolvimento de soluções digitais. As plataformas \textit{low-code} e \textit{no-code} representam um marco nesse cenário, permitindo que usuários com diferentes níveis de proficiência em programação possam construir aplicações e automações de forma mais rápida e intuitiva (SOBRENOME, ANO). As plataformas \textit{no-code} possibilitam a criação de soluções sem a necessidade de escrever uma única linha de código, utilizando interfaces visuais de arrastar e soltar. Já as plataformas \textit{low-code} oferecem uma abordagem similar, mas com a flexibilidade de adicionar código personalizado quando necessário, para funcionalidades mais específicas.
+
+Nesse contexto, o \textbf{N8N} (pronuncia-se "n-eight-n") destaca-se como uma ferramenta de automação de fluxo de trabalho de código aberto, que se enquadra na categoria \textit{low-code}. Ele permite a interconexão de serviços e a criação de automações complexas por meio de uma interface visual amigável. A arquitetura do N8N é baseada em \textbf{Nós} (\textit{Nodes}), que são blocos de funcionalidade pré-construídos que interagem com diferentes serviços ou executam ações específicas (Ex: `HTTP Request`, `Twilio`, `OpenAI`, `Webhook`), e \textbf{Workflows}, que são a sequência lógica de conexão desses nós para formar um processo automatizado.
+
+Para o projeto \textit{n8n\_bot.py}, o N8N atua como o \textbf{orquestrador central} das automações. Sua flexibilidade permite:
+\begin{itemize}
+    \item Receber e processar requisições, agindo como gatilho para os fluxos de trabalho.
+    \item Interagir com a API desenvolvida em Python (\textit{api.py}) para acessar e manipular os dados da lista PBEV.
+    \item Enviar notificações personalizadas aos usuários através da API do Twilio, direcionando mensagens para a interface web ou para o WhatsApp.
+    \item Gerenciar a lógica condicional e a sequência de ações que garantem a entrega proativa e personalizável das informações, integrando as diversas ferramentas e serviços envolvidos no projeto de forma coesa e eficiente.
+\end{itemize}
+A capacidade do N8N de conectar diferentes sistemas e automatizar a passagem de dados entre eles é fundamental para a funcionalidade e escalabilidade do \textit{n8n\_bot.py}, consolidando-o como a espinha dorsal do processo de automação.
