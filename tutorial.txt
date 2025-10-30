@@ -1,7 +1,8 @@
 Para rodar o aplicativo web:
 - Abrir 2 prompts e rodar os comandos abaixo:
-- "python -m http.server *nº da porta*"
+- "python -m http.server 8000
 - "python api.py"
+- Abrir o navegador na porta "http://localhost:8000/projeto-busca-carros"
 
 Para rodar no N8N e whatsapp:
 - Abrir 2 prompts e rodar os comandos abaixo:
