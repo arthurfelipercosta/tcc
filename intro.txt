@@ -1,0 +1,26 @@
+\pagestyle{myheadings}
+\newpage
+
+\chapter{Introdução}
+\thispagestyle{myheadings}
+
+Com o cenário de crescente digitalização de mercados e um volume massivo de dados e informações disponíveis online, surgem, simultaneamente, oportunidades e desafios todos os dias. Uma dessas oportunidades, por exemplo, é no setor automotivo, onde a busca por veículos que atendam aos critérios específicos - seja por parte de compradores comuns ou de profissionais - pode ser um processo demorado e ineficiente. A coleta, comparação e monitoramento dessas informações manualmente exigem tempo e recursos consideráveis do usuário, limitando sua tomada de decisão. Inicialmente, buscou-se a extração automatizada de dados diretamente de plataformas de anúncios como o Webmotors através de técnicas de web scrapping, contudo, restrições impostas pelo site impediram a continuidade com essa abordagem.
+
+Diante desse cenário e da necessidade de uma fonte de dados estável e confiável, este Trabalho de Conclusão de Curso (TCC) propõe o desenvolvimento de um sistema automatizado capaz de consultar e processar dados veiculares a partir de fontes oficiais como a FIPE API criada por Deivid Fortuna. O \textit{n8n\_bot.py} surge como uma solução para  minimizar as dificuldades inerentes à prospecção manual de informações, oferecendo um mecanismo mais eficiente para informar ao usuário sobre as oportunidades mais relevantes e economizando seu tempo de pesquisa. A principal fonte de dados utilizada neste projeto é um conjunto de dados (,pdf) baixado do site do PBEV (Programa Brasileiro de Etiquetagem Veicular), que oferece informações padronizadas sobre a eficiência energética e emissões de veículos, enriquecendo a capacidade de análise do sistema.
+
+A integração de bibliotecas Python, como \textit{Pandas} para manipulação de dados, e um framwork web (\textit{Flask} ou \textit{FastAPI}) para orquestrar tudo isso, combinadas com o poder de automação do \textit{N8N} e a capacidade de comunicação do \textit{Twilio}, visa criar um assistente inteligente de busca e comparação entre carros. Adicionalmente, o potencial de exploração da API da \textit{OpenAI} pode enriquecer essa análise e sumarizar os dados coletados, elevando o nível de inteligência do sistema como um todo, dando respostas mais humanizadas e menos robóticas. O projeto foca na demonstração e versatilidade dessas ferramentas, permitindo a comparação entre diferentes canais de notificação - via interface web e diretamente no WhatsApp - explorando as capacidades de cada um para entrega de informações personalizadas.
+
+O objetivo geral deste trabalho é projetar e implementar um bot de busca de informações automatizado sobre os carros presentes na lista PBEV, onde esse programa vai coletar, processar e entregar as informações de forma proativa e personalizável ao usuário final da aplicação.
+
+Para alcançar este objetivo, foram definidos os seguintes objetivos específicos:
+\begin{itemize}
+    \item Desenvolver um módulo para importar e processar dados veiculares em um arquivo .csv extraídos de um arquivo em PDF disponibilizado pelo PBEV.
+    \item Criar uma interface programática (API) para gerenciar as operações de consulta aos dados e permitir sua exposição.
+    \item Integrar o sistema com a plataforma \textit{N8N} para orquestrar fluxos de trabalho de automação, incluindo gatilhos e ações condicionais baseadas em critérios de veículos.
+    \item Configurar um mecanismo de notificação utilizando a API do \textit{Twilio} para conversar com o usuário sobre os veículos que correspondem aos seus critérios, por via de mensagens no WhatsApp
+    \item Explorar a aplicação de inteligência artificial via API da \textit{OpenAI} para refinar a análise dos dados dos veículos, buscando trazer respostas mais humanizadas.
+\end{itemize}
+
+A justificativa para este projeto está na necessidade crescente de ferramentas que possibilitem otimizar a interação humana com dados estruturados e de referência, como os fornecidos pelo PBEV. Automatizando o processo de consulta e notificação de veículos, o \textit{n8n\_bot.py} pode oferecer uma solução prática que economiza tempo, aumenta a eficiência na obtenção de informações e possibilita que usuários profissionais tomem decisões  mais rápidas e fundamentadas. A abordagem proposta é uma combinação de uma ingestão de dados de fontes oficiais , processamento de informações  e automação de forma inteligente, com a capacidade de entregar notificações de várias maneiras, demonstrando a viabilidade de construir um sistema robusto e adaptável para desafios no mundo real.
+
+\vspace{1em}

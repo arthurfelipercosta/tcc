@@ -1,0 +1,36 @@
+\chapter{Metodologia}
+
+Este capítulo descreve as etapas metodológicas adotadas para o desenvolvimento do sistema `n8n\_bot.py` e suas interfaces associadas, detalhando desde a obtenção dos dados veiculares oficiais até a entrega das informações ao usuário final. A metodologia caracteriza-se como pesquisa aplicada de desenvolvimento tecnológico, focada na automação do acesso, processamento e comparação de dados do Programa Brasileiro de Etiquetagem Veicular (PBEV).
+
+\section{Etapas do Processo Metodológico}
+
+O fluxo metodológico do projeto foi norteado pelas seguintes etapas principais:
+
+\begin{enumerate}
+    \item \textbf{Obtenção dos dados oficiais do PBEV:} Inicialmente, o arquivo em formato \textit{Portable Document Format} (PDF) contendo a base de veículos etiquetados foi baixado diretamente do portal oficial do INMETRO, responsável pelo PBEV \cite{INMETRO2024}.
+    \item \textbf{Conversão de PDF para CSV:} Como o PDF não apresenta estrutura amigável para manipulação programática, procedeu-se com a conversão do arquivo para o formato \textit{Comma-Separated Values} (CSV) utilizando o serviço online Convertio \cite{CONVERTIO}, garantindo maior maleabilidade e compatibilidade com ferramentas de análise de dados.
+    \item \textbf{Limpeza e preparação dos dados:} Os dados extraídos do PDF para CSV passaram por um processo de limpeza, padronização e eliminação de inconsistências, realizado no ambiente Jupyter Notebook (`fix.ipynb`) com uso intensivo da biblioteca Pandas \cite{Jupyter,Pandas}. Posteriormente, foi gerado um segundo arquivo, \textit{dados\_corrigidos\_sem\_duplicatas.csv}, para otimizar a unicidade dos dados.
+    \item \textbf{Consumo, exposição e tratamento dos dados:} Com os arquivos finalizados, os dados foram consumidos pelas seguintes aplicações e componentes:
+    \begin{itemize}
+        \item \textit{api.py}: servidor backend responsável por expor uma API RESTful que permite a consulta e filtragem dos dados corrigidos \cite{Flask,FastAPI}.
+        \item \textit{script.js}: script do frontend que consome a API para alimentar a interface web, permitindo a seleção e comparação de veículos em tempo real.
+        \item \textit{n8n\_bot.py}: componente de automação via WhatsApp, integrando N8N e Twilio para interação por mensageria e consulta automatizada \cite{N8N,Twilio}.
+    \end{itemize}
+    \item \textbf{Tentativa de web scraping fracassada:} Antes da adoção do dataset oficial do PBEV, realizou-se uma tentativa de coleta automatizada de dados via web scraping em grandes plataformas de anúncios de veículos (por exemplo, Webmotors) utilizando o script \textit{scrapping.js}. No entanto, devido a bloqueios de acesso e restrições impostas pelas plataformas, essa abordagem foi abandonada em favor dos dados oficiais.
+\end{enumerate}
+
+\section{Tipo de Pesquisa e Ferramentas Utilizadas}
+
+A pesquisa é classificada como aplicada, de natureza exploratória e descritiva, envolvendo o desenvolvimento de protótipo funcional. As principais ferramentas e tecnologias empregadas estão elencadas abaixo, todas referenciadas em detalhes na Bibliografia:
+
+\begin{itemize}
+    \item Ambiente Jupyter Notebook para manipulação e limpeza de dados \cite{Jupyter}
+    \item Pandas e Python para processamento dos arquivos CSV \cite{Pandas,Python}
+    \item Convertio para conversão de documentos \cite{CONVERTIO}
+    \item Flask ou FastAPI para desenvolvimento e exposição de API \cite{Flask,FastAPI}
+    \item HTML, CSS, JavaScript para o desenvolvimento da interface web (consulte referências W3C/MDN se desejar referenciar)
+    \item N8N e Twilio para integração de automação no canal WhatsApp \cite{N8N,Twilio}
+    \item Dados oficiais INMETRO/PBEV e FIPE API para possíveis integrações futuras \cite{INMETRO2024,FIPE}
+\end{itemize}
+
+As subseções seguintes detalham cada etapa do processo, justificando as escolhas técnicas e metodológicas feitas.
