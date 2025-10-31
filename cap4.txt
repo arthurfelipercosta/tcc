@@ -1,0 +1,38 @@
+\pagestyle{myheadings}
+\newpage
+
+\chapter{Desenvolvimento}
+\thispagestyle{myheadings}
+
+Este capítulo detalha a implementação técnica do \textit{n8n\_bot.py} e suas interfaces web e de comunicação via WhatsApp. Serão abordados os componentes arquitetônicos, as tecnologias empregadas e os fluxos de trabalho que integram as diversas partes do sistema, demonstrando como os objetivos do projeto foram alcançados através do desenvolvimento prático.
+
+\section{Arquitetura do Sistema}
+
+A arquitetura do sistema é modular e distribuída, projetada para gerenciar a aquisição, o processamento, a exposição e a entrega de informações veiculares de forma eficiente em múltiplos canais. O projeto é composto por três pilares principais: a camada de \textbf{Processamento de Dados}, a camada de \textbf{Serviços de Backend} (API RESTful) e as camadas de \textbf{Interface com o Usuário} (Web Frontend e Bot WhatsApp).
+
+\subsection{Visão Geral da Arquitetura}
+O diagrama da Figura \ref{fig:arquitetura_geral} (a ser inserido) ilustra a interação entre os componentes.
+\begin{itemize}
+    \item \textbf{Fontes de Dados:} Incluem o dataset do PBEV (convertido de PDF para CSV) e a FIPE API.
+    \item \textbf{Processamento de Dados:} O \textit{Jupyter Notebook} (\textit{fix.ipynb}) e a biblioteca Pandas são responsáveis pela limpeza e padronização do dataset PBEV.
+    \item \textbf{Backend (API Python):} Implementado com Flask (\textit{api.py}), serve como um ponto de acesso central para os dados processados e para a integração com a FIPE API.
+    \item \textbf{Frontend Web:} Uma aplicação baseada em HTML, CSS e JavaScript (\textit{index.html}, \textit{styles.css}, \textit{script.js}) que consome a API Flask para permitir a consulta e comparação visual de veículos.
+    \item \textbf{Bot WhatsApp (N8N/Twilio):} Utiliza a plataforma N8N e a API do Twilio (\textit{n8n\_bot.py}) para gerenciar as interações com os usuários via WhatsApp, fazendo requisições à API Flask.
+\end{itemize}
+
+Esta estrutura garante a separação de responsabilidades e facilita a manutenção e escalabilidade do sistema.
+
+\section{Processamento de Dados}
+
+\subsection{Transformação de Dados PBEV (PDF para CSV)}
+A base de dados PBEV, originalmente em formato PDF, foi convertida para CSV utilizando o serviço online Convertio \cite{CONVERTIO}. Este processo é crítico para viabilizar a manipulação programática dos dados. O resultado é um arquivo CSV (`dados_corrigidos.csv`) que serve como entrada para as próximas etapas.
+
+\subsection{Limpeza e Otimização com Pandas no Jupyter Notebook}
+O arquivo CSV do PBEV foi submetido a um rigoroso processo de limpeza e otimização. Este processo foi realizado no ambiente Jupyter Notebook (\textit{fix.ipynb}), utilizando a biblioteca Pandas \cite{Pandas}. As principais operações incluíram:
+\begin{itemize}
+    \item Carregamento dos dados do `dados_corrigidos.csv` para um DataFrame Pandas.
+    \item Tratamento de valores ausentes, inconsistências e erros de formatação.
+    \item Padronização de strings e valores numéricos para facilitar a busca e comparação.
+    \item Remoção de linhas duplicadas, gerando o arquivo final `dados_corrigidos_sem_duplicatas.csv`, que é a versão otimizada da base de dados PBEV.
+\end{itemize}
+A Figura \ref{fig:jupyter_pandas} (a ser inserida) pode mostrar um trecho do `fix.ipynb` exemplificando uma operação de limpeza.
