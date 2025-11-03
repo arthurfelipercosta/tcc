@@ -4,7 +4,7 @@
 \chapter{Desenvolvimento}
 \thispagestyle{myheadings}
 
-Este capítulo detalha a implementação técnica do \textit{n8n\_bot.py} e suas interfaces web e de comunicação via WhatsApp. Serão abordados os componentes arquitetônicos, as tecnologias empregadas e os fluxos de trabalho que integram as diversas partes do sistema, demonstrando como os objetivos do projeto foram alcançados através do desenvolvimento prático.
+Este capítulo detalha a implementação técnica da solução desenvolvida, abordando a arquitetura e as tecnologias de seus três componentes principais: o backend de dados (`api.py`), a interface de consulta web e o assistente de comunicação via WhatsApp (`n8n_bot.py`). Serão descritos os fluxos de trabalho que integram essas partes, demonstrando como os objetivos do projeto foram alcançados através do desenvolvimento prático.
 
 \section{Arquitetura do Sistema}
 
