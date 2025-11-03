@@ -1,0 +1,89 @@
+digraph G {
+    rankdir=TB; // Layout de cima para baixo
+    splines=true; // Curvas nas conexões
+    nodesep=0.8; // Espaçamento entre nós
+    ranksep=1.2; // Espaçamento entre ranks (níveis)
+
+    // Definição de estilos para os nós
+    node [shape=box, style=filled, fillcolor=lightblue, fontname="Helvetica"];
+    edge [color=gray, arrowhead=vee];
+
+    // Subgrafos para agrupar componentes lógicos
+    subgraph cluster_fontes_externas {
+        label = "Fontes de Dados Externas";
+        style = "dashed";
+        color = "grey";
+        INMETRO [label="INMETRO (PBEV PDF)", fillcolor=lightgreen];
+        Convertio [label="Convertio (PDF -> CSV)", fillcolor=lightgreen];
+        FIPE_API [label="FIPE API", fillcolor=lightgreen];
+    }
+
+    subgraph cluster_processamento_dados {
+        label = "Processamento de Dados";
+        style = "dashed";
+        color = "grey";
+        Jupyter_Notebook [label="Jupyter Notebook (fix.ipynb)", fillcolor=lightyellow];
+        Dados_Corrigidos_Fase1 [label="Dados Corrigidos", fillcolor=lightyellow];
+        Dados_Corrigidos_Finais [label="Dados Corrigidos sem Duplicatas", fillcolor=lightyellow];
+    }
+
+    subgraph cluster_backend {
+        label = "Backend API";
+        style = "dashed";
+        color = "grey";
+        API_Flask [label="API Python (Flask - api.py)", fillcolor=orange];
+    }
+
+    subgraph cluster_frontend_web {
+        label = "Interface Web (Frontend)";
+        style = "dashed";
+        color = "grey";
+        HTML_CSS_JS [label="HTML/CSS/JS (index.html, script.js)", fillcolor=lightcoral];
+    }
+
+    subgraph cluster_whatsapp_bot {
+        label = "Assistente Conversacional (WhatsApp)";
+        style = "dashed";
+        color = "grey";
+        N8N [label="N8N (n8n_bot.py)", fillcolor=lightseagreen];
+        Twilio [label="Twilio API", fillcolor=lightseagreen];
+    }
+
+    // Usuários
+    User_Web [label="Usuário Web", shape=person, fillcolor=white];
+    User_WhatsApp [label="Usuário WhatsApp", shape=person, fillcolor=white];
+
+    // Conexões e Fluxo de Dados
+
+    // Aquisição e Processamento do PBEV
+    INMETRO -> Convertio [label="Baixa PDF"];
+    Convertio -> Jupyter_Notebook [label="Gera CSV"];
+
+    // Fluxo de Limpeza e Refinamento de Dados
+    Jupyter_Notebook -> Dados_Corrigidos_Fase1 [label="Limpeza e Tratamento"];
+    Dados_Corrigidos_Fase1 -> Jupyter_Notebook [label="Retrabalho / Refinamento"]; // Loop de refinamento para mais limpeza
+
+    // Fluxo de Remoção de Duplicatas (como label na seta)
+    Dados_Corrigidos_Fase1 -> Dados_Corrigidos_Finais [label="Remover Duplicatas"]; // **CORRIGIDO AQUI - Sem estilos extras**
+
+    // Aquisição de Preços
+    FIPE_API -> API_Flask [label="Consulta Preços"]; // FIPE pode ser consultada pelo Flask diretamente
+
+    // Backend e Frontend Web
+    Dados_Corrigidos_Finais -> API_Flask [label="Alimenta API"]; // API consome os dados finais
+    API_Flask -> HTML_CSS_JS [label="Envia Dados (JSON)"];
+    HTML_CSS_JS -> API_Flask [label="Consulta Dados"]
+    HTML_CSS_JS -> User_Web [label="Exibe Interface"];
+    User_Web -> HTML_CSS_JS [label="Interage"];
+
+    // Assistente WhatsApp
+    User_WhatsApp -> Twilio [label="Mensagens"];
+    Twilio -> N8N [label="Webhook"];
+    N8N -> API_Flask [label="Consulta Dados"];
+    API_Flask -> N8N [label="Retorna Dados"];
+    N8N -> Twilio [label="Envia Resposta"];
+    Twilio -> User_WhatsApp [label="Entrega Mensagem"];
+}
+
+https://dreampuf.github.io/GraphvizOnline/
+DREAMPUF. **Graphviz Online**. dreampuf.github.io, [s.d.]. Disponível em: <https://dreampuf.github.io/GraphvizOnline/>. Acesso em: 03 nov. 2025.

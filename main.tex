@@ -1,0 +1,92 @@
+\documentclass[12pt, a4paper, oneside]{book}
+
+\include{prologue}
+
+\begin{document}
+
+%------------ CAPA ------------
+
+% Não numerar a capa
+\thispagestyle{empty}
+
+\begin{center}
+
+\begin{center}
+    \includegraphics[width=.2\linewidth]{Imagens/brasao.png}
+\end{center}
+
+\begin{center}
+    \textbf{UNIVERSIDADE FEDERAL DO RIO GRANDE DO NORTE \\
+    CENTRO DE TECNOLOGIA \\
+    DEPARTAMENTO DE ENGENHARIA DE COMPUTAÇÃO \\
+    E AUTOMAÇÃO \\
+    CURSO DE ENGENHARIA DA COMPUTAÇÃO}
+\end{center}
+
+\vspace{2cm}
+
+%------------ AUTOR ------------
+\begin{center}
+    \large \textbf{Arthur Felipe Rodrigues Costa}
+\end{center}
+
+\vspace{4cm}
+
+%------------ TÍTULO ------------
+
+\textbf{\Large{Arquitetura e Implementação de um Assistente Integrado ao WhatsApp para Consulta de Informações Veiculares no PBEV}}
+
+\vspace{5cm}
+
+\large \textbf{Natal \\
+2025}
+
+\end{center}
+
+%------------ FOLHA DE ROSTO ------------v
+
+\include{face_page}
+
+%------------ AGRADECIMENTOS ------------
+
+\include{agradecimentos}
+
+%------------ CITAÇÃO ------------
+
+\include{quote}
+
+%------------ RESUMO ------------
+\include{resume}
+
+%------------ ABSTRACT ------------
+\include{abstract}
+
+%------------ LISTA DE ABRECIATURAS E SIGLAS ------------
+\include{abbreviations}
+
+%------------ LISTA DE FIGURAS ------------
+\include{list_of_figures}
+
+%------------ LISTA DE TABELAS ------------
+\newpage
+\addcontentsline{toc}{chapter}{Lista de Tabelas}
+\listoftables
+\thispagestyle{myheadings}
+
+%------------ SUMÁRIO ------------
+\newpage
+
+\tableofcontents
+\thispagestyle{myheadings}
+
+%------------ CAPÍTULOS ------------
+
+\include{introduction}
+\include{chapter2}
+\include{chapter3}
+\include{chapter4}
+
+%------------ BIBLIOGRAFIA ------------
+\include{bibliography}
+
+\end{document}

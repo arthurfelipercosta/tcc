@@ -1,0 +1,124 @@
+\pagestyle{myheadings}
+\newpage
+
+\chapter{Desenvolvimento}
+\thispagestyle{myheadings}
+
+Este capítulo detalha a implementação técnica da solução desenvolvida, abordando a arquitetura e as tecnologias de seus três componentes principais: o backend de dados ('\textit{api.py}'), a interface de consulta web e o assistente de comunicação via WhatsApp ('\textit{n8n\_bot.py}'). Serão descritos os fluxos de trabalho que integram essas partes, demonstrando como os objetivos do projeto foram alcançados através do desenvolvimento prático.
+
+\section{Arquitetura do Sistema}
+
+A arquitetura do sistema é modular e distribuída, projetada para gerenciar a aquisição, o processamento, a exposição e a entrega de informações veiculares de forma eficiente em vários canais. O projeto é composto por três pilares principais: a camada de \textbf{Processamento de Dados}, a camada de \textbf{Serviços de Backend} (API RESTful) e as camadas de \textbf{Interface com o Usuário} (Web Frontend e Bot WhatsApp).
+
+\subsection{Visão Geral da Arquitetura}
+O diagrama da Figura \ref{fig:arquitetura_geral} ilustra a arquitetura geral do sistema e a interação entre seus principais componentes.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{Imagens/visao_geral.png}
+    \caption{Visão geral da arquitetura do sistema.}
+    \label{fig:arquitetura_geral}
+\end{figure}
+
+Os principais componentes desta arquitetura são:
+\begin{itemize}
+    \item \textbf{Fontes de Dados Externas:} Incluem o dataset do PBEV (convertido de PDF para CSV) e a FIPE API.
+    \item \textbf{Processamento de Dados:} O \textit{Jupyter Notebook} (\textit{fix.ipynb}) e a biblioteca Pandas são responsáveis pela limpeza e padronização do dataset PBEV.
+    \item \textbf{Backend (API Python):} Implementado com Flask (\textit{api.py}), serve como um ponto de acesso central para os dados processados e para a integração com a FIPE API.
+    \item \textbf{Frontend Web:} Uma aplicação baseada em HTML, CSS e JavaScript (\textit{index.html}, \textit{styles.css}, \textit{script.js}) que consome a API Flask para permitir a consulta e comparação visual de veículos.
+    \item \textbf{Bot WhatsApp (N8N/Twilio):} Utiliza a plataforma N8N e a API do Twilio (\textit{n8n\_bot.py}) para gerenciar as interações com os usuários via WhatsApp, fazendo requisições à API Flask.
+\end{itemize}
+
+Esta estrutura garante a separação de responsabilidades e facilita a manutenção e escalabilidade do sistema.
+
+\section{Processamento de Dados}
+
+\subsection{Transformação de Dados PBEV (PDF para CSV)}
+A base de dados PBEV, originalmente em formato PDF, foi convertida para CSV utilizando o serviço online Convertio \cite{CONVERTIO}. Este processo é crítico para viabilizar a manipulação programática dos dados. O resultado é um arquivo CSV (`dados_corrigidos.csv`) que serve como entrada para as próximas etapas.
+
+\subsection{Limpeza e Otimização com Pandas no Jupyter Notebook}
+O arquivo CSV do PBEV foi submetido a um rigoroso processo de limpeza e otimização. Este processo foi realizado no ambiente Jupyter Notebook (\textit{fix.ipynb}), utilizando a biblioteca Pandas \cite{Pandas}. As principais operações incluíram:
+\begin{itemize}
+    \item Carregamento dos dados do `dados_corrigidos.csv` para um DataFrame Pandas.
+    \item Tratamento de valores ausentes, inconsistências e erros de formatação.
+    \item Padronização de strings e valores numéricos para facilitar a busca e comparação.
+    \item Remoção de linhas duplicadas, gerando o arquivo final `dados_corrigidos_sem_duplicatas.csv`, que é a versão otimizada da base de dados PBEV.
+\end{itemize}
+
+O resultado final deste processo é o arquivo `dados_corrigidos_sem_duplicatas.csv`, uma base de dados otimizada e pronta para ser consumida pela API.
+
+\section{Desenvolvimento do Backend (API)}
+O backend da aplicação foi desenvolvido em Python, utilizando o micro-framework Flask \cite{Flask}, e está contido no arquivo \textit{api.py}. A principal responsabilidade desta API é servir como uma ponte entre a base de dados processada e as interfaces de usuário, além de encapsular a lógica de negócios, como a consulta a serviços externos.
+
+\subsection{Endpoints da API}
+A API expõe endpoints RESTful para fornecer os dados de forma estruturada, geralmente no formato JSON. Os principais endpoints desenvolvidos foram:
+
+\begin{itemize}
+    \item \textbf{/carros:} Retorna uma lista completa de todos os veículos disponíveis na base de dados.
+    \item \textbf{/carros/busca:} Permite a busca e filtragem de veículos com base em parâmetros como marca, modelo ou ano.
+    \item \textbf{/fipe/preco:} Um endpoint dedicado a consultar a FIPE API \cite{FIPE} para obter o preço de mercado atualizado de um veículo específico, enriquecendo os dados do PBEV.
+\end{itemize}
+
+Um exemplo simplificado de um endpoint em Flask pode ser visto abaixo, ilustrando como os dados do arquivo CSV são lidos com Pandas e retornados como JSON.
+
+% Exemplo de código do api.py (opcional, mas recomendado)
+\begin{verbatim}
+from flask import Flask, jsonify
+import pandas as pd
+
+app = Flask(__name__)
+
+@app.route('/carros', methods=['GET'])
+def get_carros():
+    df = pd.read_csv('dados_corrigidos_sem_duplicatas.csv')
+    carros = df.to_dict(orient='records')
+    return jsonify(carros)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+\end{verbatim}
+
+\section{Desenvolvimento da Interface Web}
+A interface web foi desenvolvida para oferecer uma experiência de usuário rica e interativa para a consulta e comparação de veículos. As tecnologias utilizadas foram HTML para a estrutura, CSS para a estilização e JavaScript para a lógica e interatividade.
+
+\subsection{Estrutura e Funcionalidades}
+A página principal (\textit{index.html}) contém os elementos de interface, como campos de busca, menus de seleção e áreas designadas para exibir os detalhes e comparações dos veículos. O arquivo \textit{script.js} é responsável por:
+\begin{itemize}
+    \item Carregar os dados veiculares do arquivo \textit{dados_corrigidos_sem_duplicatas.csv} através da Fetch API.
+    \item Popular dinamicamente os menus de seleção de veículos.
+    \item Gerenciar os eventos de clique do usuário para buscar e selecionar veículos.
+    \item Realizar requisições à API backend para obter dados complementares (como o preço FIPE).
+    \item Exibir os resultados e as comparações lado a lado na tela.
+\end{itemize}
+
+A Figura \ref{fig:interface_web} apresenta uma captura de tela da interface web em funcionamento.
+
+\begin{figure}[h!]
+    \centering
+    % \includegraphics[width=\textwidth]{Imagens/screenshot_web.png} % Descomente e ajuste o nome do arquivo
+    \caption{Interface web para consulta e comparação de veículos.}
+    \label{fig:interface_web}
+\end{figure}
+
+\section{Implementação do Assistente Conversacional (WhatsApp)}
+O assistente conversacional foi implementado para prover acesso rápido às informações veiculares diretamente pelo WhatsApp, utilizando uma arquitetura baseada em automação de fluxo de trabalho.
+
+\subsection{Fluxo de Comunicação}
+O fluxo de interação é orquestrado pela plataforma N8N \cite{N8N} e utiliza a API da Twilio \cite{TWILIO} como gateway de comunicação com o WhatsApp. O processo ocorre da seguinte forma:
+\begin{enumerate}
+    \item O usuário envia uma mensagem para o número de WhatsApp associado ao serviço.
+    \item A Twilio recebe a mensagem e a encaminha para um webhook configurado no N8N.
+    \item O fluxo de trabalho no N8N é acionado, processando o texto da mensagem para identificar a solicitação do usuário.
+    \item O N8N realiza uma requisição HTTP para a API Flask (\textit{api.py}) para buscar os dados do veículo solicitado.
+    \item A API retorna os dados para o N8N, que formata a informação em uma mensagem de texto amigável.
+    \item O N8N utiliza a API da Twilio para enviar a mensagem de resposta de volta ao usuário no WhatsApp.
+\end{enumerate}
+
+Este fluxo permite uma interação assíncrona e eficiente, aproveitando a robustez da API de backend e a flexibilidade da plataforma de automação. A Figura \ref{fig:fluxo_n8n} ilustra o fluxo de trabalho desenhado na interface do N8N.
+
+\begin{figure}[h!]
+    \centering
+    % \includegraphics[width=0.8\textwidth]{Imagens/workflow_n8n.png} % Descomente e ajuste o nome do arquivo
+    \caption{Fluxo de trabalho de atendimento implementado no N8N.}
+    \label{fig:fluxo_n8n}
+\end{figure}
