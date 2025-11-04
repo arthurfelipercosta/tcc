@@ -17,7 +17,7 @@
     Último acesso em: 22 out. 2025.
     
     % Flask
-    \bibitem{Flask} PALLETS.
+    \bibitem{FLASK} PALLETS.
     {\bf Flask} [ framework Python ].
     Versão 3.1.1.
     Disponível em: \url{https://flask.palletsprojects.com/}.
@@ -30,7 +30,7 @@
     Último acesso em: 22 out. 2025.
 
     % Jupyter Notebook
-    \bibitem{Jupyter} JUPYTER PROJECT.
+    \bibitem{JUPYTER} JUPYTER PROJECT.
     {\bf Jupyter Notebook} [ software ].
     Versão 6.5.4
     [S.l.]: Jupyter Project, 2023.
@@ -38,21 +38,21 @@
     Último acesso em: 22 out. 2025.
 
     % Conceito de automação
-    \bibitem{Leon2020} LEON, Abilio Tinoco.
+    \bibitem{LEON2020} LEON, Abilio Tinoco.
     {\bf Framework for the Automation of Business Processes}.
     International Journal of Systems Engineering, v. 4, n. 1, p. 1-6, 2020.
     Disponível em: \url{https://doi.org/10.11648/j.ijse.20200401.11}.
     Último acesso em: 22 out. 2025.
 
     % Artigo de A.K Madan, Rishi Vaid, Rishu Prakash Pal, Rohit Kumar
-    \bibitem{Madan2023} MADAN, A. K. et al.
+    \bibitem{MADAN2023} MADAN, A. K. et al.
     {\bf Automating the Future: Advantages, Disadvantages, and Case Studies in Automobile Manufacturing}.
     International Journal of Research Publication and Review, v. 5, n. 3, p. 3060-3067, 2023.
     Disponível em: \url{https://ijrpr.com/uploads/V5ISSUE3/IJRPR23307.pdf}.
     Último acesso em: 22 out. 2025.
 
     % Artigo de Cristhian Gustavo Minaya Vera, Oswaldo Vicente Mendoza Velez, Irina Loreley Arias Vera, Andres Alexander Minaya Vera, Henry Fabricio Bravo Vera
-    \bibitem{MinayaVera2022} MINAYA VERA, Cristhian Gustavo et al.
+    \bibitem{MINAYAVERA2022} MINAYA VERA, Cristhian Gustavo et al.
     {\bf Low/No-code development platforms and the future of software developers}.
     Minerva, v. 1, n. Special, p. 21-33, dez. 2022.
     Disponível em: \url{https://doi.org/10.47460/minerva.v1iSpecial.76}.
@@ -66,7 +66,7 @@
     Último acesso em: 22 out. 2025.
     
     % OpenAI API
-    \bibitem{OpenAI} OPENAI.
+    \bibitem{OPENAI} OPENAI.
     {\bf OpenAI API} [ serviço online ].
     Versão 0.28.1.
     San Francisco: OpenAI, 2025.
@@ -74,7 +74,7 @@
     Último acesso em: 22 out. 2025.
     
     % Python
-    \bibitem{Python} PYTHON SOFTWARE FOUNDATION.
+    \bibitem{PYTHON} PYTHON SOFTWARE FOUNDATION.
     {\bf Python} [ software ].
     Versão 3.11.2.
     [S.l.]: Python Software Foundation, 2025.
@@ -82,7 +82,7 @@
     Último acesso em: 22 out. 2025.
    
     % FastAPI
-    \bibitem{FastAPI} RAMÍREZ GALIANO, Sebastián.
+    \bibitem{FASTAPI} RAMÍREZ GALIANO, Sebastián.
     {\bf FastAPI} [ framework Python ].
     Versão 0.104.1.
     [S.l.]: Sebastián Ramírez Galiano, 2023.
@@ -90,7 +90,7 @@
     Último acesso em: 22 out. 2025.
    
     % Requests
-    \bibitem{Requests} REITZ, K.
+    \bibitem{REQUESTS} REITZ, K.
     {\bf Requests: HTTP for Humans} [ biblioteca Python ].
     Versão 2.32.4.
     [S.l.]: Kenneth Reitz, 2025.
@@ -106,7 +106,7 @@
     Último acesso em: 22 out. 2025.
        
     % Pandas
-    \bibitem{Pandas} THE PANDAS DEVELOPMENT TEAM.
+    \bibitem{PANDAS} THE PANDAS DEVELOPMENT TEAM.
     {\bf pandas: Powerful Python data analysis toolkit} [ software ].
     Versão 2.3.0.
     [S.l.]: The Pandas Development Team, 2023.
@@ -114,11 +114,18 @@
     Último acesso em: 22 out. 2025.
     
     % Twilio
-    \bibitem{Twilio} TWILIO INC.
+    \bibitem{TWILIO} TWILIO INC.
     {\bf Twilio API for WhatsApp} [ serviço online ].
     Versão 9.7.0.
     San Francisco: Twilio Inc., 2025.
     Disponível em: \url{https://www.twilio.com}.
     Último acesso em: 22 out. 2025.
+
+    % Graphviz Online
+    \bibitem{GRAPHVIZONLINE} DREAMPUF.
+    {\bf Graphviz Online} [ serviço online ].
+    [S. l.]: dreampuf.github.io, [s.d.].
+    Disponível em: \url{https://dreampuf.github.io/GraphvizOnline/}.
+    Último acesso em: 03 nov. 2025.
 
 \end{thebibliography}
