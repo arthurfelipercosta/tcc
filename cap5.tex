@@ -1,0 +1,55 @@
+\pagestyle{myheadings}
+\newpage
+
+\chapter{Resultados e Análise}
+\thispagestyle{myheadings}
+
+Este capítulo apresenta os resultados obtidos com a implementação do sistema de consulta e comparação de veículos, detalhando as funcionalidades entregues e a análise de seu desempenho. Serão discutidos os impactos da automação na obtenção e processamento de dados, a eficácia das interfaces de usuário (web e WhatsApp) e a contribuição geral da solução para os objetivos propostos neste trabalho.
+
+\section{Apresentação das Funcionalidades}
+Esta seção descreve as principais funcionalidades do sistema, demonstrando como as etapas de desenvolvimento culminaram em uma ferramenta prática e interativa.
+
+\subsection{Interface Web: Comparador de Veículos}
+A interface web, desenvolvida para acesso via navegador, oferece aos usuários uma plataforma visual para pesquisar e comparar veículos. As principais funcionalidades incluem:
+\begin{itemize}
+    \item \textbf{Seleção Dinâmica de Veículos:} Permite a filtragem por marca, modelo e versão a partir do dataset do PBEV.
+    \item \textbf{Comparação Detalhada:} Apresenta um comparativo lado a lado de atributos técnicos e ambientais dos veículos selecionados.
+    \item \textbf{Preços de Mercado (FIPE/Webmotors):} Integração com o backend para fornecer dados de preços atualizados.
+    \item \textbf{Resumo em Linguagem Natural:} Geração automática de um texto explicativo dos pontos fortes e fracos de cada veículo.
+\end{itemize}
+As \textbf{Figuras \ref{fig:interface_filtros}} a \textbf{\ref{fig:interface_resumo}}, apresentadas no Capítulo 4, ilustram o processo de interação e os resultados visuais gerados por esta interface.
+
+\subsection{Assistente Conversacional: Bot de WhatsApp}
+O assistente desenvolvido para o WhatsApp expande o alcance da ferramenta, permitindo que usuários interajam de forma prática e direta. As funcionalidades principais incluem:
+\begin{itemize}
+    \item \textbf{Consulta por Comando:} Capacidade de buscar informações sobre veículos através de comandos de texto simples.
+    \item \textbf{Validação de Entradas:} Guia o usuário na seleção de marcas, modelos e versões válidos.
+    \item \textbf{Comparação Rápida:} Oferece comparativos diretos e concisos entre dois veículos.
+    \item \textbf{Informações Detalhadas:} Retorna dados específicos sobre preço, consumo, poluentes, entre outros.
+\end{itemize}
+As \textbf{Figuras \ref{fig:whats_carro_1}} a \textbf{\ref{fig:whats_final}}, apresentadas no Capítulo 4, demonstram exemplos reais de interação com o bot.
+
+\section{Análise dos Resultados}
+Esta seção avalia a eficácia e o impacto da solução implementada em relação aos objetivos do projeto.
+
+\subsection{Benefícios da Automação e Processamento de Dados}
+A automação na aquisição (PDF para CSV com Convertio) e no tratamento de dados (Jupyter Notebook com Pandas) trouxe os seguintes benefícios:
+\begin{itemize}
+    \item \textbf{Eficiência:} Redução significativa do tempo e do esforço manual para coletar e preparar os dados do PBEV.
+    \item \textbf{Confiabilidade:} Minimização de erros humanos no processo de transcrição e limpeza dos dados.
+    \item \textbf{Atualização:} Facilidade para integrar novas versões do dataset PBEV quando disponibilizadas.
+\end{itemize}
+
+\subsection{Experiência do Usuário e Acessibilidade}
+A combinação das interfaces web e conversacional visa ampliar a acessibilidade e a usabilidade do sistema:
+\begin{itemize}
+    \item \textbf{Interface Web:} Proporciona uma experiência visual rica, ideal para análises detalhadas e comparações complexas com gráficos e tabelas.
+    \item \textbf{Assistente WhatsApp:} Oferece acesso rápido e simplificado à informação, atendendo a usuários que preferem a praticidade de uma plataforma de mensagens.
+\end{itemize}
+
+\subsection{Desempenho e Robustez do Backend}
+O backend, implementado em Flask, demonstrou capacidade de:
+\begin{itemize}
+    \item \textbf{Integrar Fontes Diversas:} Orquestrar a consulta a dados locais (CSV) e APIs externas (FIPE, Webmotors) de forma transparente.
+    \item \textbf{Processar Requisições:} Responder eficientemente às solicitações da interface web e do bot, mesmo com a lógica de fallback para preços.
+\end{itemize}

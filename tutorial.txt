@@ -2,12 +2,13 @@ Para rodar o aplicativo web:
 - Abrir 2 prompts e rodar os comandos abaixo:
 - "python -m http.server 8000
 - "python api.py"
-- Abrir o navegador na porta "http://localhost:8000/projeto-busca-carros"
+- Abrir o navegador na porta "http://localhost:8000"
 
 Para rodar no N8N e whatsapp:
-- Abrir 2 prompts e rodar os comandos abaixo:
+- Abrir 3 prompts e rodar os comandos abaixo:
 - "ngrok http 5678"
 - "python n8n_bot.py"
+- "n8n start"
 - Copiar o url gerada pelo ngrok
 - Colar no .env
 - Abrir o https://console.twilio.com

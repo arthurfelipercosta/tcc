@@ -1,0 +1,40 @@
+\pagestyle{myheadings}
+\newpage
+
+\chapter{Conclusão}
+\thispagestyle{myheadings}
+
+Este capítulo apresenta a conclusão do Trabalho de Conclusão de Curso, retomando os objetivos propostos, sintetizando as principais contribuições, discutindo as limitações do trabalho e sugerindo caminhos para pesquisas e desenvolvimentos futuros.
+
+\section{Retomada dos Objetivos e Contribuições}
+Neste trabalho, os objetivos principais foram automatizar a obtenção e o tratamento de dados veiculares, desenvolver interfaces de usuário intuitivas para consulta e comparação de veículos, e prover acesso a essas informações através de um assistente conversacional no WhatsApp. Através do desenvolvimento de um sistema completo, foi possível integrar diversas tecnologias para alcançar essas metas, criando uma ferramenta prática e acessível para o consumidor.
+
+As principais contribuições deste projeto incluem:
+\begin{itemize}
+    \item A consolidação e padronização de dados complexos do Programa Brasileiro de Etiquetagem Veicular (PBEV) em um formato consumível por aplicações.
+    \item O desenvolvimento de uma interface web interativa que permite a comparação visual e detalhada de veículos.
+    \item A implementação de um assistente conversacional via WhatsApp que democratiza o acesso a informações veiculares de forma prática e imediata.
+    \item A aplicação de técnicas de web scraping e integração com APIs externas (como a FIPE) para enriquecer a base de dados com informações de preço.
+    \item A demonstração da viabilidade de uma arquitetura modular para gerenciar e distribuir informações de forma eficiente em múltiplos canais.
+\end{itemize}
+
+\section{Limitações do Trabalho}
+Apesar dos resultados satisfatórios e da concretização dos objetivos propostos, este trabalho apresenta algumas limitações inerentes ao escopo e às ferramentas utilizadas:
+\begin{itemize}
+    \item \textbf{Dependência da Fonte de Dados PBEV em PDF:} A base de dados principal, sendo originalmente disponibilizada em formato PDF, requer um processo de conversão para CSV. Embora o serviço Convertio tenha sido eficaz, futuras atualizações anuais do PBEV demandariam a repetição desse processo manual, introduzindo um ponto de dependência e esforço recorrente.
+    \item \textbf{Cobertura de Veículos Fora do PBEV:} O sistema é fundamentalmente baseado nos dados do PBEV. Veículos que não são categorizados ou listados neste programa não podem ser processados ou comparados, o que limita o escopo da ferramenta a uma parte específica do mercado automotivo e pode gerar erros ou resultados vazios para consultas de carros fora dessa cobertura.
+    \item \textbf{Precisão do Web Scraping (Webmotors):} A estratégia de web scraping para a Webmotors, utilizada como fallback para preços, pode ser suscetível a mudanças na estrutura do site, o que poderia comprometer a consistência e a confiabilidade da coleta de dados ao longo do tempo.
+    \item \textbf{Complexidade das Respostas do Assistente Conversacional:} A inteligência do assistente do WhatsApp, embora funcional para consultas diretas e comparações estruturadas, possui limitações na interpretação de linguagem natural complexa ou perguntas ambíguas, resultando em respostas potencialmente menos flexíveis do que uma interação humana.
+    \item \textbf{Ausência de Persistência Dinâmica de Dados Secundários:} Informações como os preços FIPE e Webmotors são consultadas em tempo real. Não há um mecanismo de persistência local para esses dados, o que poderia otimizar o desempenho e reduzir a dependência de APIs externas.
+\end{itemize}
+
+\section{Trabalhos Futuros}
+Com base nas limitações identificadas e nas oportunidades de aprimoramento, sugere-se a continuidade deste projeto através das seguintes linhas de pesquisa e desenvolvimento, visando expandir a robustez e a inteligência da solução:
+\begin{itemize}
+    \item \textbf{Automação Avançada da Extração de Dados PBEV:} Investigar o uso de técnicas de Processamento de Linguagem Natural (PLN) ou modelos de aprendizado de máquina para extrair dados de novas versões do PDF do PBEV de forma totalmente automatizada, minimizando a dependência de conversões manuais.
+    \item \textbf{Expansão da Base de Dados e Fontes Adicionais:} Integrar o sistema com outras APIs ou fontes de dados para veículos não cobertos pelo PBEV, ou para enriquecer com informações como histórico de manutenção, seguro, ou avaliações de proprietários.
+    \item \textbf{Aprimoramento da Inteligência Conversacional:} Integrar o assistente do WhatsApp com modelos de linguagem mais avançados (LLMs) para permitir interações mais naturais, complexas e contextuais, transformando-o em um verdadeiro consultor veicular.
+    \item \textbf{Implementação de Cache ou Banco de Dados Local para Preços:} Desenvolver um mecanismo de cache ou um pequeno banco de dados local para armazenar preços consultados frequentemente, reduzindo a latência e a dependência contínua de APIs externas.
+    \item \textbf{Desenvolvimento de um Sistema de Recomendação:} Utilizar os dados comparativos para desenvolver um sistema que sugira veículos com base nas preferências e prioridades do usuário (ex: "carro mais econômico para família", "veículo com menor emissão").
+    \item \textbf{Otimização e Escalabilidade:} Realizar testes de desempenho e otimização para garantir que o backend e as interfaces possam lidar com um volume maior de usuários e requisições, preparando a solução para um cenário de uso em larga escala.
+\end{itemize}
