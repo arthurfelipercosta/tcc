@@ -1,0 +1,89 @@
+\subsection{Estudo de Caso 1: O comprador focado em custo-benefício}
+
+\paragraph{Cenário e Objetivo do Usuário:} Neste estudo de caso, foi simulado o perfil de um jovem estudante que necessita de um veículo compacto e econômico para seu uso diário. Seu principal objetivo é encontrar um carro que ofereça o melhor custo-benefício a longo prazo, considerando não apenas o preço de aquisição, mas também a eficiência de consumo de combustível, visando reduzir seus gastos operacionais com o tempo. A prioridade é encontrar um equilíbrio entre um baixo investimento inicial e uma economia sustentável no dia a dia.
+
+\paragraph{Ferramenta escolhida e justificativa:} Para este objetivo, a \textbf{interface web} é a ferramenta mais indicada. A necessidade de comparar múltiplos modelos em pouco tempo, aplicar filtros detalhados e visualizar métricas lado a lado torna a experiência visual e interativa dessa interface superior ao bot de WhatsApp, que é mais adequado para consultas pontuais. A capacidade da interface web de apresentar dados tabulares facilita a análise comparativa complexa e a tomada de decisão.
+
+\paragraph{Execução do Estudo de Caso:}
+O processo de análise se inicia na tela principal do sistema (\textbf{Figura \ref{fig:tela_inicial}}), onde o usuário tem acesso aos filtros para os dois veículos que deseja comparar. Para refinar sua busca, o usuário primeiramente seleciona a categoria 'Compacto' nos filtros do Carro 1 (\textbf{Figura \ref{fig:sel_cat_1}}) e, em seguida, repete a ação para o Carro 2 (\textbf{Figura \ref{fig:sel_cat_2}}), garantindo que a comparação será feita entre veículos do mesmo segmento.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Imagens/fig_tela_inicial.png}
+    \caption{Tela inicial da interface web.}
+    \label{fig:tela_inicial}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Imagens/fig_sel_cat_1.png}
+    \caption{Selecionando a categoria do carro 1.}
+    \label{fig:sel_cat_1}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Imagens/fig_sel_cat_2.png}
+    \caption{Selecionando a categoria do carro 2.}
+    \label{fig:sel_cat_2}
+\end{figure}
+
+Com a categoria definida, a lista de carros encontrados é atualizada dinamicamente. O usuário então prossegue para a seleção das marcas, escolhendo 'FIAT' para o primeiro veículo (\textbf{Figura \ref{fig:sel_marca_1}}) e 'HYUNDAI' para o segundo (\textbf{Figura \ref{fig:sel_marca_2}}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Imagens/fig_sel_marca_1.png}
+    \caption{Selecionando a marca do carro 1.}
+    \label{fig:sel_marca_1}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Imagens/fig_sel_marca_2.png}
+    \caption{Selecionando a marca do carro 2.}
+    \label{fig:sel_marca_2}
+\end{figure}
+
+A seguir, o usuário seleciona o modelo 'FIAT ARGO' na lista da esquerda (\textbf{Figura \ref{fig:sel_car_1}}), o que faz o sistema exibir as versões disponíveis para este modelo. A versão '1.0 / M-5' é então selecionada (\textbf{Figura \ref{fig:sel_ver_1}}), esse código quer dizer que o carro é 1.0 e tem marcha manual de 5 velocidades. O mesmo procedimento é realizado para o segundo carro: o modelo 'HYUNDAI HB20' é escolhido na lista da direita (\textbf{Figura \ref{fig:sel_car_2}}), e subsequentemente a sua versão 'Comfort / M-5' é selecionada (\textbf{Figura \ref{fig:sel_ver_2}}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Imagens/fig_sel_car_1.png}
+    \caption{Selecionando o carro 1.}
+    \label{fig:sel_car_1}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Imagens/fig_sel_ver_1.png}
+    \caption{Selecionando a versão do carro 1.}
+    \label{fig:sel_ver_1}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Imagens/fig_sel_car_2.png}
+    \caption{Selecionando o carro 2.}
+    \label{fig:sel_car_2}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Imagens/fig_sel_ver_2.png}
+    \caption{Selecionando a versão do carro 2.}
+    \label{fig:sel_ver_2}
+\end{figure}
+
+Uma vez que ambos os veículos e suas respectivas versões foram definidos, a interface preenche automaticamente a tabela de comparação detalhada (\textbf{Figura \ref{fig:comparativo}}). Nela, são exibidos lado a lado todos os atributos técnicos provenientes da base do PBEV, como motor, transmissão, consumo e emissões, além do preço de mercado consultado via API.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Imagens/fig_comparativo.png}
+    \caption{Comparativo entre os carros escolhidos.}
+    \label{fig:comparativo}
+\end{figure}
+
+Finalmente, para auxiliar na interpretação dos dados, o sistema gera o 'Resumo Comparativo' (\textbf{Figura \ref{fig:resumo}}). Esta funcionalidade traduz os dados numéricos em sentenças claras e diretas, destacando qual veículo é superior em cada critério principal, como preço, emissões e eficiência energética, consolidando a análise para uma tomada de decisão rápida e informada.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Imagens/fig_resumo.png}
+    \caption{Resumo comparativo gerado pelo sistema.}
+    \label{fig:resumo}
+\end{figure}
+
+\paragraph{Conclusão do Estudo de Caso:} Este estudo de caso demonstra como a interface web do sistema capacita um comprador focado em custo-benefício a realizar uma pesquisa eficiente e abrangente. Ao centralizar dados de múltiplas fontes, oferecer filtros intuitivos e visualizações comparativas detalhadas, o sistema simplifica um processo que seria demorado e complexo manualmente. O usuário consegue rapidamente identificar os veículos que não apenas se encaixam em seu orçamento inicial, mas que também prometem maior economia de combustível, resultando em uma decisão de compra mais consciente e alinhada às suas necessidades financeiras.
