@@ -53,11 +53,31 @@ let colunas = [];
     Selo CONPET de Eficiência Energética
 */
 const camposComparacao = [
-    'Categoria', 'Marca', 'Modelo', 'Versão', 'Motor', 'Tipo de Propulsão', 'Transmissão',
-    'Ar Condicionado', 'Direção Assistida', 'Combustível', 'Poluentes(NMOG+NOx [mg/km])',
-    'Poluentes(CO [mg/km])', 'Poluentes(CHO [mg/km])', 'Redução Relativa ao Limite',
-    'Consumo Energético', 'Classificação PBE (Comparação Relativa)',
-    'Classificação PBE (Absoluta na Categoria)', 'Selo CONPET de Eficiência Energética'
+    'Categoria',
+    'Marca',
+    'Modelo',
+    'Versão',
+    'Motor',
+    'Tipo de Propulsão',
+    'Transmissão',
+    'Ar Condicionado',
+    'Direção Assistida',
+    'Combustível',
+    'Poluentes(NMOG+NOx [mg/km])',
+    'Poluentes(CO [mg/km])',
+    'Poluentes(CHO [mg/km])',
+    'Redução Relativa ao Limite',
+    'Consumo Energético',
+    'Km - (Etanol[Cidade][km/l])',
+    'Km - (Etanol[Estrada][km/l])',
+    'Km - (Gasolina ou Diesel[Cidade][km/l])',
+    'Km - (Gasolina ou Diesel[Estrada][km/l])',
+    'Km - (Elétrico quando VE ou VEHP [Cidade][km/le])',
+    'Km - (Elétrico quando VE ou VEHP [Estrada][km/le])',
+    'Autonomia modo Elétrico',
+    'Classificação PBE (Comparação Relativa)',
+    'Classificação PBE (Absoluta na Categoria)',
+    'Selo CONPET de Eficiência Energética'
 
     // Adicione ou retirar campos conforme desejar
 ];
@@ -72,6 +92,13 @@ const legendasCampos = {
     'Poluentes(CHO [mg/km])': 'Poluentes (CHO [mg/km]):\nCHO = Hidrocarbonetos oxigenados\n(formaldeído e outros compostos orgânicos voláteis)\n[mg/km = miligramas por quilômetro]',
     'Redução Relativa ao Limite': 'Redução Relativa ao Limite:\nIndica o quanto abaixo do limite legal o veículo está.',
     'Consumo Energético': 'Consumo Energético:\nConsumo de energia total do veículo',
+    'Km - (Etanol[Cidade][km/l])': 'Consumo de combustível na cidade utilizando Etanol (quilômetros por litro)',
+    'Km - (Etanol[Estrada][km/l])': 'Consumo de combustível na estrada utilizando Etanol (quilômetros por litro)',
+    'Km - (Gasolina ou Diesel[Cidade][km/l])': 'Consumo de combustível na cidade utilizando Gasolina ou Diesel (quilômetros por litro)',
+    'Km - (Gasolina ou Diesel[Estrada][km/l])': 'Consumo de combustível na estrada utilizando Gasolina ou Diesel (quilômetros por litro)',
+    'Km - (Elétrico quando VE ou VEHP [Cidade][km/le])': 'Consumo de energia na cidade para veículos elétricos (quilômetros por litro equivalente)',
+    'Km - (Elétrico quando VE ou VEHP [Estrada][km/le])': 'Consumo de energia na estrada para veículos elétricos (quilômetros por litro equivalente)',
+    'Autonomia modo Elétrico': 'Autonomia declarada para o modo 100% elétrico (em quilômetros)',
     'Classificação PBE (Comparação Relativa)': 'Comparação do veículo com outros modelos (independente da categoria)',
     'Classificação PBE (Absoluta na Categoria)': 'Comparação do veículo com outros modelos (dentro da sua categoria)',
     'Selo CONPET de Eficiência Energética': 'Selo emitido pela Petrobras/Minas e Energia que reconhece veículos com alto desempenho energético'
@@ -818,6 +845,118 @@ function montarTabelaComparativa(campos, v1, v2) {
             }
         }
 
+        // Critério para comparar consumo de etanol na cidade em km/l entre os carros selecionados
+        if (campo === 'Km - (Etanol[Cidade][km/l])') {
+            // Converte para números, removendo caracteres não numéricos
+            let valor1Num = parseFloat(valor1.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+            let valor2Num = parseFloat(valor2.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+
+            if (isNaN(valor1Num)) { valor1Num = 1000; }
+            if (isNaN(valor2Num)) { valor2Num = 1000; }
+            // Verifica se os valores são números válidos
+            if (!isNaN(valor1Num) && !isNaN(valor2Num)) {
+                if (valor1Num > valor2Num) return 1;        // auto1 é melhor (menos consumo)
+                else if (valor1Num < valor2Num) return -1;  // auto2 é melhor (menos consumo)
+                return 0;                                   // empate
+            }
+        }
+
+        // Critério para comparar consumo de etanol na estrada em km/l entre os carros selecionados
+        if (campo === 'Km - (Etanol[Estrada][km/l])') {
+            // Converte para números, removendo caracteres não numéricos
+            let valor1Num = parseFloat(valor1.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+            let valor2Num = parseFloat(valor2.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+
+            if (isNaN(valor1Num)) { valor1Num = 1000; }
+            if (isNaN(valor2Num)) { valor2Num = 1000; }
+            // Verifica se os valores são números válidos
+            if (!isNaN(valor1Num) && !isNaN(valor2Num)) {
+                if (valor1Num > valor2Num) return 1;        // auto1 é melhor (menos consumo)
+                else if (valor1Num < valor2Num) return -1;  // auto2 é melhor (menos consumo)
+                return 0;                                   // empate
+            }
+        }
+
+        // Critério para comparar consumo de gasolina ou diesel na cidade em km/l entre os carros selecionados
+        if (campo === 'Km - (Gasolina ou Diesel[Cidade][km/l])') {
+            // Converte para números, removendo caracteres não numéricos
+            let valor1Num = parseFloat(valor1.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+            let valor2Num = parseFloat(valor2.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+
+            if (isNaN(valor1Num)) { valor1Num = 1000; }
+            if (isNaN(valor2Num)) { valor2Num = 1000; }
+            // Verifica se os valores são números válidos
+            if (!isNaN(valor1Num) && !isNaN(valor2Num)) {
+                if (valor1Num > valor2Num) return 1;        // auto1 é melhor (menos consumo)
+                else if (valor1Num < valor2Num) return -1;  // auto2 é melhor (menos consumo)
+                return 0;                                   // empate
+            }
+        }
+
+        // Critério para comparar consumo de gasolina ou diesel na estrada em km/l entre os carros selecionados
+        if (campo === 'Km - (Gasolina ou Diesel[Estrada][km/l])') {
+            // Converte para números, removendo caracteres não numéricos
+            let valor1Num = parseFloat(valor1.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+            let valor2Num = parseFloat(valor2.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+
+            if (isNaN(valor1Num)) { valor1Num = 1000; }
+            if (isNaN(valor2Num)) { valor2Num = 1000; }
+            // Verifica se os valores são números válidos
+            if (!isNaN(valor1Num) && !isNaN(valor2Num)) {
+                if (valor1Num > valor2Num) return 1;        // auto1 é melhor (menos consumo)
+                else if (valor1Num < valor2Num) return -1;  // auto2 é melhor (menos consumo)
+                return 0;                                   // empate
+            }
+        }
+
+        // Critério para comparar consumo de bateria do carro elétrico na cidade em km/l entre os carros selecionados
+        if (campo === 'Km - (Elétrico quando VE ou VEHP [Cidade][km/le])') {
+            // Converte para números, removendo caracteres não numéricos
+            let valor1Num = parseFloat(valor1.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+            let valor2Num = parseFloat(valor2.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+
+            if (isNaN(valor1Num)) { valor1Num = 1000; }
+            if (isNaN(valor2Num)) { valor2Num = 1000; }
+            // Verifica se os valores são números válidos
+            if (!isNaN(valor1Num) && !isNaN(valor2Num)) {
+                if (valor1Num > valor2Num) return 1;        // auto1 é melhor (menos consumo)
+                else if (valor1Num < valor2Num) return -1;  // auto2 é melhor (menos consumo)
+                return 0;                                   // empate
+            }
+        }
+
+        // Critério para comparar consumo de bateria do carro elétrico na estrada em km/l entre os carros selecionados
+        if (campo === 'Km - (Elétrico quando VE ou VEHP [Estrada][km/le])') {
+            // Converte para números, removendo caracteres não numéricos
+            let valor1Num = parseFloat(valor1.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+            let valor2Num = parseFloat(valor2.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+
+            if (isNaN(valor1Num)) { valor1Num = 1000; }
+            if (isNaN(valor2Num)) { valor2Num = 1000; }
+            // Verifica se os valores são números válidos
+            if (!isNaN(valor1Num) && !isNaN(valor2Num)) {
+                if (valor1Num > valor2Num) return 1;        // auto1 é melhor (menos consumo)
+                else if (valor1Num < valor2Num) return -1;  // auto2 é melhor (menos consumo)
+                return 0;                                   // empate
+            }
+        }
+
+        // Critério para comparar autonomia do carro elétrico em km/l entre os carros selecionados
+        if (campo === 'Autonomia modo Elétrico') {
+            // Converte para números, removendo caracteres não numéricos
+            let valor1Num = parseFloat(valor1.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+            let valor2Num = parseFloat(valor2.toString().replace(/[^\d.,]/g, '').replace(',', '.'));
+
+            if (isNaN(valor1Num)) { valor1Num = 1000; }
+            if (isNaN(valor2Num)) { valor2Num = 1000; }
+            // Verifica se os valores são números válidos
+            if (!isNaN(valor1Num) && !isNaN(valor2Num)) {
+                if (valor1Num > valor2Num) return 1;        // auto1 é melhor (menos consumo)
+                else if (valor1Num < valor2Num) return -1;  // auto2 é melhor (menos consumo)
+                return 0;                                   // empate
+            }
+        }
+
         if (campo === 'Selo CONPET de Eficiência Energética') {
             const ordemCONPET = ['SIM', 'NÃO'];
             const v1 = ordemCONPET.indexOf(valor1.trim().toUpperCase());
@@ -1156,7 +1295,7 @@ function gerarResumo(v1, v2) {
         { key: 'Poluentes(CO [mg/km])', label: 'CO' },
         { key: 'Poluentes(CHO [mg/km])', label: 'CHO' }
     ];
-    
+
     // Itera sobre cada tipo de poluente e compara os valores
     polCampos.forEach(pc => {
         const a = parseNum(v1[pc.key]);
@@ -1182,10 +1321,126 @@ function gerarResumo(v1, v2) {
         }
     }
 
+    // === COMPARAÇÃO DE EFICIÊNCIA DE COMBUSTÍVEL (KM/L e KM/LE) E AUTONOMIA ELÉTRICA ===
+    const isV1Eletrico = v1 && (v1['Tipo de Propulsão'] === 'Elétrico' || v1['Combustível'] === 'E');
+    const isV2Eletrico = v2 && (v2['Tipo de Propulsão'] === 'Elétrico' || v2['Combustível'] === 'E');
+
+    // Funções auxiliares para buscar os valores de km/l ou km/le
+    const getKmVal = (carro, tipoCombustivel, ciclo) => {
+        const campo = `Km - (${tipoCombustivel}[${ciclo}][km/l])`;
+        const val = parseNum(carro[campo]);
+        return isNaN(val) ? 0 : val; // Retorna 0 se NaN para facilitar as comparações subsequentes
+    };
+
+    const getKmLeVal = (carro, ciclo) => {
+        const campo = `Km - (Elétrico quando VE ou VEHP [${ciclo}][km/le])`;
+        const val = parseNum(carro[campo]);
+        return isNaN(val) ? 0 : val;
+    };
+
+    const getAutonomiaVal = (carro) => {
+        const campo = 'Autonomia modo Elétrico';
+        const val = parseNum(carro[campo]);
+        return isNaN(val) ? 0 : val;
+    };
+
+    // Se ambos são elétricos
+    if (isV1Eletrico && isV2Eletrico) {
+        const kme1C = getKmLeVal(v1, 'Cidade');
+        const kme2C = getKmLeVal(v2, 'Cidade');
+        const kme1E = getKmLeVal(v1, 'Estrada');
+        const kme2E = getKmLeVal(v2, 'Estrada');
+        const aut1 = getAutonomiaVal(v1);
+        const aut2 = getAutonomiaVal(v2);
+
+        if (kme1C > 0 && kme2C > 0) {
+            if (kme1C > kme2C) frases.push(`${nome1} tem melhor eficiência elétrica na cidade (${kme1C} km/le) que ${nome2} (${kme2C} km/le).`);
+            else if (kme2C > kme1C) frases.push(`${nome2} tem melhor eficiência elétrica na cidade (${kme2C} km/le) que ${nome1} (${kme1C} km/le).`);
+        }
+        if (kme1E > 0 && kme2E > 0) {
+            if (kme1E > kme2E) frases.push(`${nome1} tem melhor eficiência elétrica na estrada (${kme1E} km/le) que ${nome2} (${kme2E} km/le).`);
+            else if (kme2E > kme1E) frases.push(`${nome2} tem melhor eficiência elétrica na estrada (${kme2E} km/le) que ${nome1} (${kme1E} km/le).`);
+        }
+        if (aut1 > 0 && aut2 > 0) {
+            if (aut1 > aut2) frases.push(`${nome1} tem maior autonomia elétrica (${aut1} km) que ${nome2} (${aut2} km).`);
+            else if (aut2 > aut1) frases.push(`${nome2} tem maior autonomia elétrica (${aut2} km) que ${nome1} (${aut1} km).`);
+        }
+    }
+    // Se ambos são a combustão (ou flex)
+    else if (!isV1Eletrico && !isV2Eletrico && v1 && v2) {
+        // Compara Etanol
+        const ke1C_et = getKmVal(v1, 'Etanol', 'Cidade');
+        const ke2C_et = getKmVal(v2, 'Etanol', 'Cidade');
+        const ke1E_et = getKmVal(v1, 'Etanol', 'Estrada');
+        const ke2E_et = getKmVal(v2, 'Etanol', 'Estrada');
+
+        if (ke1C_et > 0 && ke2C_et > 0) {
+            if (ke1C_et > ke2C_et) frases.push(`${nome1} consome menos Etanol na cidade (${ke1C_et} km/l) que ${nome2} (${ke2C_et} km/l).`);
+            else if (ke2C_et > ke1C_et) frases.push(`${nome2} consome menos Etanol na cidade (${ke2C_et} km/l) que ${nome1} (${ke1C_et} km/l).`);
+        }
+        if (ke1E_et > 0 && ke2E_et > 0) {
+            if (ke1E_et > ke2E_et) frases.push(`${nome1} consome menos Etanol na estrada (${ke1E_et} km/l) que ${nome2} (${ke2E_et} km/l).`);
+            else if (ke2E_et > ke1E_et) frases.push(`${nome2} consome menos Etanol na estrada (${ke2E_et} km/l) que ${nome1} (${ke1E_et} km/l).`);
+        }
+
+        // Compara Gasolina
+        const kg1C_gas = getKmVal(v1, 'Gasolina ou Diesel', 'Cidade');
+        const kg2C_gas = getKmVal(v2, 'Gasolina ou Diesel', 'Cidade');
+        const kg1E_gas = getKmVal(v1, 'Gasolina ou Diesel', 'Estrada');
+        const kg2E_gas = getKmVal(v2, 'Gasolina ou Diesel', 'Estrada');
+
+        if (kg1C_gas > 0 && kg2C_gas > 0) {
+            if (kg1C_gas > kg2C_gas) frases.push(`${nome1} consome menos Gasolina/Diesel na cidade (${kg1C_gas} km/l) que ${nome2} (${kg2C_gas} km/l).`);
+            else if (kg2C_gas > kg1C_gas) frases.push(`${nome2} consome menos Gasolina/Diesel na cidade (${kg2C_gas} km/l) que ${nome1} (${kg1C_gas} km/l).`);
+        }
+        if (kg1E_gas > 0 && kg2E_gas > 0) {
+            if (kg1E_gas > kg2E_gas) frases.push(`${nome1} consome menos Gasolina/Diesel na estrada (${kg1E_gas} km/l) que ${nome2} (${kg2E_gas} km/l).`);
+            else if (kg2E_gas > kg1E_gas) frases.push(`${nome2} consome menos Gasolina/Diesel na estrada (${kg2E_gas} km/l) que ${nome1} (${kg1E_gas} km/l).`);
+        }
+    }
+    // Se um é elétrico e o outro não (descrição individual)
+    else if (v1 && v2) { // Garante que ambos os veículos estão selecionados para este bloco
+        if (isV1Eletrico) {
+            const kme1C = getKmLeVal(v1, 'Cidade');
+            const kme1E = getKmLeVal(v1, 'Estrada');
+            const aut1 = getAutonomiaVal(v1);
+            if (kme1C > 0) frases.push(`${nome1} (elétrico) faz ${kme1C} km/le na cidade.`);
+            if (kme1E > 0) frases.push(`${nome1} (elétrico) faz ${kme1E} km/le na estrada.`);
+            if (aut1 > 0) frases.push(`${nome1} (elétrico) tem autonomia de ${aut1} km.`);
+        } else {
+            const ke1C_et = getKmVal(v1, 'Etanol', 'Cidade');
+            const ke1E_et = getKmVal(v1, 'Etanol', 'Estrada');
+            const kg1C_gas = getKmVal(v1, 'Gasolina ou Diesel', 'Cidade');
+            const kg1E_gas = getKmVal(v1, 'Gasolina ou Diesel', 'Estrada');
+            if (ke1C_et > 0) frases.push(`${nome1} (combustão) faz ${ke1C_et} km/l com Etanol na cidade.`);
+            if (ke1E_et > 0) frases.push(`${nome1} (combustão) faz ${ke1E_et} km/l com Etanol na estrada.`);
+            if (kg1C_gas > 0) frases.push(`${nome1} (combustão) faz ${kg1C_gas} km/l com Gasolina/Diesel na cidade.`);
+            if (kg1E_gas > 0) frases.push(`${nome1} (combustão) faz ${kg1E_gas} km/l com Gasolina/Diesel na estrada.`);
+        }
+
+        if (isV2Eletrico) {
+            const kme2C = getKmLeVal(v2, 'Cidade');
+            const kme2E = getKmLeVal(v2, 'Estrada');
+            const aut2 = getAutonomiaVal(v2);
+            if (kme2C > 0) frases.push(`${nome2} (elétrico) faz ${kme2C} km/le na cidade.`);
+            if (kme2E > 0) frases.push(`${nome2} (elétrico) faz ${kme2E} km/le na estrada.`);
+            if (aut2 > 0) frases.push(`${nome2} (elétrico) tem autonomia de ${aut2} km.`);
+        } else {
+            const ke2C_et = getKmVal(v2, 'Etanol', 'Cidade');
+            const ke2E_et = getKmVal(v2, 'Etanol', 'Estrada');
+            const kg2C_gas = getKmVal(v2, 'Gasolina ou Diesel', 'Cidade');
+            const kg2E_gas = getKmVal(v2, 'Gasolina ou Diesel', 'Estrada');
+            if (ke2C_et > 0) frases.push(`${nome2} (combustão) faz ${ke2C_et} km/l com Etanol na cidade.`);
+            if (ke2E_et > 0) frases.push(`${nome2} (combustão) faz ${ke2E_et} km/l com Etanol na estrada.`);
+            if (kg2C_gas > 0) frases.push(`${nome2} (combustão) faz ${kg2C_gas} km/l com Gasolina/Diesel na cidade.`);
+            if (kg2E_gas > 0) frases.push(`${nome2} (combustão) faz ${kg2E_gas} km/l com Gasolina/Diesel na estrada.`);
+        }
+    }
+
     // === COMPARAÇÃO DE CLASSIFICAÇÕES PBE ===
     // Ordem: A (melhor) > B > C > D > E (pior)
     const ordemPBE = ['A', 'B', 'C', 'D', 'E'];
-    
+
     /**
      * Função auxiliar para comparar classificações PBE.
      * 
@@ -1197,7 +1452,7 @@ function gerarResumo(v1, v2) {
         const b = (v2[campo] || '').toString().trim().toUpperCase();
         const ia = ordemPBE.indexOf(a);
         const ib = ordemPBE.indexOf(b);
-        
+
         if (ia !== -1 && ib !== -1 && a && b) {
             if (ia < ib) {
                 frases.push(`${nome1} tem melhor ${rotulo} (${a}) que ${nome2} (${b}).`);
@@ -1206,7 +1461,7 @@ function gerarResumo(v1, v2) {
             }
         }
     };
-    
+
     // Compara PBE relativa e absoluta
     compPBE('Classificação PBE (Comparação Relativa)', 'Classificação PBE relativa');
     compPBE('Classificação PBE (Absoluta na Categoria)', 'Classificação PBE na categoria');
@@ -1219,7 +1474,7 @@ function gerarResumo(v1, v2) {
     const cb = (v2['Combustível'] || '').toString().trim().toUpperCase();
     const ia = ordemComb.indexOf(ca);
     const ib = ordemComb.indexOf(cb);
-    
+
     if (ia !== -1 && ib !== -1) {
         if (ia < ib) {
             frases.push(`${nome1} usa combustível potencialmente menos poluente (${ca}) que ${nome2} (${cb}).`);
@@ -1238,7 +1493,7 @@ function gerarResumo(v1, v2) {
     const tb = (v2['Transmissão'] || '').toString().trim();
     const ita = ordemTransm.indexOf(ta);
     const itb = ordemTransm.indexOf(tb);
-    
+
     if (ita !== -1 && itb !== -1) {
         if (ita < itb) {
             frases.push(`${nome1} tem transmissão mais moderna (${ta}) que ${nome2} (${tb}).`);
