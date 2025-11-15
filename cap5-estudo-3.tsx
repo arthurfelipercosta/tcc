@@ -1,14 +1,35 @@
-\subsection{Estudo de Caso 3: A família em dúvida entre dois modelos}
+\subsubsection{Estudo de Caso 3: Decisão Familiar entre Modelos Versáteis}
+Este estudo de caso simula a situação de uma família, composta por um casal e dois filhos, que busca um novo veículo para uso diário e viagens ocasionais. Suas prioridades incluem segurança, espaço interno adequado para a família e bagagem, boa economia de combustível e um nível razoável de tecnologia e conforto, tudo dentro de uma faixa de preço acessível para um veículo seminovo ou de entrada. Após uma pesquisa inicial, eles se encontram indecisos entre dois modelos populares no mercado que se encaixam em suas necessidades gerais: o Chevrolet Tracker e o Hyundai Creta. A dificuldade reside em comparar objetivamente as características de cada um, que muitas vezes são apresentadas de forma dispersa em diferentes fontes, dificultando uma tomada de decisão eficiente.
 
-\paragraph{Cenário e Objetivo do Usuário:} Este estudo de caso aborda uma situação comum: uma família, ou um casal com filhos, que está indecisa entre dois modelos de veículos semelhantes, mas com características distintas, como dois sedans populares (ex: Toyota Corolla e Honda Civic). O objetivo é realizar uma comparação exaustiva e detalhada para identificar qual veículo se alinha melhor às suas prioridades, que podem incluir consumo, desempenho, emissões e outros atributos técnicos, buscando uma decisão de compra bem informada e sem arrependimentos.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Imagens/fig_caso_3_carros.png}
+    \caption{Seleção inicial do Chevrolet Tracker e Hyundai Creta.}
+    \label{fig:caso3_versoes_iniciais}
+\end{figure}
 
-\paragraph{Ferramenta Escolhida e Justificativa:} Para uma análise comparativa tão abrangente e aprofundada, a \textbf{interface web} é, sem dúvida, a ferramenta mais adequada e poderosa. Diferente do bot de WhatsApp, que prioriza a agilidade em consultas pontuais, a interface web oferece a capacidade de visualizar tabelas detalhadas com múltiplos atributos lado a lado, aplicar e desaplicar filtros de comparação e, crucialmente, consumir o resumo em linguagem natural gerado pelo sistema para uma interpretação qualitativa dos dados. A riqueza visual e interativa da web é indispensável para este nível de detalhe na tomada de decisão.
+O sistema desenvolvido foi utilizado para auxiliar a família nessa decisão. Inicialmente, foram inseridos os dados dos dois modelos em versões equivalentes de entrada (por exemplo, Tracker \textbf{TA/A-6} e \textbf{Creta Comfort/A-6}), permitindo uma visualização lado a lado de suas especificações técnicas, dados de consumo do PBEV (Programa Brasileiro de Etiquetagem Veicular). A interface intuitiva do sistema facilitou a comparação direta de métricas como o consumo energético, a autonomia (km/l), o preço (puxado da FIPE API), o tipo de combustível e os principais poluentes. Adicionalmente, o resumo inteligente gerado pela integração com a API da OpenAI sintetizou as principais vantagens e desvantagens de cada modelo, traduzindo dados técnicos complexos em insights de fácil compreensão para a família.
 
-\paragraph{Execução do Estudo de Caso:}
-O usuário inicia a exploração na interface web. Como a família já tem dois modelos específicos em mente, eles podem ir diretamente à seleção. Para o 'Carro 1', a marca 'TOYOTA' é escolhida, seguida do modelo 'COROLLA' e de uma versão específica. De forma análoga, para o 'Carro 2', a marca 'HONDA' é selecionada, o modelo 'CIVIC' e sua respectiva versão. Esse processo de seleção é intuitivo e permite que os usuários foquem nos modelos de seu interesse sem a necessidade de navegar por muitos filtros iniciais (o fluxo seria similar ao ilustrado nas Figuras \ref{fig:sel_marca_1} a \ref{fig:sel_ver_2}, adaptado para os modelos Corolla e Civic).
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Imagens/fig_caso_3_comparativo.png}
+    \caption{Tabela comparativa entre Chevrolet Tracker e Hyundai Creta.}
+    \label{fig:caso3_comparativo}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Imagens/fig_caso_3_resumo.png}
+    \caption{Resumo comparativo gerado pela IA para os modelos iniciais.}
+    \label{fig:caso3_resumo}
+\end{figure}
 
-Após a seleção dos dois veículos, o sistema automaticamente gera e exibe uma \textbf{tabela de comparação detalhada} (Figura \ref{fig:comparativo}). Esta tabela é o cerne da análise para este estudo de caso, pois apresenta uma vasta gama de atributos lado a lado: desde especificações de motor e transmissão, até métricas cruciais como consumo de combustível (cidade/estrada, etanol/gasolina), níveis de poluentes (NMOG+NOx, CO, CHO), emissões de Gás Efeito Estufa (GEE) e classificações de eficiência energética do PBEV. A visualização simultânea dessas informações permite que a família avalie rapidamente os prós e contras de cada modelo em relação aos seus critérios específicos.
+\paragraph{Transição para Análise de Versões Específicas:} A partir da comparação inicial entre o Chevrolet Tracker e o Hyundai Creta, a família pôde identificar o modelo que melhor se alinhava às suas prioridades gerais. Contudo, o sistema oferece um nível de detalhe ainda maior, permitindo que, uma vez decidido o modelo principal (por exemplo, o Chevrolet Tracker), a família possa comparar entre diferentes versões disponíveis (ex: Tracker \textbf{TA/A-6} vs. Tracker \textbf{12TARS/A-6}). Essa funcionalidade é crucial, pois as nuances em motorização e eficiência energética entre versões de um mesmo veículo podem ser tão significativas quanto as diferenças entre modelos distintos, impactando diretamente o custo-benefício e a adequação às expectativas específicas da família.
 
-Para enriquecer ainda mais a decisão, o sistema então apresenta o \textbf{resumo comparativo em linguagem natural} (Figura \ref{fig:resumo}). Esta funcionalidade, alimentada por dados estruturados e potencialmente por modelos de linguagem (IA), condensa as complexas informações da tabela em uma narrativa fácil de entender. O resumo aponta de forma objetiva qual veículo se destaca em cada métrica relevante (ex: "O Toyota Corolla apresenta um consumo ligeiramente melhor na estrada, enquanto o Honda Civic possui menores emissões de CO2"). Esta "tradução" dos dados técnicos para uma linguagem mais acessível é um diferencial fundamental para famílias que não são especialistas em especificações veiculares.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Imagens/fig_caso_3_mesmo_carro.png}
+    \caption{Comparação entre diferentes versões do mesmo modelo (Chevrolet Tracker).}
+    \label{fig:caso3_mesmo_carro}
+\end{figure}
 
-\paragraph{Conclusão do Estudo de Caso:} Este estudo de caso evidencia o poder da interface web em suportar decisões de compra de veículos que exigem uma análise aprofundada e multifacetada. A capacidade de comparar lado a lado uma vasta quantidade de dados técnicos e ambientais, aliada à funcionalidade de um resumo inteligente em linguagem natural, transforma o processo complexo de escolha entre dois modelos em uma experiência clara e eficiente. O sistema não apenas organiza as informações, mas também as interpreta, capacitando a família a tomar uma decisão consciente e alinhada às suas necessidades e valores, indo além da simples apresentação de dados brutos.
+\paragraph{Conclusão do Estudo de Caso:} Este estudo de caso ilustra a capacidade da ferramenta em apoiar famílias na complexa jornada de escolha veicular. Indo além de uma comparação superficial, o sistema permite uma análise aprofundada que começa na seleção entre modelos versáteis e se estende à minuciosa avaliação de suas respectivas versões. A combinação da visualização detalhada de dados técnicos e ambientais com resumos inteligentes e customizáveis capacita os usuários a discernir as sutilezas entre as opções, garantindo uma decisão que não apenas atenda às necessidades práticas, mas também otimize o investimento e se alinhe com as expectativas de longo prazo da família.
