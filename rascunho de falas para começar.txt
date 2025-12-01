@@ -1,0 +1,7 @@
+Com o cenário atual de crescente digitalização e de dados disponíveis no mercado, surgem diariamente novos desafios e oportunidades, o setor automotivo é um desses segmentos.
+
+Onde a busca por veículos que atendam critérios específicos de cada comprador, seja do mais comum até o mais profissional, ainda pode ser um processo demorado e ineficiente, pois a coleta, comparação e monitoramento dessas informações ainda é feita de forma manual e demanda muito tempo e recursos, o que limita a tomada de decisão.
+
+Inicialmente eu planejava fazer uma extração com web scrapping no site do webmotors, porém restrições impostas pelo próprio site inviabilizou essa abordagem, diante desse cenário, viu-se a necessidade de buscar uma fonte estável e confiável de dados, que foi encontrada na FIPE API criada por Deivid Fortuna, disponibilizada gratuitamente no seu github.
+
+Este trabalho tem como objetivo final criar uma solução prática para minimizar esse tempo de pesquisa e 

@@ -1,0 +1,15 @@
+- Detalhar mais o fluxo N8N
+- Mais gráfico, análise mais quantitativa da solução
+- Falar mais diretamente com o usuário leigo
+- Revisão para erros de concordância
+- Colocar referência no padrão ABNT (retirar números)
+- Gráficos comparativos poderiam melhorar os dados
+- Arquitetura, fazer o gráfico melhor
+- Melhorar a parte de inteligência
+- Retirar muitos negritos
+
+- Colocar parágrafos e retirar itens e negritos desnecessários, deixar mais em texto corrido
+
+- Evitar frases muito fortes (Ex: APIs são espinha dorsal das aplicações modernas)
+- Usar referências na introdução
+- Colocar métricas de tempo de execução
