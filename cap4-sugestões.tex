@@ -1,0 +1,14 @@
+linhas 23~29
+original:
+\begin{itemize}
+    \item \textbf{Fontes de Dados Externas:} Incluem o dataset do PBEV (convertido de PDF para CSV) e a FIPE API.
+    \item \textbf{Processamento de Dados:} O \textit{Jupyter Notebook} (\textit{fix.ipynb}) e a biblioteca Pandas são responsáveis pela limpeza e padronização do dataset PBEV.
+    \item \textbf{Backend (API Python):} Implementado com Flask (\textit{api.py}), serve como um ponto de acesso central para os dados processados e para a integração com a FIPE API.
+    \item \textbf{Frontend Web:} Uma aplicação baseada em HTML, CSS e JavaScript (\textit{index.html}, \textit{styles.css}, \textit{script.js}) que consome a API Flask para permitir a consulta e comparação visual de veículos.
+    \item \textbf{Bot WhatsApp (N8N/Twilio):} Utiliza a plataforma N8N e a API do Twilio (\textit{n8n\_bot.py}) para gerenciar as interações com os usuários via WhatsApp, fazendo requisições à API Flask.
+\end{itemize}
+
+sugestão:
+// ... existentes
+Os principais componentes desta arquitetura são as fontes de dados externas, que incluem o dataset do PBEV e a FIPE API. A camada de processamento de dados, operada pelo Jupyter Notebook (\textit{fix.ipynb}) com a biblioteca Pandas, é responsável pela limpeza e padronização. O backend, implementado com Flask (\textit{api.py}), serve como ponto de acesso central aos dados. Por fim, as interfaces com o usuário são compostas por um frontend web (HTML, CSS, JavaScript) e um bot para WhatsApp, que utiliza N8N e Twilio para gerenciar as interações.
+// ... existentes
