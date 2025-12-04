@@ -1,0 +1,68 @@
+<svg width="782pt" height="115pt" viewBox="0.00 0.00 782.00 115.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 111)">
+<title>G</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-111 778.43,-111 778.43,4 -4,4"/>
+<g id="clust1" class="cluster">
+<title>cluster_usuario</title>
+<polygon fill="white" stroke="black" points="8,-8 8,-60 120.91,-60 120.91,-8 8,-8"/>
+</g>
+<g id="clust2" class="cluster">
+<title>cluster_frontend</title>
+<polygon fill="#ffe6e6" stroke="black" points="249.85,-16 249.85,-99 410.21,-99 410.21,-16 249.85,-16"/>
+<text xml:space="preserve" text-anchor="middle" x="330.03" y="-82.4" font-family="Times,serif" font-size="14.00">Interface Web (Frontend)</text>
+</g>
+<g id="clust3" class="cluster">
+<title>cluster_backend</title>
+<polygon fill="#fff0e6" stroke="black" points="567.92,-8 567.92,-85 766.43,-85 766.43,-8 567.92,-8"/>
+<text xml:space="preserve" text-anchor="middle" x="667.17" y="-68.4" font-family="Times,serif" font-size="14.00">Backend API</text>
+</g>
+<!-- usuario_web -->
+<g id="node1" class="node">
+<title>usuario_web</title>
+<path fill="none" stroke="black" d="M100.91,-52C100.91,-52 28,-52 28,-52 22,-52 16,-46 16,-40 16,-40 16,-28 16,-28 16,-22 22,-16 28,-16 28,-16 100.91,-16 100.91,-16 106.91,-16 112.91,-22 112.91,-28 112.91,-28 112.91,-40 112.91,-40 112.91,-46 106.91,-52 100.91,-52"/>
+<text xml:space="preserve" text-anchor="middle" x="64.46" y="-29.8" font-family="Helvetica,sans-Serif" font-size="14.00">Usuário Web</text>
+</g>
+<!-- frontend -->
+<g id="node2" class="node">
+<title>frontend</title>
+<path fill="#ffcdd2" stroke="black" d="M390.21,-65.8C390.21,-65.8 269.85,-65.8 269.85,-65.8 263.85,-65.8 257.85,-59.8 257.85,-53.8 257.85,-53.8 257.85,-36.2 257.85,-36.2 257.85,-30.2 263.85,-24.2 269.85,-24.2 269.85,-24.2 390.21,-24.2 390.21,-24.2 396.21,-24.2 402.21,-30.2 402.21,-36.2 402.21,-36.2 402.21,-53.8 402.21,-53.8 402.21,-59.8 396.21,-65.8 390.21,-65.8"/>
+<text xml:space="preserve" text-anchor="middle" x="330.03" y="-49.2" font-family="Helvetica,sans-Serif" font-size="14.00">HTML/CSS/JS</text>
+<text xml:space="preserve" text-anchor="middle" x="330.03" y="-32.4" font-family="Helvetica,sans-Serif" font-size="14.00">(index.html, script.js)</text>
+</g>
+<!-- usuario_web&#45;&gt;frontend -->
+<g id="edge1" class="edge">
+<title>usuario_web-&gt;frontend</title>
+<path fill="none" stroke="black" d="M113.17,-33.47C113.17,-33.47 246.07,-33.47 246.07,-33.47"/>
+<polygon fill="black" stroke="black" points="246.07,-36.97 256.07,-33.47 246.07,-29.97 246.07,-36.97"/>
+<text xml:space="preserve" text-anchor="middle" x="185.38" y="-63.2" font-family="Helvetica,sans-Serif" font-size="14.00">  Interage  </text>
+</g>
+<!-- frontend&#45;&gt;usuario_web -->
+<g id="edge2" class="edge">
+<title>frontend-&gt;usuario_web</title>
+<path fill="none" stroke="black" d="M257.46,-42.73C257.46,-42.73 124.54,-42.73 124.54,-42.73"/>
+<polygon fill="black" stroke="black" points="124.54,-39.23 114.54,-42.73 124.54,-46.23 124.54,-39.23"/>
+<text xml:space="preserve" text-anchor="middle" x="185.38" y="-23.2" font-family="Helvetica,sans-Serif" font-size="14.00">  Exibe Interface  </text>
+</g>
+<!-- api -->
+<g id="node3" class="node">
+<title>api</title>
+<path fill="#ffccbc" stroke="black" d="M746.43,-52C746.43,-52 587.92,-52 587.92,-52 581.92,-52 575.92,-46 575.92,-40 575.92,-40 575.92,-28 575.92,-28 575.92,-22 581.92,-16 587.92,-16 587.92,-16 746.43,-16 746.43,-16 752.43,-16 758.43,-22 758.43,-28 758.43,-28 758.43,-40 758.43,-40 758.43,-46 752.43,-52 746.43,-52"/>
+<text xml:space="preserve" text-anchor="middle" x="667.17" y="-29.8" font-family="Helvetica,sans-Serif" font-size="14.00">API Python (Flask - api.py)</text>
+</g>
+<!-- frontend&#45;&gt;api -->
+<g id="edge3" class="edge">
+<title>frontend-&gt;api</title>
+<path fill="none" stroke="black" d="M402.36,-33.47C402.36,-33.47 564.17,-33.47 564.17,-33.47"/>
+<polygon fill="black" stroke="black" points="564.17,-36.97 574.17,-33.47 564.17,-29.97 564.17,-36.97"/>
+<text xml:space="preserve" text-anchor="middle" x="489.07" y="-80" font-family="Helvetica,sans-Serif" font-size="14.00">  Envia Dados (JSON)</text>
+<text xml:space="preserve" text-anchor="middle" x="489.07" y="-63.2" font-family="Helvetica,sans-Serif" font-size="14.00">  Consulta Dados  </text>
+</g>
+<!-- api&#45;&gt;frontend -->
+<g id="edge4" class="edge">
+<title>api-&gt;frontend</title>
+<path fill="none" stroke="black" d="M575.49,-42.73C575.49,-42.73 413.98,-42.73 413.98,-42.73"/>
+<polygon fill="black" stroke="black" points="413.98,-39.23 403.98,-42.73 413.98,-46.23 413.98,-39.23"/>
+<text xml:space="preserve" text-anchor="middle" x="489.07" y="-23.2" font-family="Helvetica,sans-Serif" font-size="14.00">  Retorna Dados  </text>
+</g>
+</g>
+</svg>

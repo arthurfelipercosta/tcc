@@ -1,0 +1,106 @@
+<svg width="1083pt" height="566pt" viewBox="0.00 0.00 1083.00 566.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 562.4)">
+<title>G</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-562.4 1079.39,-562.4 1079.39,4 -4,4"/>
+<g id="clust1" class="cluster">
+<title>cluster_usuario</title>
+<polygon fill="white" stroke="black" points="39.39,-473.6 39.39,-525.6 187.39,-525.6 187.39,-473.6 39.39,-473.6"/>
+</g>
+<g id="clust2" class="cluster">
+<title>cluster_bot</title>
+<polygon fill="#e0f7fa" stroke="black" points="316.39,-240.8 316.39,-550.4 636.39,-550.4 636.39,-240.8 316.39,-240.8"/>
+<text xml:space="preserve" text-anchor="middle" x="476.39" y="-533.8" font-family="Times,serif" font-size="14.00">Assistente Conversacional (WhatsApp)</text>
+</g>
+<g id="clust3" class="cluster">
+<title>cluster_backend</title>
+<polygon fill="#fff0e6" stroke="black" points="711.39,-8 711.39,-317.6 1067.39,-317.6 1067.39,-8 711.39,-8"/>
+<text xml:space="preserve" text-anchor="middle" x="889.39" y="-301" font-family="Times,serif" font-size="14.00">Backend API</text>
+</g>
+<!-- usuario_whats -->
+<g id="node1" class="node">
+<title>usuario_whats</title>
+<path fill="none" stroke="black" d="M167.75,-517.6C167.75,-517.6 59.04,-517.6 59.04,-517.6 53.04,-517.6 47.04,-511.6 47.04,-505.6 47.04,-505.6 47.04,-493.6 47.04,-493.6 47.04,-487.6 53.04,-481.6 59.04,-481.6 59.04,-481.6 167.75,-481.6 167.75,-481.6 173.75,-481.6 179.75,-487.6 179.75,-493.6 179.75,-493.6 179.75,-505.6 179.75,-505.6 179.75,-511.6 173.75,-517.6 167.75,-517.6"/>
+<text xml:space="preserve" text-anchor="middle" x="113.39" y="-495.4" font-family="Helvetica,sans-Serif" font-size="14.00">Usuário WhatsApp</text>
+</g>
+<!-- twilio -->
+<g id="node3" class="node">
+<title>twilio</title>
+<path fill="#b2ebf2" stroke="black" d="M406.51,-284.8C406.51,-284.8 352.28,-284.8 352.28,-284.8 346.28,-284.8 340.28,-278.8 340.28,-272.8 340.28,-272.8 340.28,-260.8 340.28,-260.8 340.28,-254.8 346.28,-248.8 352.28,-248.8 352.28,-248.8 406.51,-248.8 406.51,-248.8 412.51,-248.8 418.51,-254.8 418.51,-260.8 418.51,-260.8 418.51,-272.8 418.51,-272.8 418.51,-278.8 412.51,-284.8 406.51,-284.8"/>
+<text xml:space="preserve" text-anchor="middle" x="379.39" y="-262.6" font-family="Helvetica,sans-Serif" font-size="14.00">Twilio API</text>
+</g>
+<!-- usuario_whats&#45;&gt;twilio -->
+<g id="edge1" class="edge">
+<title>usuario_whats-&gt;twilio</title>
+<path fill="none" stroke="black" d="M79.57,-481.1C38.61,-457.6 -21.42,-414.23 8.25,-374.8 46.97,-323.35 236.44,-288.88 328.71,-274.87"/>
+<polygon fill="black" stroke="black" points="329.13,-278.34 338.5,-273.4 328.09,-271.42 329.13,-278.34"/>
+<text xml:space="preserve" text-anchor="middle" x="61.32" y="-379" font-family="Times,serif" font-size="14.00">  Envia Mensagens</text>
+</g>
+<!-- n8n -->
+<g id="node2" class="node">
+<title>n8n</title>
+<path fill="#b2ebf2" stroke="black" d="M616.65,-517.6C616.65,-517.6 514.14,-517.6 514.14,-517.6 508.14,-517.6 502.14,-511.6 502.14,-505.6 502.14,-505.6 502.14,-493.6 502.14,-493.6 502.14,-487.6 508.14,-481.6 514.14,-481.6 514.14,-481.6 616.65,-481.6 616.65,-481.6 622.65,-481.6 628.65,-487.6 628.65,-493.6 628.65,-493.6 628.65,-505.6 628.65,-505.6 628.65,-511.6 622.65,-517.6 616.65,-517.6"/>
+<text xml:space="preserve" text-anchor="middle" x="565.39" y="-495.4" font-family="Helvetica,sans-Serif" font-size="14.00">N8N (n8n_bot.py)</text>
+</g>
+<!-- n8n&#45;&gt;twilio -->
+<g id="edge4" class="edge">
+<title>n8n-&gt;twilio</title>
+<path fill="none" stroke="black" d="M503.93,-481.21C460.8,-465.43 406.27,-437.48 379.69,-391.6 362.86,-362.57 366.45,-322.92 371.81,-296.39"/>
+<polygon fill="black" stroke="black" points="375.21,-297.21 373.99,-286.68 368.38,-295.67 375.21,-297.21"/>
+<text xml:space="preserve" text-anchor="middle" x="426.54" y="-379" font-family="Times,serif" font-size="14.00">  Envia Resposta</text>
+</g>
+<!-- api -->
+<g id="node4" class="node">
+<title>api</title>
+<path fill="#ffccbc" stroke="black" d="M923.65,-284.8C923.65,-284.8 765.14,-284.8 765.14,-284.8 759.14,-284.8 753.14,-278.8 753.14,-272.8 753.14,-272.8 753.14,-260.8 753.14,-260.8 753.14,-254.8 759.14,-248.8 765.14,-248.8 765.14,-248.8 923.65,-248.8 923.65,-248.8 929.65,-248.8 935.65,-254.8 935.65,-260.8 935.65,-260.8 935.65,-272.8 935.65,-272.8 935.65,-278.8 929.65,-284.8 923.65,-284.8"/>
+<text xml:space="preserve" text-anchor="middle" x="844.39" y="-262.6" font-family="Helvetica,sans-Serif" font-size="14.00">API Python (Flask - api.py)</text>
+</g>
+<!-- n8n&#45;&gt;api -->
+<g id="edge5" class="edge">
+<title>n8n-&gt;api</title>
+<path fill="none" stroke="black" d="M581.43,-481.29C604.77,-456.5 649.95,-410 692.34,-374.8 729.92,-343.59 776.21,-311.89 807.78,-291.18"/>
+<polygon fill="black" stroke="black" points="809.34,-294.34 815.81,-285.94 805.52,-288.47 809.34,-294.34"/>
+<text xml:space="preserve" text-anchor="middle" x="740.37" y="-379" font-family="Times,serif" font-size="14.00">  Consulta Dados</text>
+</g>
+<!-- twilio&#45;&gt;usuario_whats -->
+<g id="edge2" class="edge">
+<title>twilio-&gt;usuario_whats</title>
+<path fill="none" stroke="black" d="M355.02,-285.13C326.62,-305.62 278.67,-341.21 239.93,-374.8 202.8,-407 162.68,-447.28 137.8,-472.98"/>
+<polygon fill="black" stroke="black" points="135.44,-470.39 131.02,-480.02 140.48,-475.25 135.44,-470.39"/>
+<text xml:space="preserve" text-anchor="middle" x="297.66" y="-379" font-family="Times,serif" font-size="14.00">  Entrega Mensagem</text>
+</g>
+<!-- twilio&#45;&gt;n8n -->
+<g id="edge3" class="edge">
+<title>twilio-&gt;n8n</title>
+<path fill="none" stroke="black" d="M400.86,-285.24C424.72,-305.28 463.55,-339.91 491.39,-374.8 515.96,-405.59 538.28,-445.29 551.84,-471.32"/>
+<polygon fill="black" stroke="black" points="548.56,-472.6 556.23,-479.9 554.79,-469.4 548.56,-472.6"/>
+<text xml:space="preserve" text-anchor="middle" x="533.9" y="-379" font-family="Times,serif" font-size="14.00">  Webhook</text>
+</g>
+<!-- api&#45;&gt;n8n -->
+<g id="edge6" class="edge">
+<title>api-&gt;n8n</title>
+<path fill="none" stroke="black" d="M842.85,-285.18C839.67,-311.34 830.15,-361.01 802.39,-391.6 759.56,-438.81 691.87,-466.49 639.78,-481.83"/>
+<polygon fill="black" stroke="black" points="639.03,-478.4 630.37,-484.5 640.95,-485.13 639.03,-478.4"/>
+<text xml:space="preserve" text-anchor="middle" x="858.35" y="-379" font-family="Times,serif" font-size="14.00">  Retorna Dados</text>
+</g>
+<!-- fipe -->
+<g id="node5" class="node">
+<title>fipe</title>
+<path fill="#c8e6c9" stroke="black" d="M903.18,-52C903.18,-52 853.61,-52 853.61,-52 847.61,-52 841.61,-46 841.61,-40 841.61,-40 841.61,-28 841.61,-28 841.61,-22 847.61,-16 853.61,-16 853.61,-16 903.18,-16 903.18,-16 909.18,-16 915.18,-22 915.18,-28 915.18,-28 915.18,-40 915.18,-40 915.18,-46 909.18,-52 903.18,-52"/>
+<text xml:space="preserve" text-anchor="middle" x="878.39" y="-29.8" font-family="Helvetica,sans-Serif" font-size="14.00">FIPE API</text>
+</g>
+<!-- api&#45;&gt;fipe -->
+<g id="edge7" class="edge">
+<title>api-&gt;fipe</title>
+<path fill="none" stroke="black" d="M823.94,-248.38C799.09,-224.97 762.3,-181.69 778,-142 791.47,-107.98 821.43,-78.45 845.14,-59.08"/>
+<polygon fill="black" stroke="black" points="847.01,-62.06 852.68,-53.1 842.67,-56.57 847.01,-62.06"/>
+<text xml:space="preserve" text-anchor="middle" x="827.2" y="-146.2" font-family="Times,serif" font-size="14.00">  Consulta Preços</text>
+</g>
+<!-- fipe&#45;&gt;api -->
+<g id="edge8" class="edge">
+<title>fipe-&gt;api</title>
+<path fill="none" stroke="black" d="M883.32,-52.4C889.41,-76.51 898.1,-121.36 890.39,-158.8 884.56,-187.13 870.88,-217.22 859.95,-238.24"/>
+<polygon fill="black" stroke="black" points="856.88,-236.55 855.25,-247.02 863.05,-239.86 856.88,-236.55"/>
+<text xml:space="preserve" text-anchor="middle" x="939.23" y="-146.2" font-family="Times,serif" font-size="14.00">  Retorna Preços</text>
+</g>
+</g>
+</svg>

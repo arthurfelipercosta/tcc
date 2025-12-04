@@ -1,0 +1,110 @@
+% margens
+\usepackage[top=3cm, left=3cm, right=2cm, bottom=2cm]{geometry}
+
+\usepackage{setspace}
+\setstretch{1.5}
+
+\usepackage[footnotesize]{caption}
+
+\usepackage{verbatim}
+
+% espacamento entre parágrafos
+\setlength{\parindent}{1.25cm}
+
+% colocar parágrafo no começo das seções
+\usepackage{indentfirst}
+
+% aceitar acentos, cedilhas, tils
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+
+% simbolos matemáticos
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+% para subitem
+\usepackage{enumitem}
+
+% para sub sub item
+\usepackage{outlines}
+
+% para incluir imagens
+\usepackage{graphicx}
+
+% para incluir URLs
+\usepackage[hyphens]{url}
+\usepackage{hyperref}
+
+% arrumar tabelas e imagens nos seus lugares
+\usepackage{float}
+
+% caminho das imagens
+\graphicspath{{Imagens/}}
+
+
+% insere paginas em pdf (usar para inserir a ficha) 
+\usepackage{pdfpages}
+
+% retira primeira página do capítulo
+\usepackage{etoolbox}
+\patchcmd{\chapter}{plain}{myheadings}{}{}
+\patchcmd{\part}{plain}{empty}{}{}
+
+% para criar teoremas
+\newtheorem{thm}{Teorema}[section]
+\newtheorem{exe}{Exemplo}[section]
+\newtheorem{dfn}{Definição}[section]
+\newtheorem{prob}{Problema}[section]
+\newtheorem{cor}{Corolário}[section]
+\newtheorem{prop}{Proposição}[section]
+\newtheorem{lem}{Lema} [section]
+\newcounter{contar}
+
+% tira a palavra capitulo dos capitulos (ABNT)
+\usepackage{titlesec}
+\titleformat{\thechapter}{\huge\bf}{\thechapter}{30pt}{\huge\bf}
+
+% ==========================
+% FORMATAÇÃO DO SUMÁRIO (TOC)
+% ==========================
+\usepackage{tocloft}
+% Remove o recuo (alinhar todos à esquerda)
+\setlength{\cftchapindent}{0pt}
+\setlength{\cftsecindent}{0pt}
+\setlength{\cftsubsecindent}{0pt}
+\setlength{\cftsubsubsecindent}{0pt}
+% Ajusta espaçamento dos pontinhos
+\renewcommand{\cftdotsep}{1}
+
+% -------- ESTILOS --------
+% CAPÍTULO (ex: 1 FUNDAMENTAÇÃO TEÓRICA) — negrito e MAIÚSCULO
+\renewcommand{\cftchapfont}{\bfseries}
+\renewcommand{\cftchappagefont}{\bfseries}
+
+% Força maiúsculas nos capítulos
+\makeatletter
+\let\oldl@chapter\l@chapter
+\renewcommand*{\l@chapter}[2]{%
+  \oldl@chapter{\MakeUppercase{#1}}{#2}%
+}
+\makeatother
+
+% SEÇÃO (ex: 1.1) — negrito e minúsculo
+\renewcommand{\cftsecfont}{\bfseries}
+\renewcommand{\cftsecpagefont}{\bfseries}
+% SUBSEÇÃO (ex: 1.1.1) — normal
+\renewcommand{\cftsubsecfont}{\normalfont}
+\renewcommand{\cftsubsecpagefont}{\normalfont}
+% SUBSUBSEÇÃO (ex: 1.1.1.1) — normal e itálico
+\renewcommand{\cftsubsubsecfont}{\itshape}
+\renewcommand{\cftsubsubsecpagefont}{\itshape}
+
+% Ajustes para a bibliografia
+\makeatletter
+\renewcommand\@biblabel[1]{}
+\makeatother
+\setlength{\bibident}{0pt}
+\newcommand{\citecustom}[1]{(\textsc{#1})}
