@@ -7,16 +7,25 @@ Este capítulo detalha a implementação técnica da solução desenvolvida, abo
 
 \section{Arquitetura do Sistema}
 
-A arquitetura do sistema é modular e distribuída, projetada para gerenciar a aquisição, o processamento, a exposição e a entrega de informações veiculares de forma eficiente por vários canais. O projeto é composto por três pilares principais: a camada de Processamento de Dados, a camada de Serviços de Backend (API RESTful) e as camadas de Interface com o Usuário (Web Frontend e Bot WhatsApp).
+A arquitetura do sistema é apresentada a seguir em três diagramas, cada um detalhando um fluxo principal: O processamento de dados (Figura \ref{fig:fluxo_dados}), a interação com a interface web (Figura \ref{fig:fluxo_web}) e a comunicação com o assistente conversacional (Figura \ref{fig:fluxo_whats}).
 
-\subsection{Visão Geral da Arquitetura}
-O diagrama da Figura \ref{fig:arquitetura_geral} a seguir ilustra a arquitetura geral do sistema e a interação entre seus principais componentes.
-\newpage
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{Imagens/visao_geral.png}
-    \caption{Visão geral da arquitetura do sistema.}
-    \label{fig:arquitetura_geral}
+    \includegraphics[width=0.5\textwidth]{Imagens/fig_diagrama_1.png}
+    \caption{Fluxo de obtenção e processamento de dados.}
+    \label{fig:fluxo_dados}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Imagens/fig_diagrama_2.png}
+    \caption{Arquitetura de interação da interface web.}
+    \label{fig:fluxo_web}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Imagens/fig_diagrama_3.png}
+    \caption{Arquitetura de comunicação do assistente conversacional.}
+    \label{fig:fluxo_mobile}
 \end{figure}
 
 Os principais componentes desta arquitetura são as fontes de dados externas, que incluem o dataset do PBEV e a FIPE API. A camada de processamento de dados, operada pelo Jupyter Notebook (fix.ipynb) com a biblioteca Pandas, responsáveis pela limpeza e padronização. O backend, implementado com Flask (api.py), servindo como um ponto de acesso central para os dados. E por fim, as interfaces com o usuário, que são compostas por um frontend web (HTML, CSS e JavaScript) e um bot para WhatsApp, que utiliza N8N e Twilio ({n8n\_bot.py}) para gerenciar as interações.

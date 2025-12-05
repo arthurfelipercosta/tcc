@@ -42,7 +42,7 @@ Com os dados obtidos no site do PBEV convertidos para CSV, a próxima etapa foco
 \end{itemize}
 
 Um script auxiliar intitulado de '\textit{fix\_encoding.py}' foi utilizado para resolver questões específicas de codificação de caracteres.
-Ao final desta fase, foi gerado o arquivo '\textit{dados\_corrigidos.csv}', representando a primeira versão limpa e utilizável de dados, mas ainda após isso, uma etapa adicional foi realizada para remover as linhas que eram totalmente iguais, o que garante uma unicidade dos registros para o consumo pelas aplicações.
+Ao final desta fase, foi gerado o arquivo '\textit{dados\_corrigidos.csv}', representando a primeira versão limpa e utilizável de dados, mas ainda após isso, uma etapa adicional foi realizada para remover as linhas que eram totalmente iguais, o que garante que não haja registros duplicados, otimizando o consumo pelas aplicações.
 
 \subsection{Aquisição de Dados Complementares (Tabela FIPE)}
 Diferentemente dos dados de especificações veiculares do PBEV, para a obtenção dos valores de mercado dos veículos, optou-se, inicialmente, pelo uso de web scrapping direto em páginas de sites confiáveis no mercado (ex: Webmotors), contudo, essa abordagem foi inviabilizada pela dificuldade em garantir a consistência e a disponibilidade contínua dos dados, a opção final utilizada no projeto foi a integração com a FIPE API \citep{FIPE}. Esta API pública oferece acesso direto e estruturado aos dados de marcas e valores da Tabela FIPE, que é o principal referencial de preços de automóveis no mercado brasileiro, conhecida por sua confiabilidade e constante atualização.
